@@ -70,7 +70,7 @@ and its storage capacity. The latter being also listed as a separate column.
 TODO: Hash out modelling. I recommend a diagram using a tool like lucidcharts.com. 
 See the templates section. For instance (see Figure 1 below).
 
-![Example diagram](./sample_analysis.png)
+![Example diagram](./Img/sample_analysis.png)
 
 The dataset and detailed analysis can be found at this [repository](https://github.com/YongpengFu/Statistical-Model-for-Mobile-Phones). 
 
