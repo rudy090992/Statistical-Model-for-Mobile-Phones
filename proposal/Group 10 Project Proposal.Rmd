@@ -116,10 +116,30 @@ data['Company'] = data['Company'].str.capitalize()
 data.to_csv('./augmented_dataset.csv', index=False)
 data
 ```
+```{r CleanData}
+mobile_dataset <- read.csv("./Updated_Mobile_Dataset.csv")
+cat("Break down Model column into Model only and Color columns:\n")
+#Step 1: remove the Company name from Model
+Model_no_Company <- stringr::str_remove(mobile_dataset$Model,mobile_dataset$Company) %>% trimws(., which = c("both"))
+#Step 2: remove anything after parentheses to get Model only info
+mobile_dataset$Model_Only <- stringr::str_replace(Model_no_Company, " \\s*\\([^\\)]+\\)", "")
+#Step 3: Get the color information from inside the last ()
+#Step 3.1: Get the parenthesis and what is inside from the last ()
+Model_no_Company_parenthesis <- stringr::str_extract(Model_no_Company, "(?<=\\()([^()]*?)(?=\\)[^()]*$)")
+#step 3.2: Get the color by just retaining the info before ,
+mobile_dataset$Color <- gsub(",.*$", "", Model_no_Company_parenthesis)
+#Step 4: Remove duplicated rows in the dataset
+mobile_dataset <- mobile_dataset[!duplicated(mobile_dataset),]
+#Step 5: cut the price based on the percentile into 4 different levels
+mobile_dataset <- mobile_dataset %>% mutate(Price_Level = ntile(Price, n = 4))
+#Step 5.1: map each number level to the character
+from <- c(1,2,3,4)
+to <- c("Low", "Medium", "High", "Very High")
+mobile_dataset$Price_Level <- mapvalues(mobile_dataset$Price_Level, from = from, to = to)
+```
 
-At last, 7 out of the original 11 predictors were used in our regression analysis to predict car sale prices as follows:
 
-After cleaning and breaking down columns, the dataset now consists of 11 columns and 736 rows and no missing values. These 11 columns are:
+After cleaning and breaking down columns, the dataset now consists of 11 columns and 740 rows and no missing values. These 11 columns are:
 
 * **Model**: categorical variables with sub-classes. These names include the color of the unit
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
@@ -137,7 +157,7 @@ and its storage capacity. The latter being also listed as a separate column. - *
 The data was again loaded into RStudio using the "read.csv" function. The first few records of the dataset is as follows:
 
 ```{r 2.2 Load Data}
-mobile_dataset <- as_tibble(read.csv("./augmented_dataset.csv"))
+mobile_dataset <- as_tibble(mobile_dataset)
 cat("The dimension of the dataset:\n")
 dim(mobile_dataset)
 mobile_dataset %>% head(4)
