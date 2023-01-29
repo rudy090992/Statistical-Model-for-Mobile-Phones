@@ -14,6 +14,7 @@ output:
     toc: yes
   lof: yes
   lot: yes
+urlcolor: blue
 #bibliography: rmarkdown.bib
 header-includes:
   \usepackage{fvextra}
@@ -24,11 +25,15 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(survey)
-library(sampling)
-library(ggplot2)
-library(tibble)
-library(magrittr)
+library(survey) #Used for statistical analysis
+library(sampling) #Used for sample data
+library(ggplot2) #Used for plot
+library(tibble) #used for nice display dataframe
+library(magrittr) #Used for %>% 
+library(tidyverse) #Used to manipualte dataframe
+library(dplyr) # Used for easy manipualte rows and columns
+library(plyr) #Used for mapping vector values
+library(stringr) #Used to manipulate string
 ```
 
 
@@ -46,24 +51,102 @@ With so many mobile phones on the market, it can be difficult to decide which on
 3. Can we build a decent model to predict the selling price for a mobile phone?
 
 
-
 # Chapter 2: Dataset and Scope of Analysis.
 
-We chose a dataset weighting by *simplicity*. That is, we would like to maximize the learning experience applying class content to a toy/stylized modelthat may or may not have any practical use.
+~~We chose a dataset weighting by *simplicity*. That is, we would like to maximize the learning experience applying class content to a toy/stylized modelthat may or may not have any practical use.~~
 
 ## Dataset
 
-The dataset consists of 8 columns and 28'036 rows and no missing values.
+The dataset consists of 8 columns and 28,036 rows and no missing values. These 8 columns are:
 
-* *Model*: categorical variables with sub-classes. These names include the color of the unit
-and its storage capacity. The latter being also listed as a separate column.
-* *Company*: categorical variable. Name of the phone's manufacturer.
-* *Price*: continuous variable. Units in Indian Rupees.
-* *Rating*: continuous variable. Units in Indian Rupees.
-* *Number of ratings*: discrete variable: a simple count.
-* *Total reviews*: discrete variable: a simple count.
-* *RAM size*: categorical variable. RAM specification of the phone.
-* *ROM size*: categorical variable. Storage (non-volatile memory) capacity of the phone.
+* **Model**: categorical variables with sub-classes. These names include the color of the unit
+and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
+* **Company**: categorical variable. Name of the phone's manufacturer. - **Independent Variable**
+* **Price**: continuous variable. Units in Indian Rupees. - **Dependent Variable**
+* **Rating**: continuous variable. Units in Indian Rupees. - **Independent Variable**
+* **Number of ratings**: discrete variable: a simple count. - **Independent Variable**
+* **Total reviews**: discrete variable: a simple count. - **Independent Variable**
+* **RAM size**: categorical variable. RAM specification of the phone. - **Independent Variable**
+* **ROM size**: categorical variable. Storage (non-volatile memory) capacity of the phone. - **Independent Variable**
+
+The data was loaded into RStudio using the "read.csv" function. The data we needed for our analysis include the dependent variable "Price" (in Indian Rupee) and a list of independent variables listed above. The first few records of the dataset is as follows:
+
+```{r 2.1 Load Data}
+mobile_dataset <- read.csv("./Updated_Mobile_Dataset.csv")
+mobile_dataset %>% head(4)
+```
+As the first step of investigation, we did the following work to clean up the dataset.
+
+1. Remove any duplicates in the dataset;
+2. Because **Model** column contains sub-class of a mobile phone, we decide to further break it down to _Model_ and _Color_;
+3. Add additional column to segment the **Price** into 4 different levels.
+
+```{python}
+import pandas as pd
+data = pd.read_csv('./Updated_Mobile_Dataset.csv')
+
+def map_to_cat(price):
+    if price < 7500:
+        return 'Low'
+    elif 7500 <= price < 15000:
+        return 'Medium'
+    elif 15000 <= price < 30000:
+        return 'High'
+    elif price >= 30000:
+        return 'Very high'
+
+aug_model = data['Model'].copy()
+aug_color = [None]*len(aug_model)
+aug_price_category = [None]*len(aug_model)
+for i,r in data.iterrows():
+    aug_model[i] = str(aug_model[i]).replace(r['Company'], '').strip()
+    aug_price_category[i] = map_to_cat(r['Price'])
+    if (r['Model'].find(',') != -1) and (r['Model'].find('(') != -1):
+        aug_color[i] = aug_model[i].split('(')[1].split(',')[0]
+        aug_model[i] = aug_model[i].split('(')[0]
+
+data['aug_model'] = aug_model
+data['aug_color'] = aug_color
+data['aug_price'] = aug_price_category
+
+data = data.drop_duplicates().reset_index(drop=True)
+data = data[data['Company'] != 'Nothing']
+data['Company'] = data['Company'].str.capitalize()
+
+data.to_csv('./augmented_dataset.csv', index=False)
+data
+```
+
+At last, 7 out of the original 11 predictors were used in our regression analysis to predict car sale prices as follows:
+
+After cleaning and breaking down columns, the dataset now consists of 11 columns and 736 rows and no missing values. These 11 columns are:
+
+* **Model**: categorical variables with sub-classes. These names include the color of the unit
+and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
+* **Company**: categorical variable. Name of the phone's manufacturer. - **Independent Variable**
+* **Price**: continuous variable. Units in Indian Rupees. - **Dependent Variable**
+* **Rating**: continuous variable. Units in Indian Rupees. - **Independent Variable**
+* **Number of ratings**: discrete variable: a simple count. - **Independent Variable**
+* **Total reviews**: discrete variable: a simple count. - **Independent Variable**
+* **RAM size**: categorical variable. RAM specification of the phone. - **Independent Variable**
+* **ROM size**: categorical variable. Storage (non-volatile memory) capacity of the phone. - **Independent Variable**
+* **aug_model**: categorical variable. It only contains the Model information for a mobile phone. - **Independent Variable**
+* **aug_color**: categorical variable. The color of a mobile phone. - **Independent Variable**
+* **aug_price**: categorical variable. The price level of a mobile phone, with levels of "Low", "Medium", "High", "Very High" - **Independent Variable**
+
+The data was again loaded into RStudio using the "read.csv" function. The first few records of the dataset is as follows:
+
+```{r 2.2 Load Data}
+mobile_dataset <- as_tibble(read.csv("./augmented_dataset.csv"))
+cat("The dimension of the dataset:\n")
+dim(mobile_dataset)
+mobile_dataset %>% head(4)
+```
+
+
+
+
+
 
 ## Scope of Analysis
 
