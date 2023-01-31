@@ -5,16 +5,16 @@ author:
 - Stuart Finley(30191070), Andrii Voitkiv(30199373)
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
-  html_document:
-    toc: yes
-    df_print: paged
-  lof: yes
-  lot: yes
   pdf_document:
     extra_dependencies:
     - bbm
     - xcolor
     toc: yes
+  lof: yes
+  lot: yes
+  html_document:
+    toc: yes
+    df_print: paged
 geometry: margin=3cm
 subtitle: Proposal for final project (MDSA Winter 2023)
 urlcolor: blue
@@ -53,7 +53,7 @@ With so many mobile phones on the market, it can be difficult to decide which on
 
 # Dataset
 
-The dataset consists of 8 columns and 28,036 rows and no missing values. These 8 columns are:
+The initial dataset consists of 8 columns and 28,036 rows and no missing values. These 8 columns are:
 
 * **Model**: categorical variables with sub-classes. These names include the color of the unit
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
@@ -71,7 +71,7 @@ Some initial steps can be completed to clean the dataset and create new variable
 2. Because **Model** column contains sub-class of a mobile phone, we decide to further break it down to _Model_ and _Color_;
 3. Add additional column to segment the **Price** into 4 different levels.
 
-After cleaning and breaking down columns, the dataset now consists of 11 columns and 740 rows and no missing values. These 11 columns are:
+After cleaning and breaking down columns, the dataset now consists of 11 columns and 736 rows and no missing values. These 11 columns are:
 
 * **Model**: categorical variables with sub-classes. These names include the color of the unit
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
@@ -86,20 +86,21 @@ and its storage capacity. The latter being also listed as a separate column. - *
 * **aug_color**: categorical variable. The color of a mobile phone. - **Independent Variable**
 * **aug_price**: categorical variable. The price level of a mobile phone, with levels of "Low", "Medium", "High", "Very High" - **Independent Variable**
 
+```{r 2.1 Load Data}
+mobile_dataset <- as_tibble(read.csv("./augmented_dataset.csv"))
+mobile_dataset %>% head(4)
+```
+The dataset and detailed analysis can be found at this [repository](https://github.com/YongpengFu/Statistical-Model-for-Mobile-Phones). 
+
 # Scope of Analysis
 
-Our team is finalizing what the full analysis of the dataset will look like, but a preliminary template and breakdown of work by team member has been included below. The different colours represent which components of the project different team members would take on. It is anticipated that all members will assist in the finalization of the report.
+Our team is finalizing what the full analysis of the dataset will look like, but a preliminary template and breakdown of work by team member has been included below. The different colors represent which components of the project different team members would take on. It is anticipated that all members will assist in the finalization of the report.
 
-![Example diagram](./Img/sample_analysis.png)
-
-The dataset and detailed analysis can be found at this [repository](https://github.com/YongpengFu/Statistical-Model-for-Mobile-Phones). 
+![Project Workflow](./Img/project-workflow.png)
+\pagebreak
 
 # References
 
-[2020 review](https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html) 
+2020 review. “High-End Mobile Phones Price Have Soared 490% in 20 Years | This Is Money.” This Is Money, This Is Money, 23 July 2020, https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html.  
 
-Gausden, Grace. “High-End Mobile Phones Price Have Soared 490% in 20 Years | This Is Money.” This Is Money, This Is Money, 23 July 2020, https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html.
-
-[MobilePhone's dataset](https://www.kaggle.com/datasets/sudhanshuy17/mobilephone) 
-
-YADAV, SUDHANSHU. “MobilePhone’s Dataset | Kaggle.” Kaggle: Your Machine Learning and Data Science Community, Kaggle, 20 Dec. 2022, https://www.kaggle.com/datasets/sudhanshuy17/mobilephone.
+MobilePhone's dataset. “MobilePhone’s Dataset | Kaggle.” Kaggle: Your Machine Learning and Data Science Community, Kaggle, 20 Dec. 2022, https://www.kaggle.com/datasets/sudhanshuy17/mobilephone.
