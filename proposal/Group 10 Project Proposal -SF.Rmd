@@ -1,7 +1,7 @@
 ---
 title: "Mobile Phones Selling Price Report"
 author:
-- Yongpeng Fu (10182778), Rudy Brown (10057171), Jose Palacios (),
+- Yongpeng Fu (10182778), Rudy Brown (10057171), Jose Palacios (30190988),
 - Stuart Finley(30191070), Andrii Voitkiv(30199373)
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
