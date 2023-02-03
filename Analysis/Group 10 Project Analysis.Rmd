@@ -69,7 +69,67 @@ Some initial steps can be completed to clean the dataset and create new variable
 
 1. Remove any duplicates in the dataset;
 2. Because **Model** column contains sub-class of a mobile phone, we decide to further break it down to _Model_ and _Color_;
-3. Add additional column to segment the **Price** into 4 different levels.
+3. Convert all units from **RAM size** and **ROM size** measure to GB and then remove unit suffix;
+4. Add additional column to segment the **Price** into 4 different levels;
+5. Add additional column to determine if a phone has %G feature or not based on **Model** information.
+
+```{r Cleanup}
+mobile_dataset <- read.csv("./Updated_Mobile_Dataset.csv")
+#Break down Model column into Model only and Color columns
+#Step 1: remove the Company name from Model
+Model_no_Company <- stringr::str_remove(mobile_dataset$Model,mobile_dataset$Company) %>% trimws(., which = c("both"))
+#Step 2: remove anything after parentheses to get Model only info
+mobile_dataset$Model_Only <- stringr::str_replace(Model_no_Company, " \\s*\\([^\\)]+\\)", "")
+#Step 3: Get the color information from inside the last ()
+#Step 3.1: Get the parenthesis and what is inside from the last ()
+Model_no_Company_parenthesis <- stringr::str_extract(Model_no_Company, "(?<=\\()([^()]*?)(?=\\)[^()]*$)")
+#step 3.2: Get the color by just retaining the info before ,
+mobile_dataset$Color <- gsub(",.*$", "", Model_no_Company_parenthesis)
+#Step 4: Remove duplicated rows in the dataset
+mobile_dataset <- mobile_dataset[!duplicated(mobile_dataset),]
+#Step 5: cut the price based on the percentile into 4 different levels
+mobile_dataset <- mobile_dataset %>% mutate(Price_Level = ntile(Price, n = 4))
+#Step 5.1: map each number level to the character
+from <- c(1,2,3,4)
+to <- c("Low", "Medium", "High", "Very High")
+mobile_dataset$Price_Level <- mapvalues(mobile_dataset$Price_Level, from = from, to = to)
+
+
+#Step 6: Get the numeric part of RomSize (remove GB and MB, but convert MB to GB), discard any record that no numeric in RomSize
+#Step 6.1: there are some data input errors for RamSize and RomSize. In the records where RomSize is "Not Known" are swapped with RamSize, so we need to correct that.
+RamSize_temp <- ifelse(mobile_dataset$RomSize == "Not Known", "0 GB", mobile_dataset$RamSize)
+mobile_dataset$RomSize <- ifelse(mobile_dataset$RomSize == "Not Known", mobile_dataset$RamSize, mobile_dataset$RomSize)
+mobile_dataset$RamSize <- RamSize_temp
+#Step 6.2: split RomSize into two columns with size number and unit, and convert MB to 1/1000GB, KB to 1/1000000GB
+mobile_dataset$RamSize_Ori <- mobile_dataset$RamSize
+mobile_dataset$RomSize_Ori <- mobile_dataset$RomSize
+mobile_dataset <- mobile_dataset %>% separate(RomSize, c("RomSize_num", "RomSize_Unit")) %>% mutate(RomSize_Unit= mapvalues(.$RomSize_Unit, from = c("GB", "MB", "KB"), to = c(1, 1/1000, 1/1000000)))
+#step 6.3: remove any rows that are not numeric value for RomSize
+mobile_dataset <- mobile_dataset[!is.na(as.numeric(mobile_dataset$RomSize_num)),]
+mobile_dataset$RomSize_num <- as.numeric(mobile_dataset$RomSize_num)
+mobile_dataset$RomSize_Unit <- ifelse(is.na(as.numeric(mobile_dataset$RomSize_Unit)), 0, as.numeric(mobile_dataset$RomSize_Unit))
+#Step 6.4: generate the final column RomSize_inGB
+mobile_dataset$RomSize_inGB <- mobile_dataset$RomSize_num * mobile_dataset$RomSize_Unit
+
+
+#Step 7: Get the numeric part of RamSize (remove GB and MB, but convert MB to GB), discard any record that no numeric in RamSize
+#Step 7.1: split RamSize into two columns with size number and unit, and convert MB to 1/1000GB
+mobile_dataset <- mobile_dataset %>% separate(RamSize, c("RamSize_num", "RamSize_Unit")) %>% mutate(RamSize_Unit= mapvalues(.$RamSize_Unit, from = c("GB", "MB"), to = c(1, 1/1000)))
+#step 7.2: remove any rows that are not numeric value for RamSize
+mobile_dataset <- mobile_dataset[!is.na(as.numeric(mobile_dataset$RamSize_num)),]
+mobile_dataset$RamSize_num<- as.numeric(mobile_dataset$RamSize_num)
+mobile_dataset$RamSize_Unit <- as.numeric(mobile_dataset$RamSize_Unit)
+#Step 7.3: generate the final column RamSize_inGB
+mobile_dataset$RamSize_inGB <- mobile_dataset$RamSize_num * mobile_dataset$RamSize_Unit
+
+
+#Step 8: Create a new column to determine if the phone is 5G or not
+mobile_dataset$Is_5G <- ifelse(str_detect(mobile_dataset$Model_Only, "5G"), "Yes", "No")
+#Step 9: only keep the columns we need
+column_names <- c("Model", "Company", "Price", "Rating", "No_of_ratings", "TotalReviwes", "Model_Only", "Color", "Price_Level", "RamSize_inGB", "RomSize_inGB", "RamSize_Ori", "RomSize_Ori", "Is_5G" )
+mobile_dataset <- mobile_dataset[column_names]
+write.csv(mobile_dataset, file = './Cleaned_Mobile_Dataset.csv', row.names = F)
+```
 
 After cleaning and breaking down columns, the dataset now consists of 11 columns and 736 rows and no missing values. These 11 columns are:
 
@@ -80,14 +140,15 @@ and its storage capacity. The latter being also listed as a separate column. - *
 * **Rating**: continuous variable. Units in Indian Rupees. - **Independent Variable**
 * **Number of ratings**: discrete variable: a simple count. - **Independent Variable**
 * **Total reviews**: discrete variable: a simple count. - **Independent Variable**
-* **RAM size**: categorical variable. RAM specification of the phone. - **Independent Variable**
-* **ROM size**: categorical variable. Storage (non-volatile memory) capacity of the phone. - **Independent Variable**
-* **aug_model**: categorical variable. It only contains the Model information for a mobile phone. - **Independent Variable**
-* **aug_color**: categorical variable. The color of a mobile phone. - **Independent Variable**
-* **aug_price**: categorical variable. The price level of a mobile phone, with levels of "Low", "Medium", "High", "Very High" - **Independent Variable**
+* **Model_Only**: categorical variable: only contains the model information of a mobile phone. - **Independent Variable**
+* **Color**: categorical variable: color of a mobile phone. - **Independent Variable**
+* **Price_Level**: The price level of a mobile phone, with levels of "Low", "Medium", "High", "Very High". - **Independent Variable**
+* **RamSize_inGB**: continuous variable. RAM specification of the phone in GB. - **Independent Variable**
+* **RomSize_inGB**: continuous variable. Storage (non-volatile memory) capacity of the phone in GB. - **Independent Variable**
+
 
 ```{r 2.1 Load Data}
-mobile_dataset <- as_tibble(read.csv("./augmented_dataset.csv"))
+mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
 mobile_dataset %>% head(4)
 ```
 The dataset and detailed analysis can be found at this [repository](https://github.com/YongpengFu/Statistical-Model-for-Mobile-Phones). 
