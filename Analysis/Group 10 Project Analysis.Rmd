@@ -75,6 +75,9 @@ Some initial steps can be completed to clean the dataset and create new variable
 
 ```{r Cleanup}
 mobile_dataset <- read.csv("./Updated_Mobile_Dataset.csv")
+#Step 0: convert Model and Company letter to uppercase.
+mobile_dataset$Model <- toupper(mobile_dataset$Model)
+mobile_dataset$Company <- toupper(mobile_dataset$Company)
 #Break down Model column into Model only and Color columns
 #Step 1: remove the Company name from Model
 Model_no_Company <- stringr::str_remove(mobile_dataset$Model,mobile_dataset$Company) %>% trimws(., which = c("both"))
@@ -129,15 +132,15 @@ mobile_dataset$Is_5G <- ifelse(str_detect(mobile_dataset$Model_Only, "5G"), "Yes
 column_names <- c("Model", "Company", "Price", "Rating", "No_of_ratings", "TotalReviwes", "Model_Only", "Color", "Price_Level", "RamSize_inGB", "RomSize_inGB", "RamSize_Ori", "RomSize_Ori", "Is_5G" )
 mobile_dataset <- mobile_dataset[column_names]
 
-#Step 9: final check up. Convert all company name to uppercase and then do a final duplicated removal
-mobile_dataset$Company <- toupper(mobile_dataset$Company)
-mobile_dataset <- mobile_dataset[!duplicated(mobile_dataset),]
+# #Step 9: final check up. Convert all company name to uppercase and then do a final duplicated removal
+# mobile_dataset$Company <- toupper(mobile_dataset$Company)
+# mobile_dataset <- mobile_dataset[!duplicated(mobile_dataset),]
 write.csv(mobile_dataset, file = './Cleaned_Mobile_Dataset.csv', row.names = F)
 ```
 
 
 
-After cleaning and breaking down columns, the dataset now consists of 14 columns and 726 rows and no missing values. These 14 columns are:
+After cleaning and breaking down columns, the dataset now consists of 14 columns and 725 rows and no missing values. These 14 columns are:
 
 * **Model**: categorical variables with sub-classes. These names include the color of the unit
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
@@ -174,7 +177,7 @@ Our team is finalizing what the full analysis of the dataset will look like, but
 #  Chapter 4: Exploratory Data Analysis
 ## 4.1: A summary of the dataset
 The dimension of the cleaned dataset is 726 rows and 14 columns. A summary of the data is as follows:
-```{r 4.1 Summary, echo=FALSE}
+```{r 4.1 Summary, results='hold'}
 mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
 mobile_dataset %>% summary()
 ```
@@ -183,10 +186,34 @@ mobile_dataset %>% summary()
 ## 4.2: Exploratory Data Analysis
 This section is focused on the exploration of relation between variables using various visualization techniques.
 
-```{r 4.2.1}
-ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price)) +geom_boxplot()+
-  labs(y="Company Name", x="Price in Rupees", 
+The main target is Price in the dataset. In the following visualization it shows the distribution of Mobile Phone price with long tail towards to the high end. The average price is 15902 Rupees. Most price falls in the range of 50000 Rupees. one really stands out price range is 1000-2000 Rupees with the highest frequency.
+```{r 4.2.1, fig.height=6, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="black", fill="white", bins = 100)+
+  geom_vline(aes(xintercept=mean(Price)),
+            color="blue", linetype="dashed", size=0.4) + geom_label(
+    label="Mean Price = 15902", 
+    x= mean(mobile_dataset$Price) + 10000,
+    y=100,
+    label.padding = unit(0.35, "lines"),
+    label.size = 0.25,
+    color = "black",
+    fill="#69b3a2"
+  ) +  geom_segment(aes(x = -5000, y = 140, xend = 0, yend = 130),lineend = "round",linejoin = "round",
+                  arrow = arrow(length = unit(0.5, "cm"))) + labs(y="Count", x="Price in Rupees", 
+       subtitle="Distribution of Mobile Phone price")
+```
+The next figure is to break down the Price by different phone-making companies. There are a total of 37 companies in the dataset. Iin consistent with previous figure about Price distribution, we see a big portion of Price falls between 9000 (left dash line) and 40000 (right dash line) Rupees. _Apple_ alone contributes the most of high priced Mobile Phones, while companies like from _NOKIA_ to _GFIVE_ contribute to the low-priced ones.
+```{r 4.2.2,fig.height=6, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price)) +geom_boxplot()+ geom_line() +
+    sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
        subtitle="Boxplot for Mobile Phone price from different companies")
+```
+The Price is further broken down by their 5G services. Interestingly, neither high-priced nor low-priced Mobile Phones have equipped 5G service. In contrast, almost all middle-priced Mobile Phones have 5G service. Price for those with 5G service are slightly more expensive than those without. 
+
+```{r 4.2.3, fig.height=6, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price, color = Is_5G)) +geom_boxplot(position=position_dodge(width = 0.8))+ geom_line() +
+    sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
+       subtitle="Boxplot for Mobile Phone price from different companies and 5G service") + facet_wrap(~Is_5G)
 ```
 
 
