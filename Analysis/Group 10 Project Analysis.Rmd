@@ -51,7 +51,7 @@ With so many mobile phones on the market, it can be difficult to decide which on
 3. Can we build a decent model to predict the selling price for a mobile phone?
 
 
-# Dataset
+# Dataset and Cleanup
 
 The initial dataset consists of 8 columns and 28,036 rows and no missing values. These 8 columns are:
 
@@ -128,10 +128,16 @@ mobile_dataset$Is_5G <- ifelse(str_detect(mobile_dataset$Model_Only, "5G"), "Yes
 #Step 9: only keep the columns we need
 column_names <- c("Model", "Company", "Price", "Rating", "No_of_ratings", "TotalReviwes", "Model_Only", "Color", "Price_Level", "RamSize_inGB", "RomSize_inGB", "RamSize_Ori", "RomSize_Ori", "Is_5G" )
 mobile_dataset <- mobile_dataset[column_names]
+
+#Step 9: final check up. Convert all company name to uppercase and then do a final duplicated removal
+mobile_dataset$Company <- toupper(mobile_dataset$Company)
+mobile_dataset <- mobile_dataset[!duplicated(mobile_dataset),]
 write.csv(mobile_dataset, file = './Cleaned_Mobile_Dataset.csv', row.names = F)
 ```
 
-After cleaning and breaking down columns, the dataset now consists of 11 columns and 736 rows and no missing values. These 11 columns are:
+
+
+After cleaning and breaking down columns, the dataset now consists of 14 columns and 726 rows and no missing values. These 14 columns are:
 
 * **Model**: categorical variables with sub-classes. These names include the color of the unit
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
@@ -145,12 +151,17 @@ and its storage capacity. The latter being also listed as a separate column. - *
 * **Price_Level**: The price level of a mobile phone, with levels of "Low", "Medium", "High", "Very High". - **Independent Variable**
 * **RamSize_inGB**: continuous variable. RAM specification of the phone in GB. - **Independent Variable**
 * **RomSize_inGB**: continuous variable. Storage (non-volatile memory) capacity of the phone in GB. - **Independent Variable**
+* **RamSize_Ori**: categorical variable. RAM specification of the phone, original information. - **Independent Variable**
+* **RomSize_Ori**: categorical variable. Storage (non-volatile memory) capacity of the phone, original information. - **Independent Variable**
+* **Is_5G**: categorical variable. If the phone has 5G service or not. - **Independent Variable**
 
 
-```{r 2.1 Load Data}
+```{r Load Data}
 mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
 mobile_dataset %>% head(4)
 ```
+**Table 1**: The cleaned-up dataset for Mobile Phone
+
 The dataset and detailed analysis can be found at this [repository](https://github.com/YongpengFu/Statistical-Model-for-Mobile-Phones). 
 
 # Scope of Analysis
@@ -159,6 +170,25 @@ Our team is finalizing what the full analysis of the dataset will look like, but
 
 ![Project Workflow](./Img/project-workflow.png)
 \pagebreak
+
+#  Chapter 4: Exploratory Data Analysis
+## 4.1: A summary of the dataset
+The dimension of the cleaned dataset is 726 rows and 14 columns. A summary of the data is as follows:
+```{r 4.1 Summary, echo=FALSE}
+mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
+mobile_dataset %>% summary()
+```
+**Table 2**: A summary for Mobile Phone dataset
+
+## 4.2: Exploratory Data Analysis
+This section is focused on the exploration of relation between variables using various visualization techniques.
+
+```{r 4.2.1}
+ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price)) +geom_boxplot()+
+  labs(y="Company Name", x="Price in Rupees", 
+       subtitle="Boxplot for Mobile Phone price from different companies")
+```
+
 
 # References
 
