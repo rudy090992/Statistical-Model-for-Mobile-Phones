@@ -161,6 +161,8 @@ and its storage capacity. The latter being also listed as a separate column. - *
 
 ```{r Load Data}
 mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
+#Specify the level for Price_Level column
+mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
 mobile_dataset %>% head(4)
 ```
 **Table 1**: The cleaned-up dataset for Mobile Phone
@@ -179,6 +181,8 @@ Our team is finalizing what the full analysis of the dataset will look like, but
 The dimension of the cleaned dataset is 726 rows and 14 columns. A summary of the data is as follows:
 ```{r 4.1 Summary, results='hold'}
 mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
+#Specify the level for Price_Level column
+mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
 mobile_dataset %>% summary()
 ```
 **Table 2**: A summary for Mobile Phone dataset
@@ -186,8 +190,8 @@ mobile_dataset %>% summary()
 ## 4.2: Exploratory Data Analysis
 This section is focused on the exploration of relation between variables using various visualization techniques.
 
-The main target is Price in the dataset. In the following visualization it shows the distribution of Mobile Phone price with long tail towards to the high end. The average price is 15902 Rupees. Most price falls in the range of 50000 Rupees. one really stands out price range is 1000-2000 Rupees with the highest frequency.
-```{r 4.2.1, fig.height=6, fig.width=10, results='hold'}
+The main target is Price in the dataset. In the following visualization it shows the distribution of Mobile Phone price with long tail towards to the high end. The average price is 15902 Rupees. Most price falls in the range of 50000 Rupees. One really stands out price range (arrow indicated) is 1000-2000 Rupees with the highest frequency.
+```{r 4.2.1, fig.height=4, fig.width=10, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="black", fill="white", bins = 100)+
   geom_vline(aes(xintercept=mean(Price)),
             color="blue", linetype="dashed", size=0.4) + geom_label(
@@ -202,19 +206,45 @@ ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="bl
                   arrow = arrow(length = unit(0.5, "cm"))) + labs(y="Count", x="Price in Rupees", 
        subtitle="Distribution of Mobile Phone price")
 ```
-The next figure is to break down the Price by different phone-making companies. There are a total of 37 companies in the dataset. Iin consistent with previous figure about Price distribution, we see a big portion of Price falls between 9000 (left dash line) and 40000 (right dash line) Rupees. _Apple_ alone contributes the most of high priced Mobile Phones, while companies like from _NOKIA_ to _GFIVE_ contribute to the low-priced ones.
-```{r 4.2.2,fig.height=6, fig.width=10, results='hold'}
+The following figure is to break down the Price by different phone-making companies. There are a total of 37 companies in the dataset. Iin consistent with previous figure about Price distribution, we see a big portion of Price falls between 9000 (left dash line) and 40000 (right dash line) Rupees. _Apple_ alone contributes the most of high priced Mobile Phones, while companies like from _NOKIA_ to _GFIVE_ contribute to the low-priced ones.
+```{r 4.2.2,fig.height=5, fig.width=10, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price)) +geom_boxplot()+ geom_line() +
     sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
        subtitle="Boxplot for Mobile Phone price from different companies")
 ```
-The Price is further broken down by their 5G services. Interestingly, neither high-priced nor low-priced Mobile Phones have equipped 5G service. In contrast, almost all middle-priced Mobile Phones have 5G service. Price for those with 5G service are slightly more expensive than those without. 
+The Price is further broken down by their 5G services. Interestingly, neither high-priced nor low-priced Mobile Phones have equipped 5G service. In contrast, almost all middle-priced Mobile Phones have 5G service. Price for those with 5G service are slightly more expensive than those without. NOTE: the dashed line indicates the price between 9000 (left dash line) and 40000 (right dash line) Rupees.
 
-```{r 4.2.3, fig.height=6, fig.width=10, results='hold'}
+```{r 4.2.3, fig.height=5, fig.width=10, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price, color = Is_5G)) +geom_boxplot(position=position_dodge(width = 0.8))+ geom_line() +
     sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
-       subtitle="Boxplot for Mobile Phone price from different companies and 5G service") + facet_wrap(~Is_5G)
+       subtitle="Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
 ```
+The pattern is more obvious when we provide color for 4 different price level ("Low", "Medium", "High", "Very High"). Although mobile phones from companies like APPLE, GOOGLE, ASUS and NOTHING have no 5G service, their price are all very high. It is worth investigating if some other attributes like brand effect, Storage capacity (Rom Size), and calculation power (Ram Size) are playing roles. Most Mobile Phones (except MI) with 5G service, again, have a higher proportion falling in a Very High price level, compared to the counterparts without 5G service. Almost all the rest mobile phones without 5G service fall in a Low price level.
+
+```{r 4.2.4, fig.height=5, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(y =reorder(Company, Price), fill = Price_Level)) + geom_bar(stat = "count", position="fill") + labs(y="Company", x="Percentage", 
+       subtitle="Percent Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
+```
+
+Next, we explored some quantitative features with the respect to the price. The following scatter plot shows an obvious correlation between Rating and Price. The higher the Rating, the higher the Price, especially on the right end. 
+```{r 4.2.5, fig.height=4, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(x = Rating, y = Price)) + geom_point() + geom_smooth(se=T, method = lm)+ labs(y="Price in Rupees", x="Rating", subtitle="Relation between rating and price")
+```
+```{r 4.2.6, fig.height=4, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(x = No_of_ratings, y = Price)) + geom_point() + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
+```
+```{r 4.2.6, fig.height=4, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(x = TotalReviwes, y = Price)) + geom_point() + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
+```
+
+```{r 4.2.7, fig.height=4, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(x = RamSize_inGB, y = Price)) + geom_point() + geom_smooth(se=T, method = lm)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between Ram size (in GB) and price")
+```
+
+```{r 4.2.8, fig.height=4, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point() + geom_smooth(se=T, method = lm)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between tram size (in GB) and price")
+```
+
 
 
 # References
