@@ -34,6 +34,7 @@ library(tidyverse) #Used to manipualte dataframe
 library(dplyr) # Used for easy manipualte rows and columns
 library(plyr) #Used for mapping vector values
 library(stringr) #Used to manipulate string
+library(gridExtra) #Used to arrange the ggplot chart
 ```
 
 
@@ -226,26 +227,49 @@ ggplot(data = mobile_dataset,mapping = aes(y =reorder(Company, Price), fill = Pr
        subtitle="Percent Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
 ```
 
-Next, we explored some quantitative features with the respect to the price. The following scatter plot shows an obvious correlation between Rating and Price. The higher the Rating, the higher the Price, especially on the right end. 
+Next, we explored some quantitative features with respect to the Mobile Phone price. The first scatter plot shows an obvious positive relation between Rating and Price as the smooth line indicates. The higher the Rating, the higher the Price. And this holds when we remove those bottom left 2 outlier data points. 
 ```{r 4.2.5, fig.height=4, fig.width=10, results='hold'}
-ggplot(data = mobile_dataset,mapping = aes(x = Rating, y = Price)) + geom_point() + geom_smooth(se=T, method = lm)+ labs(y="Price in Rupees", x="Rating", subtitle="Relation between rating and price")
-```
-```{r 4.2.6, fig.height=4, fig.width=10, results='hold'}
-ggplot(data = mobile_dataset,mapping = aes(x = No_of_ratings, y = Price)) + geom_point() + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
-```
-```{r 4.2.6, fig.height=4, fig.width=10, results='hold'}
-ggplot(data = mobile_dataset,mapping = aes(x = TotalReviwes, y = Price)) + geom_point() + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
+#The first plot is one with outlier
+plot1 = ggplot(data = mobile_dataset,mapping = aes(x = Rating, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T) + 
+  geom_segment(aes(x = 2.6, y = 20000, xend = 2.67, yend = 10000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
+  geom_point(data=mobile_dataset[mobile_dataset$Rating<3.0,], aes(x = Rating, y = Price), color='red') +
+  labs(y="Price in Rupees", x="Rating", subtitle="Relation between rating and price")
+
+#The first plot is a one with outliers removed
+plot2 = ggplot(data = mobile_dataset[mobile_dataset$Rating>3.0, ],mapping = aes(x = Rating, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T) +
+  labs(y="Price in Rupees", x="Rating", subtitle="Relation between rating and price after removing \nbottom left 2 outliers")
+
+grid.arrange(plot1, plot2, ncol=2)
 ```
 
+The second scatter plot shows the relation between Total number of rating and Price. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
+```{r 4.2.6, fig.height=4, fig.width=10, results='hold'}
+ggplot(data = mobile_dataset,mapping = aes(x = No_of_ratings, y = Price)) + geom_point(alpha=0.3) + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
+```
+The same pattern is also observed in the third scatter plot where relation between Total number of reviews and Price is plotted. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
 ```{r 4.2.7, fig.height=4, fig.width=10, results='hold'}
-ggplot(data = mobile_dataset,mapping = aes(x = RamSize_inGB, y = Price)) + geom_point() + geom_smooth(se=T, method = lm)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between Ram size (in GB) and price")
+ggplot(data = mobile_dataset,mapping = aes(x = TotalReviwes, y = Price)) + geom_point(alpha=0.3) + geom_smooth()+ labs(y="Price in Rupees", x="Total number of reviews", subtitle="Relation between total nubmer of reviews and price")
 ```
-
+In the fourth scatter plot, below, there seems a slight positive relation between Ram size (in GB) and the Price. Ram is normally associated with speed and performance of an operating system. The higher ram is, the better it is in speed and performance. It makes sense that a mobile phone with a larger Ram will charge more. However, because nowadays most mobile phones are very fast and stable, people wont tell too much difference, making the added on value from ram is only weekly associated with price.
 ```{r 4.2.8, fig.height=4, fig.width=10, results='hold'}
-ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point() + geom_smooth(se=T, method = lm)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between tram size (in GB) and price")
+ggplot(data = mobile_dataset,mapping = aes(x = RamSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between Ram size (in GB) and price")
+```
+In the final scatter plot, again, we have two charts, one the original dataset, the other with outlier removed. Both cases tells the same story. In contrast to the previous scatter plot (Ram size (in GB) and the Price), there is a very obvious positive linear relation between Rom size (in GB) and the Price. This makes sense because often times a mobile phone is more limited by its non-volatile memory space than its speed & performance.
+```{r 4.2.9, fig.height=4, fig.width=10, results='hold'}
+#The first plot is a one with outliers
+plot1 = ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T, method = lm)+ 
+  geom_segment(aes(x = 490, y = 100000, xend = 500, yend = 90000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
+  geom_point(data=mobile_dataset[mobile_dataset$RomSize_inGB>400,], aes(x = RomSize_inGB, y = Price), color='red') +
+  labs(y="Price in Rupees", x="Rom Size in GB", subtitle="Relation between Rom size (in GB) and price")
+
+#The second plot is a one with outliers removed
+plot2 = ggplot(data = mobile_dataset[mobile_dataset$RomSize_inGB<400, ],mapping = aes(x = RomSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T,method = lm) +
+  labs(y="Price in Rupees", x="Rom Size in GB", subtitle="Relation between Rom size (in GB) and price")
+
+grid.arrange(plot1, plot2, ncol=2)
 ```
 
-
+\pagebreak
 
 # References
 
