@@ -271,6 +271,8 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
+
+
 # References
 
 2020 review. “High-End Mobile Phones Price Have Soared 490% in 20 Years | This Is Money.” This Is Money, This Is Money, 23 July 2020, https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html.  
