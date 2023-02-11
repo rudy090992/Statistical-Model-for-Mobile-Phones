@@ -271,6 +271,61 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
+#  Chapter 5: Statistical Data Analysis
+## 5.1: Prediction of Mobile Phone Price Level
+In this section, we will use a range of statistical models to predict mobile phone price level: "Low", "Medium", "High", "Very High" based on some selected features.
+
+- Quadratic Discriminant Analysis (QDA)
+- Decision Tree
+- Multinomial-regression
+
+First, let use explore the distribution for difference price level. From the following bar plot, you can see it is very close to uniformly distributed across the dataset.
+```{r 5.1,fig.height=4, fig.width=10, results='hold'}
+price_level_count <- table(mobile_dataset$Price_Level) %>% as.data.frame()
+ggplot(data = price_level_count, mapping = aes(x = Var1, y = Freq)) + geom_bar(stat = "identity") + 
+  labs(y="Price Level", x="Count", subtitle="Count for different Price Level")
+```
+### 5.1.1 Quadratic Discriminant Analysis (QDA)
+Based on EDA in section 4.2, we know three numeric features have a great impact on price level a mobile phone belongs to, which are _Rating_, _RamSize_inGB_ and _RomSize_inGB_.
+We split the dataset into 75% for training and 25% for testing purpose. 
+We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample.
+Then we fit the data into Quadratic Discriminant Analysis (QDA) as follows:
+```{r 5.1.1.1, results='hold'}
+library(MASS) #USed for QDA
+library(klaR) #Used for partimat
+set.seed(2023)
+Ny <- round(table(mobile_dataset$Price_Level)[unique(mobile_dataset$Price_Level)]* 0.75)
+#Create the sample from the population
+idx=sampling:::strata(mobile_dataset, stratanames=c("Price_Level"), size=Ny, method="srswor")
+strata_sample <- getdata(mobile_dataset,idx)
+train <- mobile_dataset[idx$ID_unit,]
+test <- mobile_dataset[-idx$ID_unit,]
+#Train the data using Quadratic Discriminant Analysis
+Model.fit<-qda(Price_Level~Rating+RamSize_inGB+RomSize_inGB, data = train)
+Model.fit
+cat(rep("-", 50), "\n")
+#This plot is showing that LD1 can do a really good to separate these species rather than LD2
+partimat(Price_Level~Rating+RamSize_inGB+RomSize_inGB, data = train, method="qda")
+```
+After this, we are confident to apply this model on the testing dataset, and calculate the misclassification rate.
+```{r 5.1.1.2, results='hold'}
+cat(rep("-", 50), "\n")
+cat("\nApply the fitted logistic regression model to the test set, And we can get the following confusion table.\n")
+Prob.predict<-predict(Model.fit,test,type="response")
+table(Prob.predict$class,test$Price_Level)
+cat(rep("-", 50), "\n")
+cat("The misclassification rate is: ", mean(Prob.predict$class != test$Price_Level))
+```
+
+Conclusion: Quadratic Discriminant Analysis has a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (77%).
+
+
+
+
+
+
+\pagebreak
+
 
 
 # References
