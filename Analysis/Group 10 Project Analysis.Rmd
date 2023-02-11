@@ -52,7 +52,7 @@ With so many mobile phones on the market, it can be difficult to decide which on
 3. Can we build a decent model to predict the selling price for a mobile phone?
 
 
-# Dataset and Cleanup
+# Dataset and Cleanup (Done by Yongpeng Fu)
 
 The initial dataset consists of 8 columns and 28,036 rows and no missing values. These 8 columns are:
 
@@ -74,7 +74,7 @@ Some initial steps can be completed to clean the dataset and create new variable
 4. Add additional column to segment the **Price** into 4 different levels;
 5. Add additional column to determine if a phone has %G feature or not based on **Model** information.
 
-```{r Cleanup}
+```{r Cleanup, results='hold'}
 mobile_dataset <- read.csv("./Updated_Mobile_Dataset.csv")
 #Step 0: convert Model and Company letter to uppercase.
 mobile_dataset$Model <- toupper(mobile_dataset$Model)
@@ -160,7 +160,7 @@ and its storage capacity. The latter being also listed as a separate column. - *
 * **Is_5G**: categorical variable. If the phone has 5G service or not. - **Independent Variable**
 
 
-```{r Load Data}
+```{r Load Data, results='hold'}
 mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
 #Specify the level for Price_Level column
 mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
@@ -177,7 +177,7 @@ Our team is finalizing what the full analysis of the dataset will look like, but
 ![Project Workflow](./Img/project-workflow.png)
 \pagebreak
 
-#  Chapter 4: Exploratory Data Analysis
+#  Chapter 4: Exploratory Data Analysis (Done by Yongpeng Fu)
 ## 4.1: A summary of the dataset
 The dimension of the cleaned dataset is 726 rows and 14 columns. A summary of the data is as follows:
 ```{r 4.1 Summary, results='hold'}
@@ -271,13 +271,13 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
-#  Chapter 5: Statistical Data Analysis
+#  Chapter 5: Statistical Data Analysis (Done by Yongpeng Fu)
 ## 5.1: Prediction of Mobile Phone Price Level
 In this section, we will use a range of statistical models to predict mobile phone price level: "Low", "Medium", "High", "Very High" based on some selected features.
 
 - Quadratic Discriminant Analysis (QDA)
-- Decision Tree
-- Multinomial-regression
+- Decision Tree (Classification)
+- Multinomial Regression
 
 First, let use explore the distribution for difference price level. From the following bar plot, you can see it is very close to uniformly distributed across the dataset.
 ```{r 5.1,fig.height=4, fig.width=10, results='hold'}
@@ -319,8 +319,86 @@ cat("The misclassification rate is: ", mean(Prob.predict$class != test$Price_Lev
 
 Conclusion: Quadratic Discriminant Analysis has a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (77%).
 
+### 5.1.2 Decision Tree (Classification)
+To be consistent and comparable with QDA, we again use these three variables _Rating_, _RamSize_inGB_ and _RomSize_inGB_ to build the decision tree model.
+We split the dataset into 75% for training and 25% for testing purpose. 
+We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample.
+Then we fit the data into Classification tree model as follows:
 
+```{r 5.1.2.1, results='hold'}
+library(tree)
+set.seed(2023)
+Ny <- round(table(mobile_dataset$Price_Level)[unique(mobile_dataset$Price_Level)]* 0.75)
+#Create the sample from the population
+idx=sampling:::strata(mobile_dataset, stratanames=c("Price_Level"), size=Ny, method="srswor")
+strata_sample <- getdata(mobile_dataset,idx)
+train <- mobile_dataset[idx$ID_unit,]
+test <- mobile_dataset[-idx$ID_unit,]
+#Fit the train data into the tree model
+tree.class<-tree(factor(Price_Level)~Rating+RamSize_inGB+RomSize_inGB, train)
+summary(tree.class)
+```
 
+The tree is plotted without pruning as follows. There are a total of 9 terminal nodes in the tree.
+```{r 5.1.2.2, results='hold'}
+#Let us plot the tree as well
+plot(tree.class)
+text(tree.class, pretty=0)
+```
+To find the best tree size, we used cross-validation to select the "best" number of tree size (the terminal nodes). Based on the following plot, it seems tree size 9 gives the smallest deviance. Just to demonstrate how prunned tree works and also reduce the complecity of tree, we decide to use 8 as the "best" tree size.
+```{r 5.1.2.3, results='hold'}
+cv.class<-cv.tree(tree.class, FUN = prune.misclass) 
+plot(cv.class$size, cv.class$dev,type="b")
+```
+A tree after prunning is plotted as follows. There are a total of 8 terminal nodes in the tree.
+```{r 5.1.2.4, results='hold'}
+prune.class=prune.tree(tree.class,best=8)
+plot(prune.class)
+text(prune.class,pretty=0)
+```
+Finally, we use the pruned tree to do prediction.
+```{r 5.1.2.5, results='hold'}
+prune.pred=predict(prune.class,test,type="class")
+table(prune.pred,test$Price_Level)
+cat(rep("-", 50), "\n")
+cat("The misclassification rate is: ", mean(prune.pred != test$Price_Level))
+```
+Conclusion: Decision Tree (Classification) has also a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (76.2%).
+
+### 5.1.3 Multinomial Regression
+This is an experimental analysis. Based on EDA in section 4.2, we know that Company name (branding) also plays a big role in the price level. We also know that Rom size of a mobile phone matters a lot as well. We are curious to see if a combination of _Company_ and _RomSize_ can also be used to distinguish the price level.
+
+Normally, we would split the dataset into 75% for training and 25% for testing purpose. However, because our sample size is small, not every Company has multiple records in our dataset. Therefore, in the following test, we use whole sample as the training and test purpose.
+
+Then we fit the data into Multinomial Regression as follows.
+Note, because our response is ordinal, we use Cumulative logit model; also parallel = TRUE: means beta is the same, this is a simple model.
+
+We also use Chi square test to test for the goodness-of-fit for this model.
+$$
+H_0: \text{The Cumulative logit model fits the observations}
+$$
+$$
+H_1: \text{The Cumulative logit model does not fit the observations}
+$$
+```{r 5.1.3.1, warning=FALSE, results='hold'}
+library(VGAM)
+comany_rom_train <- mobile_dataset[c("Company", "RomSize_Ori", "Price_Level")]
+multi_train_fit <- vglm(Price_Level~Company+RomSize_Ori,family=cumulative(parallel = TRUE),data=comany_rom_train)
+cat("The p value for the chi test is: ", 1-pchisq(deviance(multi_train_fit),df.residual(multi_train_fit)))
+cat("\nThe p-value here is large = 1, so we cannot reject null hypothesis. Our model seems to be provide a good fit.")
+```
+
+Finally, we use this model to predict use the same training dataset, as a demonstration purpose.
+
+```{r 5.1.3.2, results='hold'}
+pred_fit <- predict(multi_train_fit, type="response")
+#Use the record that has the highest probability as the final predication for each row.
+pred_fit_class <-factor(dimnames(pred_fit)[[2]][max.col(pred_fit, 'first')], levels = c("Low", "Medium", "High", "Very High"))
+table(pred_fit_class, mobile_dataset$Price_Level)
+cat(rep("-", 50), "\n")
+cat("The misclassification rate is: ", mean(pred_fit_class != mobile_dataset$Price_Level))
+```
+Conclusion: Multinomial Regression has also a good performance to predict the mobile phone price level using only 2 variables ( _Company_ and _RomSize_), with a relatively high accuracy (71.9%).
 
 
 
