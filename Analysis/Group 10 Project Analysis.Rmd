@@ -161,7 +161,7 @@ and its storage capacity. The latter being also listed as a separate column. - *
 
 
 ```{r Load Data}
-mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
+mobile_dataset <- as_tibble(read.csv("/Users/berg/DataspellProjects/Statistical-Model-for-Mobile-Phones/Analysis/Cleaned_Mobile_Dataset.csv"))
 #Specify the level for Price_Level column
 mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
 mobile_dataset %>% head(4)
@@ -205,7 +205,9 @@ ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="bl
     fill="#69b3a2"
   ) +  geom_segment(aes(x = -5000, y = 140, xend = 0, yend = 130),lineend = "round",linejoin = "round",
                   arrow = arrow(length = unit(0.5, "cm"))) + labs(y="Count", x="Price in Rupees", 
-       subtitle="Distribution of Mobile Phone price")
+       subtitle="Distribution of Mobile Phone price") +
+       geom_vline(aes(xintercept = 5000), color="red", linetype="dashed", size=0.4) +
+       geom_vline(aes(xintercept = 22000), color="red", linetype="dashed", size=0.4)
 ```
 The following figure is to break down the Price by different phone-making companies. There are a total of 37 companies in the dataset. Iin consistent with previous figure about Price distribution, we see a big portion of Price falls between 9000 (left dash line) and 40000 (right dash line) Rupees. _Apple_ alone contributes the most of high priced Mobile Phones, while companies like from _NOKIA_ to _GFIVE_ contribute to the low-priced ones.
 ```{r 4.2.2,fig.height=5, fig.width=10, results='hold'}
@@ -271,9 +273,202 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
+## New price level variable
+```{r}
+# Break Price into 4 groups:
+classify_price_level <- function(price) {
+  if (price <= 5000) {
+    return("Cheap")
+  } else if (price > 5000 & price <= 22000) {
+    return("Affordable")
+  } else if (price > 22000 & price <= 100000) {
+    return("Expensive")
+  } else {
+    return("Luxury")
+  }
+}
+
+mobile_dataset$Price_level_av <- sapply(mobile_dataset$Price, classify_price_level)
+
+# Convert Price_level_av to factor
+mobile_dataset$Price_level_av <- factor(mobile_dataset$Price_level_av, levels = c("Cheap", "Affordable", "Expensive", "Luxury"))
+
+# What proportion of mobile phones are in each price level?
+prop.table(table(mobile_dataset$Price_level_av))
+```
+
+## Sampling estimation
+### Simple random sampling (SRS)
+```{r}
+# Calculate the population mean and its standard deviation
+pop_mean = mean(mobile_dataset$Price)
+pop_sd = sd(mobile_dataset$Price)
+# Print the results
+print(paste("The population mean is", pop_mean))
+print(paste("The population standard deviation is", pop_sd))
+```
+```{r}
+set.seed(2023)
+n <- 100
+# Simple random sampling
+ix <- sample(1:nrow(mobile_dataset), n, replace = FALSE)
+srs <- mobile_dataset[ix,]
+# Calculate the sample mean and its standard deviation
+srs_mean = mean(srs$Price)
+srs_sd = sd(srs$Price)
+# Print the results
+print(paste("The sample mean is", srs_mean))
+print(paste("The sample standard deviation is", srs_sd))
+
+```
+
+```{r}
+# Method 1: Estimate the population mean and its standard deviation using survey package
+library("survey")
+# Simple random sample of 5000 observations
+set.seed(2023)
+N = nrow(mobile_dataset)
+n = 100
+ix <- sample(1:N, n, replace = FALSE)
+srs <- mobile_dataset[ix,]
+# Add a sampling weight column and finite population correction factor to the sample
+srs = data.frame(srs, pw = rep(N/n, n), fpc = rep(N, n))
+svy1 = svydesign(id = ~0, strata = NULL, data = srs, weights = ~pw, fpc = ~fpc)
+# Estimate the population mean and its standard deviation
+srs_mean = svymean(~Price, design = svy1)
+# Print the results
+srs_mean
+
+```
+
+```{r}
+# Calculate confidence interval for the population mean of usd_pledged_real
+confint(srs_mean ,level = 0.95, df=degf(svy1))
+```
+
+```{r}
+# Method 2: Estimate the population mean and its standard deviation using simulation
+library(ggplot2)
+
+mean_SD_facet <- function(s, n, N){ # s denotes how many times you draw the sample, n denotes the sample size
+  set.seed(2023)
+  sam_mean <- rep(0, s)
+  sam_sd <- rep(0, s)
+  for (i in 1:s){
+    ind <- sample(seq(0, N), n, replace=FALSE)
+    sam_mean[i] <- mean(mobile_dataset$Price[ind])
+    sam_sd[i] <- sd(mobile_dataset$Price[ind])
+  }
+  es_mean <- mean(sam_mean)
+  es_var <- sam_sd[1]^2/n*(1-n/N)
+  es_var2 <- sd(sam_mean)^2
+  print(c(es_mean,es_var,es_var2))
+  # Plot the histogram of the sample mean using ggplot2
+  ggplot(data.frame(sam_mean), aes(x=sam_mean)) +
+          geom_histogram(binwidth=500) +
+          geom_vline(xintercept=mean(mobile_dataset$Price), color="red", size=1) +
+          geom_text(x=mean(mobile_dataset$Price), y=0, label="Population mean", vjust=-1) +
+          labs(title=paste("Sample size =", n, "\n", "Draw sample times =", s), x="Sample mean", y="Frequency")
+}
+
+# Create a list of parameters for the function
+params_list <- list(list(s = 50, n = 50), list(s = 50, n = 100), list(s = 50, n = 200),
+                    list(s = 50, n = 100), list(s = 100, n = 100), list(s = 200, n = 100))
+
+# Create a list of plots
+plots_list <- lapply(params_list, function(params) mean_SD_facet(params[["s"]], params[["n"]], N))
+
+# Plot the subplots
+library(gridExtra)
+grid.arrange(grobs = plots_list, ncol = 3, nrow = 2)
+
+```
+
+### Stratified random sampling
+```{r}
+# Calculate proportion of each category and make a data frame
+prop = table(mobile_dataset$Price_level_av)/nrow(mobile_dataset)
+# Sort the data in data frame order
+prop = prop[unique(mobile_dataset$Price_level_av)]
+# Create a vector of the proportion of each category
+prop = as.vector(prop)
+# Calculate the sample size for each strata
+strata_size = round(prop * 200)
+# Add 1 ro Luxury strata to make the total sample size 201
+strata_size[4] = strata_size[4] + 1
+# Test if the sum of the sample size equals 100
+print(paste("The sample size is:", sum(strata_size)))
+# Print the strata sizes
+print(strata_size)
+```
+```{r}
+table(mobile_dataset$Price_level_av)
+```
+```{r}
+library("sampling")
+set.seed(2023)
+# Sampling strata_size observations from each stratum with simple random sampling
+idx = sampling::strata(mobile_dataset, stratanames = "Price_level_av", size = strata_size, method = "srswor")
+# Create a new data frame with the sampled observations
+strata_srs = getdata(mobile_dataset, idx)
+# Add columns for sampling weight and finite population correction factor
+strata_srs = data.frame(strata_srs, pw = rep(N/nrow(strata_srs), nrow(strata_srs)), fpc = c(rep(470, 130), rep(106, 29), rep(146, 40), rep(3, 2)))
+# Estimate the population mean and its standard deviation
+svy2 = svydesign(id = ~1, strata = ~Price_level_av, data = strata_srs, weights = ~pw, fpc = ~fpc)
+me2 = svymean(~Price, svy2)
+# Print the results
+print(me2)
+```
+
+```{r}
+# Calculate confidence interval for the population mean of usd_pledged_real
+confint(me2, level = 0.95, df=degf(svy2))
+```
+
+### Cluster sampling
+```{r}
+# Calculate the number of unique clusters in the data
+n_clusters = length(unique(mobile_dataset$Company))
+# Print unique values of the country column
+print(unique(mobile_dataset$Company))
+# Print the length of the unique values
+print(paste("Number of clusters (companies) in the dataset:", n_clusters))
+```
+
+```{r}
+library("sampling")
+library("survey")
+# Select two clusters with simple random sampling method using the sampling package
+set.seed(2023)
+n_choose = 5
+idx = sampling::cluster(mobile_dataset, clustername = "Company", size = n_choose, method = "srswor")
+# Create a new data frame with the sampled observations
+cluster_srs = getdata(mobile_dataset, idx)
+# Print the clusters (countries) in the sample
+print(paste(
+        "The clusters (countries) in the sample are:",
+        paste(unique(cluster_srs$Company), collapse = ", ")
+))
+```
+
+```{r}
+# Calculate the sampling weight and finite population correction factor
+cluster_srs = data.frame(cluster_srs, pw = rep(n_clusters/n_choose, nrow(cluster_srs)), fpc = rep(n_clusters, nrow(cluster_srs)))
+# Estimate the population mean and its standard deviation
+svy3 = svydesign(id = ~Company, data = cluster_srs, weights = ~pw, fpc = ~fpc)
+me3 = svymean(~Price, svy3)
+# Print the results
+print(me3)
+```
+
+```{r}
+# Calculate confidence interval for the population mean of usd_pledged_real
+confint(me3, level = 0.95, df=degf(svy3))
+```
 
 
-# References
+
+References
 
 2020 review. “High-End Mobile Phones Price Have Soared 490% in 20 Years | This Is Money.” This Is Money, This Is Money, 23 July 2020, https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html.  
 
