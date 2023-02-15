@@ -195,7 +195,7 @@ The main target is Price in the dataset. In the following visualization it shows
 
 ```{r 4.2.1, fig.height=4, fig.width=10, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(x=Price)) +
-        geom_histogram(color="black", fill="white", bins = 100)+
+        geom_histogram(color="white", fill="orange", bins = 100)+
         labs(y="Count", x="Price in Rupees", subtitle="Distribution of Mobile Phone price") +
         geom_vline(aes(xintercept = 9500), color="blue", linetype="dashed", size=0.4) +
         geom_vline(aes(xintercept = 24400), color="blue", linetype="dashed", size=0.4) +
@@ -391,13 +391,13 @@ grid.arrange(grobs = plots_list, ncol = 3, nrow = 2)
 # Calculate proportion of each category and make a data frame
 prop = table(mobile_dataset$Price_level_av)/nrow(mobile_dataset)
 # Sort the data in data frame order
-prop = prop[unique(mobile_dataset$Price_level_av)]
+# prop = prop[unique(mobile_dataset$Price_level_av)]
 # Create a vector of the proportion of each category
 prop = as.vector(prop)
 # Calculate the sample size for each strata
-strata_size = round(prop * 201)
+strata_size = round(prop * 100)
 # Add 1 ro Luxury strata to make the total sample size 201
-strata_size[4] = strata_size[4] + 1
+strata_size[4] = strata_size[4]
 # Test if the sum of the sample size equals 100
 print(paste("The sample size is:", sum(strata_size)))
 # Print the strata sizes
@@ -414,7 +414,7 @@ idx = sampling::strata(mobile_dataset, stratanames = "Price_level_av", size = st
 # Create a new data frame with the sampled observations
 strata_srs = getdata(mobile_dataset, idx)
 # Add columns for sampling weight and finite population correction factor
-strata_srs = data.frame(strata_srs, pw = rep(N/nrow(strata_srs), nrow(strata_srs)), fpc = c(rep(470, 130), rep(106, 29), rep(146, 40), rep(3, 2)))
+strata_srs = data.frame(strata_srs, pw = rep(N/nrow(strata_srs), nrow(strata_srs)), fpc = c(rep(260, 36), rep(365, 50), rep(64, 9), rep(36, 5)))
 # Estimate the population mean and its standard deviation
 svy2 = svydesign(id = ~1, strata = ~Price_level_av, data = strata_srs, weights = ~pw, fpc = ~fpc)
 me2 = svymean(~Price, svy2)
@@ -752,6 +752,17 @@ print(price_thresholds)
 ```
 
 ```{r}
+# Regression tree
+# Create a new data frame with the variables of interest
+column_names_tree <- c("Price", "Rating", "No_of_ratings", "TotalReviwes", "RamSize_inGB", "RomSize_inGB", "Is_5G", "Company")
+mobile_dataset_tree <- mobile_dataset[column_names_tree]
+# Remove missing values from the dataset
+mobile_dataset_tree <- mobile_dataset_tree %>%
+        filter(!is.na(Price))
+# Split the data into train and test sets
+set.seed(2023)
+train_data <- mobile_dataset_tree[sample(1:nrow(mobile_dataset_tree), 0.7*nrow(mobile_dataset_tree)), ]
+test_data <- mobile_dataset_tree[-sample(1:nrow(mobile_dataset_tree), 0.7*nrow(mobile_dataset_tree)), ]
 # Fit a regression tree to the data
 library(tree)
 tree_model <- tree(Price ~ ., data = train_data)
@@ -787,6 +798,153 @@ text(pruned_tree_model, pretty = 0)
 pruned_tree_pred <- predict(pruned_tree_model, test_data)
 # Calculate the RMSE
 mse_pruned <- mean((pruned_tree_pred - test_data$Price)^2)
+# Print the MSE
+print(paste("MSE:", mse_pruned))
+```
+
+```{r}
+# Create 10 folds
+library(caret)
+folds<-createFolds(mobile_dataset_tree$Price, k=10)
+```
+```{r}
+# Calculate the cross-validation error for linear regression
+library(MASS)
+cv_error_lr <- c()
+for (i in 1:10){
+  train_lr <- mobile_dataset_mlr[-folds[[i]], ]
+  test_lr <- mobile_dataset_mlr[folds[[i]], ]
+  lr_model <- mlr_poly_model
+  lr_pred <- predict(lr_model, test_lr)
+  RMSE <- sqrt(mean((lr_pred - test_lr$Price)^2))
+  cv_error_lr <- c(cv_error_lr, RMSE)
+}
+cv_error_lr <- mean(cv_error_lr)
+print(paste("Cross-validation error for linear regression:", cv_error_lr))
+```
+```{r warning = FALSE, message = FALSE}
+# Calculate the cross-validation error for regression tree
+cv_error_tree <- c()
+for (i in 1:10){
+  train_cv <- mobile_dataset_tree[-folds[[i]], ]
+  test_cv <- mobile_dataset_tree[folds[[i]], ]
+  tree_model <- pruned_tree_model # tree(Price ~ ., data = train_cv)
+  tree_pred <- predict(tree_model, test_cv)
+  RMSE <- sqrt(mean((tree_pred - test_cv$Price)^2))
+  cv_error_tree <- c(cv_error_tree, RMSE)
+}
+cv_error_tree <- mean(cv_error_tree)
+print(paste("Cross-validation error for regression tree:", cv_error_tree))
+```
+
+## classification tree
+```{r}
+# Create a new data frame with the variables of interest
+# Calculate proportion of each category and make a data frame
+prop = table(mobile_dataset$Price_level_av)/nrow(mobile_dataset)
+# Sort the data in data frame order
+prop = prop[unique(mobile_dataset$Price_level_av)]
+# Create a vector of the proportion of each category
+prop = as.vector(prop)
+# Calculate the sample size for each strata
+strata_size = round(prop * 544)
+# Test if the sum of the sample size equals 100
+print(paste("The sample size is:", sum(strata_size)))
+# Print the strata sizes
+print(strata_size)
+library("sampling")
+set.seed(2023)
+# Sampling strata_size observations from each stratum with simple random sampling
+idx = sampling::strata(mobile_dataset, stratanames = "Price_level_av", size = strata_size, method = "srswor")
+# Create a new data frame with the sampled observations
+train_data <- data.frame(getdata(mobile_dataset, idx))
+# Get index values of train data
+train_index <- as.numeric(rownames(train_data))
+# Get test data by excluding index values of train data
+test_data <- mobile_dataset[-train_index, ]
+# Select colunms for multiple linear regression
+column_names_tree <- c("Price_level_av", "Rating", "No_of_ratings", "TotalReviwes", "RamSize_inGB", "RomSize_inGB", "Is_5G", "Company")
+train_data <- train_data[column_names_tree]
+test_data <- test_data[column_names_tree]
+
+# column_names_tree <- c("Price_level_av", "Rating", "No_of_ratings", "TotalReviwes", "RamSize_inGB", "RomSize_inGB", "Is_5G", "Company")
+# mobile_dataset_tree <- mobile_dataset[column_names_tree]
+# Remove missing values from the dataset
+mobile_dataset_tree <- mobile_dataset_tree %>%
+        filter(!is.na(Price_level_av))
+# Split the data into train and test sets
+# set.seed(2023)
+# train_data <- mobile_dataset_tree[sample(1:nrow(mobile_dataset_tree), 0.7*nrow(mobile_dataset_tree)), ]
+# test_data <- mobile_dataset_tree[-sample(1:nrow(mobile_dataset_tree), 0.7*nrow(mobile_dataset_tree)), ]
+
+```
+
+```{r}
+# Fit a classification tree to the data
+library(tree)
+tree_model <- tree(as.factor(Price_level_av) ~ ., data = train_data)
+summary(tree_model)
+```
+```{r}
+# Plot the tree
+plot(tree_model)
+text(tree_model, pretty = 0)
+```
+```{r}
+set.seed(10)
+# Apply the tree to the test set
+tree_pred <- predict(tree_model, test_data, type = "class")
+# Calculate the misclassification rate
+misclassification_rate <- mean(tree_pred != test_data$Price_level_av)
+# Print the misclassification rate
+print(paste("Misclassification rate:", misclassification_rate))
+```
+```{r}
+# Prune the tree by checking the cross-validation errors
+cv.tree_model <- cv.tree(tree_model, FUN = prune.misclass)
+plot(cv.tree_model$size, cv.tree_model$dev, type = "b")
+```
+```{r}
+# build the pruned tree
+pruned_tree_model <- prune.tree(tree_model, best = 4)
+# Plot the pruned tree
+plot(pruned_tree_model)
+text(pruned_tree_model, pretty = 0)
+```
+```{r}
+# Re-calculate the misclassification rate
+pruned_tree_pred <- predict(pruned_tree_model, test_data, type = "class")
+misclassification_rate_pruned <- mean(pruned_tree_pred != test_data$Price_level_av)
+print(paste("Misclassification rate:", misclassification_rate_pruned))
+```
+```{r}
+library(caret)
+# Create the confusion matrix
+conf_matrix <- confusionMatrix(pruned_tree_pred, test_data$Price_level_av)
+# Extract the accuracy, precision, and F1 score
+accuracy <- conf_matrix$overall[1]
+precision <- conf_matrix$byClass[1]
+f1_score <- conf_matrix$byClass[5]
+# Print the accuracy, precision, and F1 score
+print(paste("Accuracy:", accuracy))
+print(paste("Precision:", precision))
+print(paste("F1 score:", f1_score))
+```
+
+```
+
+```{r}
+# Plot a heatmap of the confusion matrix
+conf_matrix_df <- as.data.frame.table(conf_matrix$table)
+library(tidyr)
+conf_matrix_df <- pivot_wider(conf_matrix_df, names_from = Reference, values_from = Freq)
+# Save the confusion matrix as a csv file
+# write.csv(conf_matrix_df, "/Users/berg/DataspellProjects/MDSA-UofC/DATA605/00_demos/confusion_matrix.csv")
+
+```
+```{r}
+
+```
 ```
 
 While improving the model's explanatory power (Adjusted R-squared), the model's performance on the test data has decreased. This is because the model is overfitting the training data. The model is not generalizing well to the test data. The model is not able to predict the price of the test data accurately.
