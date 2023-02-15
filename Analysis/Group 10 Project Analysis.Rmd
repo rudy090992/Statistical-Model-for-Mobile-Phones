@@ -752,11 +752,41 @@ print(price_thresholds)
 ```
 
 ```{r}
-
+# Fit a regression tree to the data
+library(tree)
+tree_model <- tree(Price ~ ., data = train_data)
+summary(tree_model)
+```
+```{r}
+# Plot the tree
+plot(tree_model)
+text(tree_model, pretty = 0)
+```
+```{r}
+# Apply the tree to the test set
+tree_pred <- predict(tree_model, test_data)
+# Calculate the RMSE
+mse <- mean((tree_pred - test_data$Price)^2)
+mse
 ```
 
 ```{r}
-
+# Check the plot between the cross-valiation error and the size of the tree
+cv.tree_model <- cv.tree(tree_model)
+plot(cv.tree_model$size, cv.tree_model$dev, type = "b")
+```
+```{r}
+# Prune the tree
+pruned_tree_model <- prune.tree(tree_model, best = 6)
+# Plot the pruned tree
+plot(pruned_tree_model)
+text(pruned_tree_model, pretty = 0)
+```
+```{r}
+# Apply the tree to the test set
+pruned_tree_pred <- predict(pruned_tree_model, test_data)
+# Calculate the RMSE
+mse_pruned <- mean((pruned_tree_pred - test_data$Price)^2)
 ```
 
 While improving the model's explanatory power (Adjusted R-squared), the model's performance on the test data has decreased. This is because the model is overfitting the training data. The model is not generalizing well to the test data. The model is not able to predict the price of the test data accurately.
