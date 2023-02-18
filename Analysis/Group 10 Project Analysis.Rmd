@@ -27,6 +27,11 @@ header-includes: \usepackage{fvextra} \DefineVerbatimEnvironment{Highlighting}{V
 knitr::opts_chunk$set(echo = TRUE)
 library(survey) #Used for statistical analysis
 library(sampling) #Used for sample data
+library(MASS) #USed for QDA
+library(klaR) #Used for partimat
+library(tree) #used for the tree model
+library(VGAM) #Used for Multinominal Regression model
+library(caret) #Used for creating folds
 library(ggplot2) #Used for plot
 library(tibble) #used for nice display dataframe
 library(magrittr) #Used for %>% 
@@ -35,6 +40,8 @@ library(dplyr) # Used for easy manipualte rows and columns
 library(plyr) #Used for mapping vector values
 library(stringr) #Used to manipulate string
 library(gridExtra) #Used to arrange the ggplot chart
+library(rpart) #Used for classification tree
+library(rpart.plot) #Used for plottingclassification tree
 ```
 
 
@@ -52,7 +59,7 @@ With so many mobile phones on the market, it can be difficult to decide which on
 3. Can we build a decent model to predict the selling price for a mobile phone?
 
 
-# Dataset and Cleanup (Done by Yongpeng Fu)
+# Dataset and Cleanup
 
 The initial dataset consists of 8 columns and 28,036 rows and no missing values. These 8 columns are:
 
@@ -60,7 +67,7 @@ The initial dataset consists of 8 columns and 28,036 rows and no missing values.
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
 * **Company**: categorical variable. Name of the phone's manufacturer. - **Independent Variable**
 * **Price**: continuous variable. Units in Indian Rupees. - **Dependent Variable**
-* **Rating**: continuous variable. Units in Indian Rupees. - **Independent Variable**
+* **Rating**: continuous variable. - **Independent Variable**
 * **Number of ratings**: discrete variable: a simple count. - **Independent Variable**
 * **Total reviews**: discrete variable: a simple count. - **Independent Variable**
 * **RAM size**: categorical variable. RAM specification of the phone. - **Independent Variable**
@@ -147,7 +154,7 @@ After cleaning and breaking down columns, the dataset now consists of 14 columns
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
 * **Company**: categorical variable. Name of the phone's manufacturer. - **Independent Variable**
 * **Price**: continuous variable. Units in Indian Rupees. - **Dependent Variable**
-* **Rating**: continuous variable. Units in Indian Rupees. - **Independent Variable**
+* **Rating**: continuous variable. - **Independent Variable**
 * **Number of ratings**: discrete variable: a simple count. - **Independent Variable**
 * **Total reviews**: discrete variable: a simple count. - **Independent Variable**
 * **Model_Only**: categorical variable: only contains the model information of a mobile phone. - **Independent Variable**
@@ -177,7 +184,7 @@ Our team is finalizing what the full analysis of the dataset will look like, but
 ![Project Workflow](./Img/project-workflow.png)
 \pagebreak
 
-#  Chapter 4: Exploratory Data Analysis (Done by Yongpeng Fu)
+#  Chapter 4: Exploratory Data Analysis
 ## 4.1: A summary of the dataset
 The dimension of the cleaned dataset is 726 rows and 14 columns. A summary of the data is as follows:
 ```{r 4.1 Summary, results='hold'}
@@ -192,7 +199,7 @@ mobile_dataset %>% summary()
 This section is focused on the exploration of relation between variables using various visualization techniques.
 
 The main target is Price in the dataset. In the following visualization it shows the distribution of Mobile Phone price with long tail towards to the high end. The average price is 15902 Rupees. Most price falls in the range of 50000 Rupees. One really stands out price range (arrow indicated) is 1000-2000 Rupees with the highest frequency.
-```{r 4.2.1, fig.height=4, fig.width=10, results='hold'}
+```{r 4.2.1, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="black", fill="white", bins = 100)+
   geom_vline(aes(xintercept=mean(Price)),
             color="blue", linetype="dashed", size=0.4) + geom_label(
@@ -207,28 +214,31 @@ ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="bl
                   arrow = arrow(length = unit(0.5, "cm"))) + labs(y="Count", x="Price in Rupees", 
        subtitle="Distribution of Mobile Phone price")
 ```
+
+
 The following figure is to break down the Price by different phone-making companies. There are a total of 37 companies in the dataset. Iin consistent with previous figure about Price distribution, we see a big portion of Price falls between 9000 (left dash line) and 40000 (right dash line) Rupees. _Apple_ alone contributes the most of high priced Mobile Phones, while companies like from _NOKIA_ to _GFIVE_ contribute to the low-priced ones.
-```{r 4.2.2,fig.height=5, fig.width=10, results='hold'}
+```{r 4.2.2,fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price)) +geom_boxplot()+ geom_line() +
-    sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
+    sapply(c(6499, 12490, 20000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
        subtitle="Boxplot for Mobile Phone price from different companies")
 ```
+
 The Price is further broken down by their 5G services. Interestingly, neither high-priced nor low-priced Mobile Phones have equipped 5G service. In contrast, almost all middle-priced Mobile Phones have 5G service. Price for those with 5G service are slightly more expensive than those without. NOTE: the dashed line indicates the price between 9000 (left dash line) and 40000 (right dash line) Rupees.
 
-```{r 4.2.3, fig.height=5, fig.width=10, results='hold'}
+```{r 4.2.3, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price, color = Is_5G)) +geom_boxplot(position=position_dodge(width = 0.8))+ geom_line() +
     sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
        subtitle="Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
 ```
 The pattern is more obvious when we provide color for 4 different price level ("Low", "Medium", "High", "Very High"). Although mobile phones from companies like APPLE, GOOGLE, ASUS and NOTHING have no 5G service, their price are all very high. It is worth investigating if some other attributes like brand effect, Storage capacity (Rom Size), and calculation power (Ram Size) are playing roles. Most Mobile Phones (except MI) with 5G service, again, have a higher proportion falling in a Very High price level, compared to the counterparts without 5G service. Almost all the rest mobile phones without 5G service fall in a Low price level.
 
-```{r 4.2.4, fig.height=5, fig.width=10, results='hold'}
+```{r 4.2.4, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset,mapping = aes(y =reorder(Company, Price), fill = Price_Level)) + geom_bar(stat = "count", position="fill") + labs(y="Company", x="Percentage", 
        subtitle="Percent Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
 ```
 
 Next, we explored some quantitative features with respect to the Mobile Phone price. The first scatter plot shows an obvious positive relation between Rating and Price as the smooth line indicates. The higher the Rating, the higher the Price. And this holds when we remove those bottom left 2 outlier data points. 
-```{r 4.2.5, fig.height=4, fig.width=10, results='hold'}
+```{r 4.2.5, fig.height=6, fig.width=12, results='hold'}
 #The first plot is one with outlier
 plot1 = ggplot(data = mobile_dataset,mapping = aes(x = Rating, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T) + 
   geom_segment(aes(x = 2.6, y = 20000, xend = 2.67, yend = 10000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
@@ -242,20 +252,27 @@ plot2 = ggplot(data = mobile_dataset[mobile_dataset$Rating>3.0, ],mapping = aes(
 grid.arrange(plot1, plot2, ncol=2)
 ```
 
-The second scatter plot shows the relation between Total number of rating and Price. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
-```{r 4.2.6, fig.height=4, fig.width=10, results='hold'}
+The second scatter plot as follows shows the relation between Total number of rating and Price. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
+```{r 4.2.6, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset,mapping = aes(x = No_of_ratings, y = Price)) + geom_point(alpha=0.3) + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
 ```
 The same pattern is also observed in the third scatter plot where relation between Total number of reviews and Price is plotted. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
-```{r 4.2.7, fig.height=4, fig.width=10, results='hold'}
+```{r 4.2.7, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset,mapping = aes(x = TotalReviwes, y = Price)) + geom_point(alpha=0.3) + geom_smooth()+ labs(y="Price in Rupees", x="Total number of reviews", subtitle="Relation between total nubmer of reviews and price")
 ```
 In the fourth scatter plot, below, there seems a slight positive relation between Ram size (in GB) and the Price. Ram is normally associated with speed and performance of an operating system. The higher ram is, the better it is in speed and performance. It makes sense that a mobile phone with a larger Ram will charge more. However, because nowadays most mobile phones are very fast and stable, people wont tell too much difference, making the added on value from ram is only weekly associated with price.
-```{r 4.2.8, fig.height=4, fig.width=10, results='hold'}
-ggplot(data = mobile_dataset,mapping = aes(x = RamSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between Ram size (in GB) and price")
+```{r 4.2.8, fig.height=6, fig.width=12, results='hold'}
+plot1 = ggplot(data = mobile_dataset,mapping = aes(x = RamSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between Ram size (in GB) and price")
+
+plot2 = ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T, method = lm)+ 
+  geom_segment(aes(x = 490, y = 100000, xend = 500, yend = 90000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
+  geom_point(data=mobile_dataset[mobile_dataset$RomSize_inGB>400,], aes(x = RomSize_inGB, y = Price), color='red') +
+  labs(y="Price in Rupees", x="Rom Size in GB", subtitle="Relation between Rom size (in GB) and price")
+
+grid.arrange(plot1, plot2, ncol=2)
 ```
 In the final scatter plot, again, we have two charts, one the original dataset, the other with outlier removed. Both cases tells the same story. In contrast to the previous scatter plot (Ram size (in GB) and the Price), there is a very obvious positive linear relation between Rom size (in GB) and the Price. This makes sense because often times a mobile phone is more limited by its non-volatile memory space than its speed & performance.
-```{r 4.2.9, fig.height=4, fig.width=10, results='hold'}
+```{r 4.2.9, fig.height=6, fig.width=12, results='hold'}
 #The first plot is a one with outliers
 plot1 = ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T, method = lm)+ 
   geom_segment(aes(x = 490, y = 100000, xend = 500, yend = 90000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
@@ -271,28 +288,80 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
-#  Chapter 5: Statistical Data Analysis (Done by Yongpeng Fu)
+#  Chapter 5: Statistical Data Analysis
 ## 5.1: Prediction of Mobile Phone Price Level
 In this section, we will use a range of statistical models to predict mobile phone price level: "Low", "Medium", "High", "Very High" based on some selected features.
 
+- Linear Discriminant Analysis (LDA)
 - Quadratic Discriminant Analysis (QDA)
 - Decision Tree (Classification)
 - Multinomial Regression
 
-First, let use explore the distribution for difference price level. From the following bar plot, you can see it is very close to uniformly distributed across the dataset.
+First, let use explore the distribution for difference price level. From the following bar plot, you can see it is very close to uniformly distributed across the dataset. Balanced dataset is important for us when we do the classification.
 ```{r 5.1,fig.height=4, fig.width=10, results='hold'}
 price_level_count <- table(mobile_dataset$Price_Level) %>% as.data.frame()
 ggplot(data = price_level_count, mapping = aes(x = Var1, y = Freq)) + geom_bar(stat = "identity") + 
   labs(y="Price Level", x="Count", subtitle="Count for different Price Level")
 ```
-### 5.1.1 Quadratic Discriminant Analysis (QDA)
-Based on EDA in section 4.2, we know three numeric features have a great impact on price level a mobile phone belongs to, which are _Rating_, _RamSize_inGB_ and _RomSize_inGB_.
-We split the dataset into 75% for training and 25% for testing purpose. 
-We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample.
-Then we fit the data into Quadratic Discriminant Analysis (QDA) as follows:
-```{r 5.1.1.1, results='hold'}
-library(MASS) #USed for QDA
-library(klaR) #Used for partimat
+### 5.1.1 Quadratic Discriminant Analysis (LDA)
+We want to use LDA to classify our observations into mobile phone price level: "Low", "Medium", "High", "Very High". However, we know LDA has 2 assumptions:
+
+- The distribution of the predictors is normally distributed within each group.
+- The homogeneity of variance-covariance matrices 
+
+Based on EDA in section 4.2, we know three **numeric features** have a great impact on price level a mobile phone belongs to, which are _Rating_, _RamSize_inGB_ and _RomSize_inGB_. As such, we will do a test for normal distribution for each predictor in each price level. Because we have 4 different price levels and 3 variables, the resulting normality check would be 4*3 = 12 comparison. We use Q-Q plot and Shapiro test for normality check.
+```{r 5.1.1.1, fig.height=3, fig.width=12, results='hold'}
+#split the dataset based on the price level
+mobile_dataset_low <- mobile_dataset[mobile_dataset$Price_Level == "Low", ]
+mobile_dataset_medium <- mobile_dataset[mobile_dataset$Price_Level == "Medium", ]
+mobile_dataset_high <- mobile_dataset[mobile_dataset$Price_Level == "High", ]
+mobile_dataset_very_high <- mobile_dataset[mobile_dataset$Price_Level == "Very High", ]
+#generate the QQ plot for each price level
+variables <- c("Rating", "RamSize_inGB", "RomSize_inGB")
+par(mfrow = c(1,3))
+for (i in variables){
+  qqnorm(mobile_dataset_low[[i]], main = paste("Price Level LOW, Normal Q-Q Plot for", i))
+  qqline(mobile_dataset_low[[i]], col = 3)
+}
+par(mfrow = c(1,3))
+for (i in variables){
+  qqnorm(mobile_dataset_medium[[i]], main = paste("Price Level Medium, Normal Q-Q Plot for", i))
+  qqline(mobile_dataset_medium[[i]], col = 3)
+}
+par(mfrow = c(1,3))
+for (i in variables){
+  qqnorm(mobile_dataset_high[[i]], main = paste("Price Level High, Normal Q-Q Plot for", i))
+  qqline(mobile_dataset_high[[i]], col = 3)
+}
+par(mfrow = c(1,3))
+for (i in variables){
+  qqnorm(mobile_dataset_high[[i]], main = paste("Price Level Very High, Normal Q-Q Plot for", i))
+  qqline(mobile_dataset_high[[i]], col = 3)
+}
+
+#We also run the shapiro test to statistically conclude the result
+p_value_rating <- c(shapiro.test(mobile_dataset_low$Rating)$p.value, shapiro.test(mobile_dataset_medium$Rating)$p.value,
+                    shapiro.test(mobile_dataset_high$Rating)$p.value,
+                    shapiro.test(mobile_dataset_very_high$Rating)$p.value)
+p_value_RamSize_inGB <- c(shapiro.test(mobile_dataset_low$RamSize_inGB)$p.value, shapiro.test(mobile_dataset_medium$RamSize_inGB)$p.value,
+                    shapiro.test(mobile_dataset_high$RamSize_inGB)$p.value,
+                    shapiro.test(mobile_dataset_very_high$RamSize_inGB)$p.value)
+p_value_rating_RomSize_inGB <- c(shapiro.test(mobile_dataset_low$RomSize_inGB)$p.value, shapiro.test(mobile_dataset_medium$RomSize_inGB)$p.value,
+                    shapiro.test(mobile_dataset_high$RomSize_inGB)$p.value,
+                    shapiro.test(mobile_dataset_very_high$RomSize_inGB)$p.value)
+p_value_df <- data.frame(p_value_rating,p_value_RamSize_inGB,p_value_rating_RomSize_inGB)
+rownames(p_value_df) <- c("Low", "Medium", "High", "Very High")
+p_value_df
+```
+Based on the Q-Q plots (dots not fall on the line) and Shapiro test (p value is < 5%), we can conclude that all variables are not normal. Therefore, we will not preceded with LDA model. Although Quadratic Discriminant Analysis (QDA) also requires normality assumption, we still want to try QDA (in the next section) since it normally has less strict assumptions.
+NOTE, the above code is inspired by Pascal Schmidt from post [Assumption Checking of LDA vs. QDA – R Tutorial Pima Indians Data Set](https://thatdatatho.com/assumption-checking-lda-vs-qda-r-tutorial-2/).
+
+
+### 5.1.2 Quadratic Discriminant Analysis (QDA)
+
+In consistent with LDA, we use the same three numeric features that have a great impact on price level a mobile phone belongs to, which are _Rating_, _RamSize_inGB_ and _RomSize_inGB_.
+To that end, we split the dataset into 75% for training and 25% for testing purpose. We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample. Then we fit the data into Quadratic Discriminant Analysis (QDA) as follows:
+```{r 5.1.2.1, results='hold'}
 set.seed(2023)
 Ny <- round(table(mobile_dataset$Price_Level)[unique(mobile_dataset$Price_Level)]* 0.75)
 #Create the sample from the population
@@ -305,28 +374,26 @@ Model.fit<-qda(Price_Level~Rating+RamSize_inGB+RomSize_inGB, data = train)
 Model.fit
 cat(rep("-", 50), "\n")
 #This plot is showing that LD1 can do a really good to separate these species rather than LD2
-partimat(Price_Level~Rating+RamSize_inGB+RomSize_inGB, data = train, method="qda")
+# partimat(Price_Level~Rating+RamSize_inGB+RomSize_inGB, data = train, method="qda")
 ```
-After this, we are confident to apply this model on the testing dataset, and calculate the misclassification rate.
-```{r 5.1.1.2, results='hold'}
-cat(rep("-", 50), "\n")
-cat("\nApply the fitted logistic regression model to the test set, And we can get the following confusion table.\n")
+
+At last, we apply this model on the testing dataset, and calculate the misclassification rate.
+```{r 5.1.1.3, results='hold'}
 Prob.predict<-predict(Model.fit,test,type="response")
-table(Prob.predict$class,test$Price_Level)
-cat(rep("-", 50), "\n")
-cat("The misclassification rate is: ", mean(Prob.predict$class != test$Price_Level))
+ggplot(as.data.frame(table(Prob.predict$class,test$Price_Level)), aes(x = Var1, y = Var2, fill = Freq)) +geom_tile() + geom_text(aes(label = round(Freq, 1))) + scale_fill_gradient(low = "white", high = "red") + labs(y="True", x="Predict", subtitle="Confusion Matrix for Classification Tree")
+cat(rep("-", 45), "\n")
+cat("The misclassification rate for QDA is: ", mean(Prob.predict$class != test$Price_Level))
 ```
 
 Conclusion: Quadratic Discriminant Analysis has a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (77%).
 
-### 5.1.2 Decision Tree (Classification)
+### 5.1.3 Decision Tree (Classification)
 To be consistent and comparable with QDA, we again use these three variables _Rating_, _RamSize_inGB_ and _RomSize_inGB_ to build the decision tree model.
 We split the dataset into 75% for training and 25% for testing purpose. 
 We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample.
 Then we fit the data into Classification tree model as follows:
 
-```{r 5.1.2.1, results='hold'}
-library(tree)
+```{r 5.1.3.1, results='hold'}
 set.seed(2023)
 Ny <- round(table(mobile_dataset$Price_Level)[unique(mobile_dataset$Price_Level)]* 0.75)
 #Create the sample from the population
@@ -338,34 +405,36 @@ test <- mobile_dataset[-idx$ID_unit,]
 tree.class<-tree(factor(Price_Level)~Rating+RamSize_inGB+RomSize_inGB, train)
 summary(tree.class)
 ```
-
 The tree is plotted without pruning as follows. There are a total of 9 terminal nodes in the tree.
-```{r 5.1.2.2, results='hold'}
+```{r 5.1.3.2, results='hold'}
 #Let us plot the tree as well
 plot(tree.class)
-text(tree.class, pretty=0)
+text(tree.class,pretty=0)
+# rpart_fit <- rpart(factor(Price_Level)~Rating+RamSize_inGB+RomSize_inGB, train, method = 'class')
+# rpart.plot(rpart_fit)
 ```
-To find the best tree size, we used cross-validation to select the "best" number of tree size (the terminal nodes). Based on the following plot, it seems tree size 9 gives the smallest deviance. Just to demonstrate how prunned tree works and also reduce the complecity of tree, we decide to use 8 as the "best" tree size.
-```{r 5.1.2.3, results='hold'}
+To find the best tree size, we used cross-validation to select the "best" number of tree size (the terminal nodes). Based on the following plot, it seems tree size 9 gives the smallest deviance. Just to demonstrate how prunned tree works and also reduce the complexity of tree, we decide to use 8 as the "best" tree size.
+```{r 5.1.3.3, results='hold'}
 cv.class<-cv.tree(tree.class, FUN = prune.misclass) 
 plot(cv.class$size, cv.class$dev,type="b")
 ```
 A tree after prunning is plotted as follows. There are a total of 8 terminal nodes in the tree.
-```{r 5.1.2.4, results='hold'}
+```{r 5.1.3.4, results='hold'}
 prune.class=prune.tree(tree.class,best=8)
 plot(prune.class)
 text(prune.class,pretty=0)
 ```
 Finally, we use the pruned tree to do prediction.
-```{r 5.1.2.5, results='hold'}
+```{r 5.1.3.5, results='hold'}
 prune.pred=predict(prune.class,test,type="class")
-table(prune.pred,test$Price_Level)
-cat(rep("-", 50), "\n")
-cat("The misclassification rate is: ", mean(prune.pred != test$Price_Level))
+ggplot(as.data.frame(table(prune.pred,test$Price_Level)), aes(x = prune.pred, y = Var2, fill = Freq)) +geom_tile() + geom_text(aes(label = round(Freq, 1))) + scale_fill_gradient(low = "white", high = "red") + labs(y="True", x="Predict", subtitle="Confusion Matrix for Classification Tree")
+cat(rep("-", 45), "\n")
+cat("The misclassification rate for regression tree is: ", mean(prune.pred != test$Price_Level))
 ```
+
 Conclusion: Decision Tree (Classification) has also a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (76.2%).
 
-### 5.1.3 Multinomial Regression
+### 5.1.4 Multinomial Regression
 This is an experimental analysis. Based on EDA in section 4.2, we know that Company name (branding) also plays a big role in the price level. We also know that Rom size of a mobile phone matters a lot as well. We are curious to see if a combination of _Company_ and _RomSize_ can also be used to distinguish the price level.
 
 Normally, we would split the dataset into 75% for training and 25% for testing purpose. However, because our sample size is small, not every Company has multiple records in our dataset. Therefore, in the following test, we use whole sample as the training and test purpose.
@@ -380,8 +449,7 @@ $$
 $$
 H_1: \text{The Cumulative logit model does not fit the observations}
 $$
-```{r 5.1.3.1, warning=FALSE, results='hold'}
-library(VGAM)
+```{r 5.1.4.1, warning=FALSE, results='hold'}
 comany_rom_train <- mobile_dataset[c("Company", "RomSize_Ori", "Price_Level")]
 multi_train_fit <- vglm(Price_Level~Company+RomSize_Ori,family=cumulative(parallel = TRUE),data=comany_rom_train)
 cat("The p value for the chi test is: ", 1-pchisq(deviance(multi_train_fit),df.residual(multi_train_fit)))
@@ -390,17 +458,80 @@ cat("\nThe p-value here is large = 1, so we cannot reject null hypothesis. Our m
 
 Finally, we use this model to predict use the same training dataset, as a demonstration purpose.
 
-```{r 5.1.3.2, results='hold'}
+```{r 5.1.4.2, results='hold'}
 pred_fit <- predict(multi_train_fit, type="response")
 #Use the record that has the highest probability as the final predication for each row.
 pred_fit_class <-factor(dimnames(pred_fit)[[2]][max.col(pred_fit, 'first')], levels = c("Low", "Medium", "High", "Very High"))
-table(pred_fit_class, mobile_dataset$Price_Level)
-cat(rep("-", 50), "\n")
-cat("The misclassification rate is: ", mean(pred_fit_class != mobile_dataset$Price_Level))
+ggplot(as.data.frame(table(pred_fit_class, mobile_dataset$Price_Level)), aes(x = pred_fit_class, y = Var2, fill = Freq)) +geom_tile() + geom_text(aes(label = round(Freq, 1))) + scale_fill_gradient(low = "white", high = "red") + labs(y="True", x="Predict", subtitle="Confusion Matrix for Classification Tree")
+cat(rep("-", 45), "\n")
+cat("The misclassification rate for Multinomial Regression is: ", mean(pred_fit_class != mobile_dataset$Price_Level))
 ```
 Conclusion: Multinomial Regression has also a good performance to predict the mobile phone price level using only 2 variables ( _Company_ and _RomSize_), with a relatively high accuracy (71.9%).
 
+## 5.2: Cross-Validation
+In section 5.1, we have compared three different models based on their misclassification rate: **Quadratic Discriminant Analysis (QDA)** = 0.2265193, **Decision Tree (Classification)** = 0.2375691, and **Multinomial Regression** = 0.2813793. In order to compare model performance, we decide to also use stratified $10$-fold cross-validation to calculate the cross-validation errors of these 3 methods.
+```{r 5.2.1, results='hold'}
+cat("\nFirst I am using the 10-fold cross validation for Quadratic Discriminant Analysis")
+set.seed(2023)
+#Create 10 folds
+folds<-createFolds(mobile_dataset$Price_Level, k=10)
+#Define a function to calculate the misclassification rate for each fold
+misrate_fold<-function(idx){
+  Train<-mobile_dataset[-idx,]
+  Test<-mobile_dataset[idx,]
+  fit <- qda(Price_Level~Rating+RamSize_inGB+RomSize_inGB, data = Train)
+  pred<-predict(fit,Test)
+  return(1- mean(pred$class == Test$Price_Level))
+}
+#Get the misclassification rate from each fold
+type_misrate_fold=lapply(folds,misrate_fold)
+#The average of misclassification rate  for 10 folds is:
+cat("\nThe average of misclassification rate for 10 folds 
+    cross validation of Quadratic Discriminant Analysis is :", 
+    mean(as.numeric(type_misrate_fold)))
+cat("\n")
+cat(rep("-", 45), "\n")
 
+
+cat("\nSecond I am using the 10-fold cross validation for Decision Tree (Classification)")
+set.seed(2023)
+#Create 10 folds
+folds<-createFolds(mobile_dataset$Price_Level, k=10)
+#Define a function to calculate the misclassification rate for each fold
+misrate_fold<-function(idx){
+  Train<-mobile_dataset[-idx,]
+  Test<-mobile_dataset[idx,]
+  fit <- tree(factor(Price_Level)~Rating+RamSize_inGB+RomSize_inGB, data = Train)
+  pred<-predict(fit,Test, type = 'class')
+  return(1- mean(pred == Test$Price_Level))
+}
+
+#Get the misclassification rate from each fold
+type_misrate_fold=lapply(folds,misrate_fold)
+#The average of misclassification rate  for 10 folds is:
+cat("\nThe average of misclassification rate for 10 folds cross 
+    validation of Decision Tree (Classification) is :", mean(as.numeric(type_misrate_fold)))
+cat("\n")
+cat(rep("-", 45), "\n")
+
+cat("\nBecause our sample size is small, not every Company has multiple records in our dataset. \nTherefore, we are not able to perform cross-validation for Multinomial regression.")
+```
+## 5.3: Summary for Prediction of Mobile Phone Price Level
+To summarize this part of analysis, we find some contradictory results. We used the balanced dataset trying to classify the Mobile Phone Price Level. In Section 5.1, we have the following misclassificaiton rate from each model:
+
+- **Quadratic Discriminant Analysis (QDA)**: 0.2265193
+- **Decision Tree (Classification)**: 0.2375691
+- **Multinomial Regression**: 0.2813793
+
+We can see Quadratic Discriminant Analysis (QDA) gives the lowest misclassification rate, making this model the best one. However, when we do the 10-folds cross validation, we have the following misclassificaiton rate from each model:
+
+- **Quadratic Discriminant Analysis (QDA)**: 0.2690109
+- **Decision Tree (Classification)**: 0.2314057
+- **Multinomial Regression**: Not Available (see section 5.2 explanation)
+
+From this result, Decision Tree (Classification) gives the lowest misclassification rate. Because cross-validation is averaging multiple misclassificaiton rate, we think this result is more reliable. 
+
+So our final conclusion is that Decision Tree (Classification) can best predict the Mobile Phone Price Level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (76.9%).
 
 \pagebreak
 
@@ -410,4 +541,8 @@ Conclusion: Multinomial Regression has also a good performance to predict the mo
 
 2020 review. “High-End Mobile Phones Price Have Soared 490% in 20 Years | This Is Money.” This Is Money, This Is Money, 23 July 2020, https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html.  
 
-MobilePhone's dataset. “MobilePhone’s Dataset | Kaggle.” Kaggle: Your Machine Learning and Data Science Community, Kaggle, 20 Dec. 2022, https://www.kaggle.com/datasets/sudhanshuy17/mobilephone.
+MobilePhone's dataset. “MobilePhone’s Dataset | Kaggle.” Kaggle: Your Machine Learning and Data Science Community, Kaggle, 20 Dec. 2022, https://www.kaggle.com/datasets/sudhanshuy17/mobilephone.  
+
+Pascal Schmidt. "Assumption Checking of LDA vs. QDA – R Tutorial Pima Indians Data Set", retrieved Feb 17 2023, https://thatdatatho.com/assumption-checking-lda-vs-qda-r-tutorial-2/.
+
+
