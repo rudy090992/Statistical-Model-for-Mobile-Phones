@@ -16,7 +16,7 @@ output:
     toc: yes
     df_print: paged
 geometry: margin=3cm
-subtitle: Proposal for final project (MDSA Winter 2023)
+subtitle: Final report (MDSA Winter 2023)
 urlcolor: blue
 header-includes: \usepackage{fvextra} \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
   \usepackage[nottoc]{tocbibind}
