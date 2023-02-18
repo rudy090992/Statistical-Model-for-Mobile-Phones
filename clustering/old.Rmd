@@ -137,7 +137,7 @@ After cleaning and breaking down columns, the dataset now consists of 11 columns
 and its storage capacity. The latter being also listed as a separate column. - **Independent Variable**
 * **Company**: categorical variable. Name of the phone's manufacturer. - **Independent Variable**
 * **Price**: continuous variable. Units in Indian Rupees. - **Dependent Variable**
-* **Rating**: continuous variable. Units in Indian Rupees. - **Independent Variable**
+* **Rating**: continuous variable. No units. - **Independent Variable**
 * **Number of ratings**: discrete variable: a simple count. - **Independent Variable**
 * **Total reviews**: discrete variable: a simple count. - **Independent Variable**
 * **Model_Only**: categorical variable: only contains the model information of a mobile phone. - **Independent Variable**
@@ -167,29 +167,7 @@ We should emphasize that this part of the analysis is not particularly useful in
 ## Principal component analysis
 
 PCA is a tool that projects a collection of vectors into a a new vector space of fewer orthogonal dimensions. This projection can be simpler to fit
-using a linear model but much harder to interpret: the new predictors are going to be linear combinations of the original predictors and may not have a direct interpretation. To carry out a PCA one must have correlation among features,
-
-![PCA correlation](./Img/pca_correlation.png)
-PCA is sensitive to outliers and scale. This means that if our numerical predictors have different units or span different orders of magnitude we need to re-scale it. For every predictor, this is accomplished by simply subtracting the mean and dividing by its standard deviation. In python, the library *scikit learn* support different types of scaling out of the box. It can also perform PCA, 
-
-  ```
-  from sklearn.decomposition import PCA
-  pca = PCA(n_components = 2)
-  principal_components = pca.fit_transform(df_scaled)
-  ```
-
-The following figure summarizes the results,
-
-![PCA correlation](./Img/pca_plot.png)
-We can see that about 70% of the variance can be explained by projecting onto a 2D space. To use this in a prediction scenario we'd have to setup a pipeline that follows this workflow,
-
-1) Rescale
-2) Map from the original predictor/response space to the new PC space using a a linear transformation
-3) Apply the model (predict)
-4) Rescale result
-5) Map from PC to original predictor/response space
-
-This is less of a hassle when dealing with many predictors and the gains from dimensionality reduction are tangible.
+using a linear model but much harder to interpret: the new predictors are going to be linear combinations of the original predictors and may not have a direct interpretation. To carry out a PCA one 
 
 # References
 

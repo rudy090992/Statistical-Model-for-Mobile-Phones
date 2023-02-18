@@ -1,0 +1,526 @@
+Model,Company,Price,Rating,No_of_ratings,TotalReviews,RamSize (GB),RomSize (GB),aug_model,aug_color,aug_price,cluster_labels_kmeans
+"Infinix HOT 20 Play (Luna Blue, 64 GB)",Infinix,8199,4.3,505,52,4.0,64.0,HOT 20 Play ,Luna Blue,Medium,0
+"MOTOROLA e40 (Carbon Gray, 64 GB)",Motorola,7999,4.1,56085,5600,4.0,64.0,e40 ,Carbon Gray,Medium,0
+"MOTOROLA e40 (Pink Clay, 64 GB)",Motorola,7999,4.1,56085,5600,4.0,64.0,e40 ,Pink Clay,Medium,0
+"POCO C31 (Shadow Gray, 64 GB)",Poco,7499,4.3,183688,11185,4.0,64.0,C31 ,Shadow Gray,Low,0
+"MOTOROLA G32 (Mineral Gray, 64 GB)",Motorola,9999,4.2,16249,1639,4.0,64.0,G32 ,Mineral Gray,Medium,0
+"REDMI 9i Sport (Carbon Black, 64 GB)",Redmi,7199,4.3,209377,12027,4.0,64.0,9i Sport ,Carbon Black,Low,0
+"REDMI 9i Sport (Coral Green, 64 GB)",Redmi,7199,4.3,209377,12027,4.0,64.0,9i Sport ,Coral Green,Low,0
+"POCO M4 Pro 5G (Cool Blue, 64 GB)",Poco,11999,4.3,33258,2972,4.0,64.0,M4 Pro 5G ,Cool Blue,Medium,0
+"realme 9 5G (Stargaze White, 128 GB)",Realme,16499,4.4,44415,2930,6.0,128.0,9 5G ,Stargaze White,High,1
+"realme 9 5G (Supersonic Blue, 64 GB)",Realme,14999,4.5,36109,2083,4.0,64.0,9 5G ,Supersonic Blue,Medium,0
+"realme 9 5G (Meteor Black, 64 GB)",Realme,14999,4.5,36109,2083,4.0,64.0,9 5G ,Meteor Black,Medium,0
+"MOTOROLA G62 5G (Midnight Gray, 128 GB)",Motorola,14999,4.1,8567,933,6.0,128.0,G62 5G ,Midnight Gray,Medium,1
+"POCO M4 Pro 5G (Cool Blue, 128 GB)",Poco,13999,4.2,41124,3691,6.0,128.0,M4 Pro 5G ,Cool Blue,Medium,1
+"MOTOROLA g52 (Metallic White, 128 GB)",Motorola,12999,4.2,20882,2628,6.0,128.0,g52 ,Metallic White,Medium,1
+"realme 9 5G (Meteor Black, 128 GB)",Realme,16499,4.4,44415,2930,6.0,128.0,9 5G ,Meteor Black,High,1
+"SAMSUNG Galaxy F23 5G (Aqua Blue, 128 GB)",Samsung,13999,4.2,32083,2613,4.0,128.0,Galaxy F23 5G ,Aqua Blue,Medium,1
+"realme 9 5G (Supersonic Blue, 128 GB)",Realme,16499,4.4,44415,2930,6.0,128.0,9 5G ,Supersonic Blue,High,1
+"realme 9 5G (Stargaze White, 64 GB)",Realme,14999,4.5,36109,2083,4.0,64.0,9 5G ,Stargaze White,Medium,0
+"MOTOROLA g52 (Charcoal Grey, 128 GB)",Motorola,12999,4.2,20882,2628,6.0,128.0,g52 ,Charcoal Grey,Medium,1
+"SAMSUNG Galaxy F23 5G (Forest Green, 128 GB)",Samsung,14999,4.3,137778,11213,6.0,128.0,Galaxy F23 5G ,Forest Green,Medium,0
+"vivo T1 5G (Starlight Black, 128 GB)",Vivo,16990,4.4,157801,12539,6.0,128.0,T1 5G ,Starlight Black,High,0
+"MOTOROLA G32 (Satin Silver, 64 GB)",Motorola,9999,4.2,16249,1639,4.0,64.0,G32 ,Satin Silver,Medium,0
+"MOTOROLA G62 5G (Frosted Blue, 128 GB)",Motorola,14999,4.1,8567,933,6.0,128.0,G62 5G ,Frosted Blue,Medium,1
+"MOTOROLA g42 (Atlantic Green, 64 GB)",Motorola,10999,4.1,3075,385,4.0,64.0,g42 ,Atlantic Green,Medium,0
+"realme 9 5G (Supersonic Black, 128 GB)",Realme,16499,4.4,44415,2930,6.0,128.0,9 5G ,Supersonic Black,High,1
+"Infinix HOT 20 Play (Racing Black, 64 GB)",Infinix,8199,4.3,505,52,4.0,64.0,HOT 20 Play ,Racing Black,Medium,0
+"Infinix HOT 20 Play (Aurora Green, 64 GB)",Infinix,8199,4.3,505,52,4.0,64.0,HOT 20 Play ,Aurora Green,Medium,0
+"Infinix HOT 20 Play (Fantasy Purple, 64 GB)",Infinix,8199,4.3,505,52,4.0,64.0,HOT 20 Play ,Fantasy Purple,Medium,0
+"vivo T1 5G (Rainbow Fantasy, 128 GB)",Vivo,16990,4.4,157801,12539,6.0,128.0,T1 5G ,Rainbow Fantasy,High,0
+"vivo T1 5G (Rainbow Fantasy, 128 GB)",Vivo,15990,4.3,59607,4787,4.0,128.0,T1 5G ,Rainbow Fantasy,High,1
+"REDMI Note 11 SE (Cosmic White, 64 GB)",Redmi,16998,4.3,30409,1886,6.0,64.0,Note 11 SE ,Cosmic White,High,0
+"REDMI 10 (Midnight Black, 64 GB)",Redmi,9999,4.3,165144,10864,4.0,64.0,10 ,Midnight Black,Medium,0
+"REDMI 10 (Pacific Blue, 64 GB)",Redmi,9999,4.3,165144,10864,4.0,64.0,10 ,Pacific Blue,Medium,0
+"POCO C31 (Royal Blue, 64 GB)",Poco,7499,4.3,183688,11185,4.0,64.0,C31 ,Royal Blue,Low,0
+"POCO M4 5G (Cool Blue, 128 GB)",Poco,13999,4.2,22699,1884,6.0,128.0,M4 5G ,Cool Blue,Medium,1
+"vivo T1X (Gravity Black, 64 GB)",Vivo,11999,4.5,68117,3863,4.0,64.0,T1X ,Gravity Black,Medium,0
+"vivo T1X (Space Blue, 64 GB)",Vivo,11999,4.5,68117,3863,4.0,64.0,T1X ,Space Blue,Medium,0
+"POCO M4 5G (Cool Blue, 64 GB)",Poco,11999,4.2,45400,3749,4.0,64.0,M4 5G ,Cool Blue,Medium,0
+"POCO M4 5G (Power Black, 128 GB)",Poco,13999,4.2,22699,1884,6.0,128.0,M4 5G ,Power Black,Medium,1
+"MOTOROLA g82 5G(White Lily, 128 GB)",Motorola,18999,4.2,5211,703,6.0,128.0,g82 5G,White Lily,High,1
+"SAMSUNG Galaxy F23 5G (Forest Green, 128 GB)",Samsung,13999,4.2,32083,2613,4.0,128.0,Galaxy F23 5G ,Forest Green,Medium,1
+"vivo T1 5G (Starlight Black, 128 GB)",Vivo,15990,4.3,59607,4787,4.0,128.0,T1 5G ,Starlight Black,High,1
+"Infinix Smart 6 HD (Origin Blue, 32 GB)",Infinix,5799,4.4,15648,823,2.0,32.0,Smart 6 HD ,Origin Blue,Low,0
+"MOTOROLA g22 (Iceberg Blue, 64 GB)",Motorola,9499,3.7,26741,3220,4.0,64.0,g22 ,Iceberg Blue,Medium,0
+"Infinix Smart 6 HD (Aqua Sky, 32 GB)",Infinix,5799,4.4,15648,823,2.0,32.0,Smart 6 HD ,Aqua Sky,Low,0
+"realme 9i (Prism Blue, 128 GB)",Realme,12599,4.5,116293,6868,4.0,128.0,9i ,Prism Blue,Medium,0
+"vivo T1X (Gravity Black, 128 GB)",Vivo,12999,4.5,68117,3863,4.0,128.0,T1X ,Gravity Black,Medium,0
+"vivo T1X (Space Blue, 128 GB)",Vivo,12999,4.5,68117,3863,4.0,128.0,T1X ,Space Blue,Medium,0
+"Infinix Hot 12 (Exploratory Blue, 64 GB)",Infinix,8899,4.2,14750,1095,4.0,64.0,Hot 12 ,Exploratory Blue,Medium,0
+"Infinix Hot 12 (7° Purple, 64 GB)",Infinix,8899,4.2,14750,1095,4.0,64.0,Hot 12 ,7° Purple,Medium,0
+"Infinix Smart 6 HD (Force Black, 32 GB)",Infinix,5799,4.4,15648,823,2.0,32.0,Smart 6 HD ,Force Black,Low,0
+"REDMI 10 (Caribbean Green, 64 GB)",Redmi,9999,4.3,165144,10864,4.0,64.0,10 ,Caribbean Green,Medium,0
+"realme 9i (Prism Blue, 128 GB)",Realme,13599,4.5,25752,1531,6.0,128.0,9i ,Prism Blue,Medium,1
+"realme 9i (Prism Black, 128 GB)",Realme,12599,4.5,116293,6868,4.0,128.0,9i ,Prism Black,Medium,0
+"vivo T1 44W (Starry Sky, 128 GB)",Vivo,14499,4.5,74897,5493,4.0,128.0,T1 44W ,Starry Sky,Medium,0
+"vivo T1 44W (Midnight Galaxy, 128 GB)",Vivo,14499,4.5,74897,5493,4.0,128.0,T1 44W ,Midnight Galaxy,Medium,0
+"MOTOROLA g42 (Metallic Rose, 64 GB)",Motorola,10999,4.1,3075,385,4.0,64.0,g42 ,Metallic Rose,Medium,0
+"MOTOROLA g72 (Polar Blue, 128 GB)",Motorola,14999,4.1,4878,776,6.0,128.0,g72 ,Polar Blue,Medium,1
+"POCO M4 Pro 5G (Yellow, 64 GB)",Poco,11999,4.3,33258,2972,4.0,64.0,M4 Pro 5G ,Yellow,Medium,0
+"MOTOROLA g82 5G (Meterorite Grey, 128 GB)",Motorola,20499,4.1,3123,411,8.0,128.0,g82 5G ,Meterorite Grey,High,1
+"vivo T1X (Space Blue, 128 GB)",Vivo,14999,4.4,3415,211,6.0,128.0,T1X ,Space Blue,Medium,1
+"POCO M4 Pro (Power Black, 128 GB)",Poco,16499,4.3,130276,11960,6.0,128.0,M4 Pro ,Power Black,High,0
+"Infinix Smart 6 Plus (Tranquil Sea Blue, 64 GB)",Infinix,7599,4.2,9919,738,3.0,64.0,Smart 6 Plus ,Tranquil Sea Blue,Medium,0
+"vivo T1 44W (Midnight Galaxy, 128 GB)",Vivo,15999,4.4,43289,3353,6.0,128.0,T1 44W ,Midnight Galaxy,High,1
+"vivo T1 44W (Starry Sky, 128 GB)",Vivo,15999,4.4,43289,3353,6.0,128.0,T1 44W ,Starry Sky,High,1
+"realme 10 Pro 5G (Dark Matter, 128 GB)",Realme,18999,4.4,3410,339,6.0,128.0,10 Pro 5G ,Dark Matter,High,1
+"realme 10 Pro 5G (Nebula Blue, 128 GB)",Realme,19999,4.4,1963,193,8.0,128.0,10 Pro 5G ,Nebula Blue,High,1
+"Infinix Hot 12 (Polar Black, 64 GB)",Infinix,8899,4.2,14750,1095,4.0,64.0,Hot 12 ,Polar Black,Medium,0
+"SAMSUNG Galaxy F13 (Nightsky Green, 128 GB)",Samsung,12999,4.4,108205,6211,4.0,128.0,Galaxy F13 ,Nightsky Green,Medium,0
+"realme 9 (Sunburst Gold, 128 GB)",Realme,14599,4.4,55583,4035,6.0,128.0,9 ,Sunburst Gold,Medium,1
+"realme 9 (Meteor Black, 128 GB)",Realme,14599,4.4,55583,4035,6.0,128.0,9 ,Meteor Black,Medium,1
+"realme 9 (Stargaze White, 128 GB)",Realme,14599,4.4,55583,4035,6.0,128.0,9 ,Stargaze White,Medium,1
+"MOTOROLA g82 5G (Meterorite Grey, 128 GB)",Motorola,18999,4.2,5211,703,6.0,128.0,g82 5G ,Meterorite Grey,High,1
+"POCO M4 Pro 5G (Power Black, 128 GB)",Poco,14999,4.2,7856,692,8.0,128.0,M4 Pro 5G ,Power Black,Medium,1
+"vivo T1 5G (Silky White, 128 GB)",Vivo,16990,4.4,157801,12539,6.0,128.0,T1 5G ,Silky White,High,0
+"POCO M4 Pro 5G (Cool Blue, 128 GB)",Poco,14999,4.2,7856,692,8.0,128.0,M4 Pro 5G ,Cool Blue,Medium,1
+"REDMI 9i Sport (Metallic Blue, 64 GB)",Redmi,7199,4.3,209377,12027,4.0,64.0,9i Sport ,Metallic Blue,Low,0
+"SAMSUNG Galaxy F13 (Sunrise Copper, 128 GB)",Samsung,12999,4.4,108205,6211,4.0,128.0,Galaxy F13 ,Sunrise Copper,Medium,0
+"MOTOROLA g82 5G (White Lily, 128 GB)",Motorola,20499,4.1,3123,411,8.0,128.0,g82 5G ,White Lily,High,1
+"MOTOROLA g31 (Meteorite Grey, 64 GB)",Motorola,9999,4.2,31884,3711,4.0,64.0,g31 ,Meteorite Grey,Medium,0
+"MOTOROLA G62 5G (Midnight Gray, 128 GB)",Motorola,16999,4.1,1949,229,8.0,128.0,G62 5G ,Midnight Gray,High,1
+"realme C30 (Denim Black, 32 GB)",Realme,5999,4.3,66939,3492,2.0,32.0,C30 ,Denim Black,Low,0
+"realme C30 (Lake Blue, 32 GB)",Realme,5999,4.3,66939,3492,2.0,32.0,C30 ,Lake Blue,Low,0
+"SAMSUNG Galaxy F13 (Waterfall Blue, 128 GB)",Samsung,12999,4.4,108205,6211,4.0,128.0,Galaxy F13 ,Waterfall Blue,Medium,0
+"POCO X4 Pro 5G (Laser Blue, 128 GB)",Poco,19999,4.2,61334,6308,6.0,128.0,X4 Pro 5G ,Laser Blue,High,1
+"MOTOROLA g72 (Meteorite Grey, 128 GB)",Motorola,14999,4.1,4878,776,6.0,128.0,g72 ,Meteorite Grey,Medium,1
+"MOTOROLA g31 (Baby Blue, 128 GB)",Motorola,11999,4.1,12475,1337,6.0,128.0,g31 ,Baby Blue,Medium,1
+"SAMSUNG Galaxy S21 FE 5G (Olive, 128 GB)",Samsung,35999,4.4,29082,3001,8.0,128.0,Galaxy S21 FE 5G ,Olive,Very high,1
+"POCO M3 Pro 5G (Yellow, 128 GB)",Poco,15499,4.2,52420,4434,6.0,128.0,M3 Pro 5G ,Yellow,High,1
+"OPPO K10 (Black Carbon, 128 GB)",Oppo,13990,4.4,95135,7013,6.0,128.0,K10 ,Black Carbon,Medium,0
+"realme 9 (Stargaze White, 128 GB)",Realme,15599,4.4,20705,1568,8.0,128.0,9 ,Stargaze White,High,1
+"OPPO K10 (Blue Flame, 128 GB)",Oppo,13990,4.4,95135,7013,6.0,128.0,K10 ,Blue Flame,Medium,0
+"REDMI 10 (Pacific Blue, 128 GB)",Redmi,11999,4.2,21630,1610,6.0,128.0,10 ,Pacific Blue,Medium,1
+"MOTOROLA g31 (Baby Blue, 64 GB)",Motorola,9999,4.2,31884,3711,4.0,64.0,g31 ,Baby Blue,Medium,0
+"Infinix Note 12 5G (Force Black, 64 GB)",Infinix,12999,4.2,10906,1285,6.0,64.0,Note 12 5G ,Force Black,Medium,0
+"MOTOROLA Edge 30 (Aurora Green, 128 GB)",Motorola,24999,4.1,3589,526,8.0,128.0,Edge 30 ,Aurora Green,High,1
+"Infinix Note 12 (Jewel Blue, 64 GB)",Infinix,9999,4.2,22608,2286,4.0,64.0,Note 12 ,Jewel Blue,Medium,0
+"Infinix Note 12 (Force Black, 64 GB)",Infinix,9999,4.2,22608,2286,4.0,64.0,Note 12 ,Force Black,Medium,0
+"realme C30 (Lake Blue, 32 GB)",Realme,6999,4.1,32757,2159,3.0,32.0,C30 ,Lake Blue,Low,0
+"realme C30 (Denim Black, 32 GB)",Realme,6999,4.1,32757,2159,3.0,32.0,C30 ,Denim Black,Low,0
+"realme 9 5G (Supersonic Black, 64 GB)",Realme,14999,4.5,36109,2083,4.0,64.0,9 5G ,Supersonic Black,Medium,0
+"OPPO F19 Pro+ 5G (Space Silver, 128 GB)",Oppo,19990,4.3,24287,2518,8.0,128.0,F19 Pro+ 5G ,Space Silver,High,1
+"POCO M4 Pro (Power Black, 64 GB)",Poco,14999,4.3,130276,11960,6.0,64.0,M4 Pro ,Power Black,Medium,0
+"Micromax IN 2C (Silver, 32 GB)",Micromax,5999,4.2,2047,262,3.0,32.0,IN 2C ,Silver,Low,0
+"MOTOROLA Edge 30 (Meteor Grey, 128 GB)",Motorola,24999,4.1,3589,526,8.0,128.0,Edge 30 ,Meteor Grey,High,1
+"REDMI A1 (Black, 32 GB)",Redmi,6490,4.2,1893,141,2.0,32.0,A1 ,Black,Low,0
+"vivo T1 44W (Midnight Galaxy, 128 GB)",Vivo,17999,4.3,5156,440,8.0,128.0,T1 44W ,Midnight Galaxy,High,1
+"MOTOROLA G51 5G (Bright Silver, 64 GB)",Motorola,12999,4.1,16473,2057,4.0,64.0,G51 5G ,Bright Silver,Medium,0
+"realme C31 (Dark Green, 64 GB)",Realme,8999,4.4,56801,2730,4.0,64.0,C31 ,Dark Green,Medium,0
+"POCO M4 Pro (Yellow, 128 GB)",Poco,16499,4.3,130276,11960,6.0,128.0,M4 Pro ,Yellow,High,0
+"REDMI 10 (Caribbean Green, 128 GB)",Redmi,11999,4.2,21630,1610,6.0,128.0,10 ,Caribbean Green,Medium,1
+"REDMI 10A (Charcoal Black, 64 GB)",Redmi,8690,4.2,7695,484,4.0,64.0,10A ,Charcoal Black,Medium,0
+"Tecno Spark 8T (Atlantic Blue, 64 GB)",Tecno,10490,4.2,348,34,4.0,64.0,Spark 8T ,Atlantic Blue,Medium,0
+"SAMSUNG Galaxy F13 (Sunrise Copper, 64 GB)",Samsung,11999,4.4,108205,6211,4.0,64.0,Galaxy F13 ,Sunrise Copper,Medium,0
+"REDMI 10A (Sea Blue, 64 GB)",Redmi,8746,4.2,5010,325,4.0,64.0,10A ,Sea Blue,Medium,0
+"POCO M4 Pro (Yellow, 128 GB)",Poco,17999,4.3,12383,1095,8.0,128.0,M4 Pro ,Yellow,High,1
+"POCO M4 5G (Yellow, 128 GB)",Poco,13999,4.2,22699,1884,6.0,128.0,M4 5G ,Yellow,Medium,1
+"REDMI 10A (Sea Blue, 32 GB)",Redmi,7890,4.1,749,53,3.0,32.0,10A ,Sea Blue,Medium,0
+"REDMI 10A (Sea Blue, 64 GB)",Redmi,8649,4.2,5010,325,4.0,64.0,10A ,Sea Blue,Medium,0
+"realme C31 (Dark Green, 32 GB)",Realme,8299,4.5,45218,1790,3.0,32.0,C31 ,Dark Green,Medium,0
+"SAMSUNG Galaxy F23 5G (Copper Blush, 128 GB)",Samsung,14999,4.3,137778,11213,6.0,128.0,Galaxy F23 5G ,Copper Blush,Medium,0
+"Infinix Note 12 5G (Snowfall, 64 GB)",Infinix,12999,4.2,10906,1285,6.0,64.0,Note 12 5G ,Snowfall,Medium,0
+"SAMSUNG Galaxy F13 (Nightsky Green, 64 GB)",Samsung,11999,4.4,108205,6211,4.0,64.0,Galaxy F13 ,Nightsky Green,Medium,0
+"Infinix Smart 6 (Light Sea Green, 64 GB)",Infinix,6499,4.3,27687,1913,2.0,64.0,Smart 6 ,Light Sea Green,Low,0
+"SAMSUNG Galaxy M04 (Light Green, 64 GB)",Samsung,9444,4.8,14,0,4.0,64.0,Galaxy M04 ,Light Green,Medium,0
+"POCO M4 Pro (Cool Blue, 128 GB)",Poco,16499,4.3,130276,11960,6.0,128.0,M4 Pro ,Cool Blue,High,0
+"POCO X4 Pro 5G (Laser Black, 128 GB)",Poco,19999,4.2,61334,6308,6.0,128.0,X4 Pro 5G ,Laser Black,High,1
+"Infinix Hot 12 Pro (Lightsaber Green, 64 GB)",Infinix,9999,4.2,5542,324,6.0,64.0,Hot 12 Pro ,Lightsaber Green,Medium,0
+"Infinix Hot 12 Pro (Halo White, 128 GB)",Infinix,11999,4.0,3969,355,8.0,128.0,Hot 12 Pro ,Halo White,Medium,1
+"POCO X4 Pro 5G (Yellow, 128 GB)",Poco,19999,4.2,61334,6308,6.0,128.0,X4 Pro 5G ,Yellow,High,1
+"realme C35 (Glowing Green, 64 GB)",Realme,11999,4.4,159779,9431,4.0,64.0,C35 ,Glowing Green,Medium,0
+"vivo T1 5G (Rainbow Fantasy, 128 GB)",Vivo,19990,4.3,14894,1303,8.0,128.0,T1 5G ,Rainbow Fantasy,High,1
+"Infinix Smart 6 (Heart Of Ocean, 64 GB)",Infinix,6499,4.3,27687,1913,2.0,64.0,Smart 6 ,Heart Of Ocean,Low,0
+"Infinix Smart 6 (Starry Purple, 64 GB)",Infinix,6499,4.3,27687,1913,2.0,64.0,Smart 6 ,Starry Purple,Low,0
+"REDMI 10A (Sea Blue, 64 GB)",Redmi,9499,4.2,7695,484,4.0,64.0,10A ,Sea Blue,Medium,0
+"realme C31 (Light Silver, 64 GB)",Realme,8999,4.4,56801,2730,4.0,64.0,C31 ,Light Silver,Medium,0
+"realme C31 (Light Silver, 32 GB)",Realme,9299,4.5,45218,1790,3.0,32.0,C31 ,Light Silver,Medium,0
+"POCO M4 Pro (Power Black, 128 GB)",Poco,17999,4.3,12383,1095,8.0,128.0,M4 Pro ,Power Black,High,1
+"realme 10 Pro 5G (Hyperspace, 128 GB)",Realme,19999,4.4,1963,193,8.0,128.0,10 Pro 5G ,Hyperspace,High,1
+"realme C35 (Glowing Black, 128 GB)",Realme,12999,4.4,159779,9431,4.0,128.0,C35 ,Glowing Black,Medium,0
+"Infinix Note 12 Pro 5G (Snowfall, 128 GB)",Infinix,16999,4.1,15545,2023,8.0,128.0,Note 12 Pro 5G ,Snowfall,High,1
+"SAMSUNG Galaxy F13 (Waterfall Blue, 64 GB)",Samsung,11999,4.4,108205,6211,4.0,64.0,Galaxy F13 ,Waterfall Blue,Medium,0
+"SAMSUNG Galaxy F23 5G (Copper Blush, 128 GB)",Samsung,13999,4.2,32083,2613,4.0,128.0,Galaxy F23 5G ,Copper Blush,Medium,1
+"Realme C30 - Locked with Airtel Prepaid (Lake Blue, 32 GB)",Realme,5499,4.3,66939,3492,2.0,32.0,C30 - Locked with Airtel Prepaid ,Lake Blue,Low,0
+"POCO M4 Pro 5G (Power Black, 128 GB)",Poco,13999,4.2,41124,3691,6.0,128.0,M4 Pro 5G ,Power Black,Medium,1
+"Infinix Note 12 Pro 5G (Force Black, 128 GB)",Infinix,16999,4.1,15545,2023,8.0,128.0,Note 12 Pro 5G ,Force Black,High,1
+"SAMSUNG GALAXY M13 5G (Aqua Green, 128 GB)",Samsung,14988,4.1,402,28,6.0,128.0,GALAXY M13 5G ,Aqua Green,Medium,1
+"POCO C31 (Shadow Gray, 32 GB)",Poco,6999,4.3,123512,7402,3.0,32.0,C31 ,Shadow Gray,Low,0
+"vivo T1 Pro 5G (Turbo Black, 128 GB)",Vivo,23999,4.4,7325,702,6.0,128.0,T1 Pro 5G ,Turbo Black,High,1
+"REDMI 10 Prime (Bifrost Blue, 128 GB)",Redmi,12999,4.2,10213,748,6.0,128.0,10 Prime ,Bifrost Blue,Medium,1
+"SAMSUNG Galaxy S21 FE 5G (Lavender, 128 GB)",Samsung,35999,4.4,29082,3001,8.0,128.0,Galaxy S21 FE 5G ,Lavender,Very high,1
+"MOTOROLA G60 (Moonless, 128 GB)",Motorola,15999,4.2,131824,13360,6.0,128.0,G60 ,Moonless,High,0
+"Infinix Smart 6 (Polar Black, 64 GB)",Infinix,6499,4.3,27687,1913,2.0,64.0,Smart 6 ,Polar Black,Low,0
+"REDMI 10 Prime (Astral White, 128 GB)",Redmi,12999,4.2,10213,748,6.0,128.0,10 Prime ,Astral White,Medium,1
+"MOTOROLA g52 (Charcoal Grey, 64 GB)",Motorola,11999,4.2,8442,1070,4.0,64.0,g52 ,Charcoal Grey,Medium,0
+"realme C33 (Night Sea, 32 GB)",Realme,8999,4.4,16512,699,3.0,32.0,C33 ,Night Sea,Medium,0
+"realme C11 2021 (Cool Grey, 32 GB)",Realme,7499,4.4,233435,10147,2.0,32.0,C11 2021 ,Cool Grey,Low,0
+"vivo T1 44W (Starry Sky, 128 GB)",Vivo,17999,4.3,5156,440,8.0,128.0,T1 44W ,Starry Sky,High,1
+"realme C33 (Aqua Blue, 32 GB)",Realme,8999,4.4,16512,699,3.0,32.0,C33 ,Aqua Blue,Medium,0
+"realme C33 (Sandy Gold, 32 GB)",Realme,8999,4.4,16512,699,3.0,32.0,C33 ,Sandy Gold,Medium,0
+"POCO C50 (Country Green, 32 GB)",Poco,7299,2.7,3,0,3.0,32.0,C50 ,Country Green,Low,0
+"POCO M4 Pro 5G (Yellow, 128 GB)",Poco,14999,4.2,7856,692,8.0,128.0,M4 Pro 5G ,Yellow,Medium,1
+"Infinix HOT 12 Play (Racing Black, 64 GB)",Infinix,8699,4.3,108143,8028,4.0,64.0,HOT 12 Play ,Racing Black,Medium,0
+"Infinix HOT 12 Play (Daylight Green, 64 GB)",Infinix,8699,4.3,108143,8028,4.0,64.0,HOT 12 Play ,Daylight Green,Medium,0
+"Infinix HOT 12 Play (Horizon Blue, 64 GB)",Infinix,8699,4.3,108143,8028,4.0,64.0,HOT 12 Play ,Horizon Blue,Medium,0
+"Infinix HOT 12 Play (Champagne Gold, 64 GB)",Infinix,8699,4.3,108143,8028,4.0,64.0,HOT 12 Play ,Champagne Gold,Medium,0
+"REDMI A1 (Light Green, 32 GB)",Redmi,6335,4.2,1893,141,2.0,32.0,A1 ,Light Green,Low,0
+"realme 9i 5G (Metallica Gold, 64 GB)",Realme,14999,4.5,37211,1725,4.0,64.0,9i 5G ,Metallica Gold,Medium,0
+"realme 9i 5G (Soulful Blue, 64 GB)",Realme,14999,4.5,37211,1725,4.0,64.0,9i 5G ,Soulful Blue,Medium,0
+"realme 9i 5G (Rocking Black, 64 GB)",Realme,14999,4.5,37211,1725,4.0,64.0,9i 5G ,Rocking Black,Medium,0
+"vivo Y16 (Drizzling Gold, 64 GB)",Vivo,10499,4.3,776,58,3.0,64.0,Y16 ,Drizzling Gold,Medium,0
+"Infinix Hot 12 Pro (Electric Blue, 64 GB)",Infinix,9999,4.2,5542,324,6.0,64.0,Hot 12 Pro ,Electric Blue,Medium,0
+"POCO X4 Pro 5G (Laser Black, 128 GB)",Poco,21999,4.1,14202,1467,8.0,128.0,X4 Pro 5G ,Laser Black,High,1
+"REDMI 10A (Slate grey, 64 GB)",Redmi,8488,4.2,7695,484,4.0,64.0,10A ,Slate grey,Medium,0
+"REDMI 10A (Charcoal Black, 32 GB)",Redmi,7990,4.1,1550,103,3.0,32.0,10A ,Charcoal Black,Medium,0
+"Tecno Spark 8T (Turquoise Cyan, 64 GB)",Tecno,8985,4.2,348,34,4.0,64.0,Spark 8T ,Turquoise Cyan,Medium,0
+"Infinix Note 12 TURBO (Snowfall, 128 GB)",Infinix,13999,4.2,7196,925,8.0,128.0,Note 12 TURBO ,Snowfall,Medium,1
+"Infinix Note 12 (Jewel Blue, 128 GB)",Infinix,11999,4.2,11430,1103,6.0,128.0,Note 12 ,Jewel Blue,Medium,1
+"Infinix Note 12 (Force Black, 128 GB)",Infinix,11999,4.2,11430,1103,6.0,128.0,Note 12 ,Force Black,Medium,1
+"MOTOROLA Edge 30 Pro (Cosmos Blue, 128 GB)",Motorola,34999,4.0,1010,179,8.0,128.0,Edge 30 Pro ,Cosmos Blue,Very high,1
+"Realme C30 - Locked with Airtel Prepaid (Bamboo Green, 32 GB)",Realme,5499,4.3,66939,3492,2.0,32.0,C30 - Locked with Airtel Prepaid ,Bamboo Green,Low,0
+"Realme C30 - Locked with Airtel Prepaid (Denim Black, 32 GB)",Realme,5499,4.3,66939,3492,2.0,32.0,C30 - Locked with Airtel Prepaid ,Denim Black,Low,0
+"REDMI Note 10T 5G (Mint Green, 128 GB)",Redmi,16999,4.2,30870,2392,6.0,128.0,Note 10T 5G ,Mint Green,High,1
+"POCO X4 Pro 5G (Laser Blue, 128 GB)",Poco,21999,4.1,14202,1467,8.0,128.0,X4 Pro 5G ,Laser Blue,High,1
+"realme C33 (Aqua Blue, 64 GB)",Realme,9999,4.5,52460,2270,4.0,64.0,C33 ,Aqua Blue,Medium,0
+"realme C33 (Sandy Gold, 64 GB)",Realme,9999,4.5,52460,2270,4.0,64.0,C33 ,Sandy Gold,Medium,0
+"realme C33 (Night Sea, 64 GB)",Realme,9999,4.5,52460,2270,4.0,64.0,C33 ,Night Sea,Medium,0
+"MOTOROLA G60 (Frosted Champagne, 128 GB)",Motorola,15999,4.2,131824,13360,6.0,128.0,G60 ,Frosted Champagne,High,0
+"OPPO F19 (Midnight Blue, 128 GB)",Oppo,15490,4.3,22833,1669,6.0,128.0,F19 ,Midnight Blue,High,1
+"REDMI Note 11 SE (Bifrost Blue, 64 GB)",Redmi,16998,4.3,30409,1886,6.0,64.0,Note 11 SE ,Bifrost Blue,High,0
+"Infinix Note 11s Free Fire Edition (Haze Green, 128 GB)",Infinix,15999,4.2,7333,980,8.0,128.0,Note 11s Free Fire Edition ,Haze Green,High,1
+"OPPO F19 (Prism Black, 128 GB)",Oppo,15490,4.3,22833,1669,6.0,128.0,F19 ,Prism Black,High,1
+"Google Pixel 6a (Charcoal, 128 GB)",Google,29999,4.3,22516,2917,6.0,128.0,Pixel 6a ,Charcoal,High,1
+"POCO F4 5G (Night Black, 128 GB)",Poco,25999,4.3,4248,586,8.0,128.0,F4 5G ,Night Black,High,1
+"REDMI 10A SPORT (SLATE GREY, 128 GB)",Redmi,10447,4.0,548,37,6.0,128.0,10A SPORT ,SLATE GREY,Medium,1
+"MOTOROLA edge 30 (Meteor Grey, 128 GB)",Motorola,22999,4.1,6637,949,6.0,128.0,edge 30 ,Meteor Grey,High,1
+"IQOO Z6 44W (Ravan Black, 128 GB)",Iqoo,16299,4.2,607,42,6.0,128.0,Z6 44W ,Ravan Black,High,1
+"realme 9 Pro+ 5G (Aurora Green, 128 GB)",Realme,21499,4.4,30596,3739,6.0,128.0,9 Pro+ 5G ,Aurora Green,High,1
+"realme Narzo 50i (Carbon Black, 32 GB)",Realme,6920,4.5,121209,4801,2.0,32.0,Narzo 50i ,Carbon Black,Low,0
+"realme C35 (Glowing Black, 128 GB)",Realme,13999,4.2,12952,848,6.0,128.0,C35 ,Glowing Black,Medium,1
+"realme C35 (Glowing Green, 128 GB)",Realme,13999,4.2,12952,848,6.0,128.0,C35 ,Glowing Green,Medium,1
+"POCO M4 Pro (Cool Blue, 128 GB)",Poco,17999,4.3,12383,1095,8.0,128.0,M4 Pro ,Cool Blue,High,1
+"REDMI 10A SPORT (SEA BLUE, 128 GB)",Redmi,9995,4.0,548,37,6.0,128.0,10A SPORT ,SEA BLUE,Medium,1
+"REDMI Note 11 SE (Thunder Purple, 64 GB)",Redmi,11999,4.3,30409,1886,6.0,64.0,Note 11 SE ,Thunder Purple,Medium,0
+"SAMSUNG GALAXY M13 (Aqua Green, 64 GB)",Samsung,11099,4.2,1860,131,4.0,64.0,GALAXY M13 ,Aqua Green,Medium,0
+"Micromax IN 2C (Brown, 32 GB)",Micromax,5999,4.2,2047,262,3.0,32.0,IN 2C ,Brown,Low,0
+"Tecno POVA 4 (Uranolith Grey, 128 GB)",Tecno,12826,4.3,4,1,8.0,128.0,POVA 4 ,Uranolith Grey,Medium,1
+"realme Narzo 50i (Mint Green, 32 GB)",Realme,7014,4.5,121209,4801,2.0,32.0,Narzo 50i ,Mint Green,Low,0
+"vivo Y16 (Steller Black, 32 GB)",Vivo,9999,4.3,776,58,3.0,32.0,Y16 ,Steller Black,Medium,0
+"realme C30s (Stripe Blue, 32 GB)",Realme,7499,4.5,3975,143,2.0,32.0,C30s ,Stripe Blue,Low,0
+"Tecno Pova 3 (Electric Blue, 64 GB)",Tecno,11990,4.2,253,12,4.0,64.0,Pova 3 ,Electric Blue,Medium,0
+"Tecno Pova 3 (Tech Silver, 64 GB)",Tecno,10955,4.2,253,12,4.0,64.0,Pova 3 ,Tech Silver,Medium,0
+"Tecno Pova 3 (Tech Silver, 128 GB)",Tecno,13958,4.1,170,12,6.0,128.0,Pova 3 ,Tech Silver,Medium,1
+"Tecno Pova 3 (Eco Black, 64 GB)",Tecno,10949,4.2,253,12,4.0,64.0,Pova 3 ,Eco Black,Medium,0
+"POCO F4 5G (Night Black, 256 GB)",Poco,29999,4.4,2469,358,12.0,256.0,F4 5G ,Night Black,High,1
+"SAMSUNG Galaxy F22 (Denim Blue, 64 GB)",Samsung,11499,4.3,101336,9764,4.0,64.0,Galaxy F22 ,Denim Blue,Medium,0
+"MOTOROLA G51 5G (Indigo Blue, 64 GB)",Motorola,12999,4.1,16473,2057,4.0,64.0,G51 5G ,Indigo Blue,Medium,0
+"OPPO K10 (Black Carbon, 128 GB)",Oppo,16990,4.3,5053,432,8.0,128.0,K10 ,Black Carbon,High,1
+"REDMI 10A (Charcoal Black, 64 GB)",Redmi,8579,4.2,7695,484,4.0,64.0,10A ,Charcoal Black,Medium,0
+"SAMSUNG Galaxy M33 5G (Deep Ocean Blue, 128 GB)",Samsung,19698,4.3,784,58,8.0,128.0,Galaxy M33 5G ,Deep Ocean Blue,High,1
+"SAMSUNG GALAXY M13 5G (Midnight Blue, 128 GB)",Samsung,14699,4.1,402,28,6.0,128.0,GALAXY M13 5G ,Midnight Blue,Medium,1
+"Tecno Spark 9 (Infinity Black, 64 GB)",Tecno,8479,4.1,293,23,4.0,64.0,Spark 9 ,Infinity Black,Medium,0
+"Infinix HOT 20 5G (Blaster Green, 64 GB)",Infinix,11499,4.2,831,107,4.0,64.0,HOT 20 5G ,Blaster Green,Medium,0
+"SAMSUNG Galaxy M33 5G (Deep Ocean Blue, 128 GB)",Samsung,19298,4.3,784,58,8.0,128.0,Galaxy M33 5G ,Deep Ocean Blue,High,1
+"OPPO F19s (Glowing Gold, 128 GB)",Oppo,19990,4.5,8966,505,6.0,128.0,F19s ,Glowing Gold,High,1
+"Infinix Zero 20 (Green Fantasy, 128 GB)",Infinix,17999,4.4,449,80,8.0,128.0,Zero 20 ,Green Fantasy,High,1
+"Infinix Zero 20 (DEEP GRAY, 128 GB)",Infinix,17999,4.4,449,80,8.0,128.0,Zero 20 ,DEEP GRAY,High,1
+"vivo Y01 (Elegant Black, 32 GB)",Vivo,7999,4.3,549,40,2.0,32.0,Y01 ,Elegant Black,Medium,0
+"realme Narzo 50i (Carbon Black, 64 GB)",Realme,8999,4.3,61879,3488,4.0,64.0,Narzo 50i ,Carbon Black,Medium,0
+"IQOO Neo 6 5G (Dark Nova, 128 GB)",Iqoo,30199,4.3,754,91,8.0,128.0,Neo 6 5G ,Dark Nova,Very high,1
+"vivo Y01A (Sapphire Blue, 32 GB)",Vivo,7999,4.2,544,32,2.0,32.0,Y01A ,Sapphire Blue,Medium,0
+"realme 9 Pro+ 5G (Aurora Green, 128 GB)",Realme,23499,4.4,27012,3068,8.0,128.0,9 Pro+ 5G ,Aurora Green,High,1
+"realme 9 Pro+ 5G (Midnight Black, 128 GB)",Realme,21499,4.4,30596,3739,6.0,128.0,9 Pro+ 5G ,Midnight Black,High,1
+"realme 9 Pro+ 5G (Midnight Black, 128 GB)",Realme,23499,4.4,27012,3068,8.0,128.0,9 Pro+ 5G ,Midnight Black,High,1
+"realme 9 Pro+ 5G (Aurora Green, 256 GB)",Realme,25499,4.4,27012,3068,8.0,256.0,9 Pro+ 5G ,Aurora Green,High,1
+"realme C35 (Glowing Green, 128 GB)",Realme,12999,4.4,159779,9431,4.0,128.0,C35 ,Glowing Green,Medium,0
+"REDMI Note 11S (Horizon Blue, 64 GB)",Redmi,15399,4.2,2082,170,6.0,64.0,Note 11S ,Horizon Blue,High,0
+"REDMI 9 Activ (Coral Green, 128 GB)",Redmi,10499,4.2,4552,308,6.0,128.0,9 Activ ,Coral Green,Medium,1
+"vivo T1 Pro 5G (Turbo Cyan, 128 GB)",Vivo,24999,4.3,14613,1579,8.0,128.0,T1 Pro 5G ,Turbo Cyan,High,1
+"SAMSUNG Galaxy M33 5G (Mystique Green, 128 GB)",Samsung,18300,4.2,7179,613,6.0,128.0,Galaxy M33 5G ,Mystique Green,High,1
+"Infinix Note 12 TURBO (Jewel Blue, 128 GB)",Infinix,13999,4.2,7196,925,8.0,128.0,Note 12 TURBO ,Jewel Blue,Medium,1
+"Infinix Note 12 TURBO (Force Black, 128 GB)",Infinix,13999,4.2,7196,925,8.0,128.0,Note 12 TURBO ,Force Black,Medium,1
+"REDMI K50i (Quick Silver, 128 GB)",Redmi,24998,4.2,310,26,6.0,128.0,K50i ,Quick Silver,High,1
+"realme 10 Pro+ 5G (Nebula Blue, 128 GB)",Realme,24999,4.5,4381,565,6.0,128.0,10 Pro+ 5G ,Nebula Blue,High,1
+"Infinix Note 12 Pro (Volcanic Grey, 256 GB)",Infinix,14999,4.2,2968,337,8.0,256.0,Note 12 Pro ,Volcanic Grey,Medium,1
+"realme 9 5G SE (Azure Glow, 128 GB)",Realme,19999,4.4,25528,2116,6.0,128.0,9 5G SE ,Azure Glow,High,1
+"realme 9 5G SE (Starry Glow, 128 GB)",Realme,19999,4.4,25528,2116,6.0,128.0,9 5G SE ,Starry Glow,High,1
+"realme C30s (Stripe Black, 32 GB)",Realme,7499,4.5,3975,143,2.0,32.0,C30s ,Stripe Black,Low,0
+"REDMI 9i (Sea Blue, 64 GB)",Redmi,8999,4.3,575907,33942,4.0,64.0,9i ,Sea Blue,Medium,0
+"realme C11 2021 (Cool Grey, 64 GB)",Realme,8999,4.3,204720,11070,4.0,64.0,C11 2021 ,Cool Grey,Medium,0
+"realme C11 2021 (Cool Blue, 64 GB)",Realme,8999,4.3,204720,11070,4.0,64.0,C11 2021 ,Cool Blue,Medium,0
+"Itel Magic2 4G( WiFi,Hotspot Tethering)",Itel,2450,4.0,18315,2667,64.0,128.0,Magic2 4G, WiFi,Low,1
+"MOTOROLA g22 (Cosmic Black, 64 GB)",Motorola,9499,3.7,26741,3220,4.0,64.0,g22 ,Cosmic Black,Medium,0
+"REDMI K50i 5G (Stealth Black, 128 GB)",Redmi,24830,4.2,874,126,6.0,128.0,K50i 5G ,Stealth Black,High,1
+"Infinix HOT 20 5G (Space Blue, 64 GB)",Infinix,11499,4.2,831,107,4.0,64.0,HOT 20 5G ,Space Blue,Medium,0
+"REDMI Note 11T 5G (Aquamarine Blue, 128 GB)",Redmi,17990,4.2,275,19,6.0,128.0,Note 11T 5G ,Aquamarine Blue,High,1
+"IQOO Neo 6 5G (Dark Nova, 128 GB)",Iqoo,30329,4.3,754,91,8.0,128.0,Neo 6 5G ,Dark Nova,Very high,1
+"realme C25_Y (Glacier Blue, 64 GB)",Realme,10999,4.5,46231,2216,4.0,64.0,C25_Y ,Glacier Blue,Medium,0
+"realme C25_Y (Metal Grey, 128 GB)",Realme,11999,4.5,46231,2216,4.0,128.0,C25_Y ,Metal Grey,Medium,0
+"SAMSUNG GALAXY M13 5G (Aqua Green, 128 GB)",Samsung,14838,4.1,402,28,6.0,128.0,GALAXY M13 5G ,Aqua Green,Medium,1
+"SAMSUNG Galaxy M33 5G (Mystique Green, 128 GB)",Samsung,19722,4.3,784,58,8.0,128.0,Galaxy M33 5G ,Mystique Green,High,1
+"vivo Y33T (Mid day dream, 128 GB)",Vivo,16990,4.4,2462,175,8.0,128.0,Y33T ,Mid day dream,High,1
+"POCO M5 (Power Black, 64 GB)",Poco,10999,4.3,2782,214,4.0,64.0,M5 ,Power Black,Medium,0
+"itel Vision3 (Multi Green, 32 GB)",Itel,5766,4.3,43,3,2.0,32.0,Vision3 ,Multi Green,Low,0
+"SAMSUNG GALAXY M13 (Aqua Green, 64 GB)",Samsung,11490,4.2,1860,131,4.0,64.0,GALAXY M13 ,Aqua Green,Medium,0
+"realme 9 5G SE (Azure Glow, 128 GB)",Realme,22999,4.3,2263,210,8.0,128.0,9 5G SE ,Azure Glow,High,1
+"realme 9 5G SE (Starry Glow, 128 GB)",Realme,22999,4.3,2263,210,8.0,128.0,9 5G SE ,Starry Glow,High,1
+"Redmi 9A Sport (Coral Green, 32 GB)",Redmi,7499,4.2,5872,437,3.0,32.0,9A Sport ,Coral Green,Low,0
+"OPPO A16 (Crystal Black, 64 GB)",Oppo,12990,4.3,3670,262,4.0,64.0,A16 ,Crystal Black,Medium,0
+"REDMI Note 11S (Horizon Blue, 128 GB)",Redmi,15829,4.2,872,85,8.0,128.0,Note 11S ,Horizon Blue,High,1
+"POCO M5 (Icy Blue, 64 GB)",Poco,10999,4.3,2782,214,4.0,64.0,M5 ,Icy Blue,Medium,0
+"Moto G71 5G (Arctic Blue, 128 GB)",Moto,16999,4.2,21817,2541,6.0,128.0,G71 5G ,Arctic Blue,High,1
+"OPPO A16 (Pearl Blue, 64 GB)",Oppo,12990,4.3,3670,262,4.0,64.0,A16 ,Pearl Blue,Medium,0
+"vivo T1 Pro 5G (Turbo Cyan, 128 GB)",Vivo,23999,4.4,7325,702,6.0,128.0,T1 Pro 5G ,Turbo Cyan,High,1
+"realme 9i 5G (Metallica Gold, 128 GB)",Realme,16999,4.3,4970,354,6.0,128.0,9i 5G ,Metallica Gold,High,1
+"vivo Y15c (Wave Green, 32 GB)",Vivo,9948,4.1,1047,75,3.0,32.0,Y15c ,Wave Green,Medium,0
+"realme Narzo 50 (Speed Blue, 64 GB)",Realme,12999,4.5,14747,936,4.0,64.0,Narzo 50 ,Speed Blue,Medium,0
+"realme Narzo 50 (Speed Blue, 128 GB)",Realme,15499,4.4,7120,534,6.0,128.0,Narzo 50 ,Speed Blue,High,1
+"REDMI Note 10 Lite (Glacier White, 128 GB)",Redmi,19900,4.3,843,67,6.0,128.0,Note 10 Lite ,Glacier White,High,1
+"realme 9 Pro+ 5G (Sunrise Blue, 256 GB)",Realme,25499,4.4,27012,3068,8.0,256.0,9 Pro+ 5G ,Sunrise Blue,High,1
+"realme C25_Y (Metal Grey, 64 GB)",Realme,10999,4.5,46231,2216,4.0,64.0,C25_Y ,Metal Grey,Medium,0
+"realme C25_Y (Glacier Blue, 128 GB)",Realme,11999,4.5,46231,2216,4.0,128.0,C25_Y ,Glacier Blue,Medium,0
+"Redmi Note 11 PRO Plus 5G (Stealth Black, 128 GB)",Redmi,20295,4.2,5366,457,6.0,128.0,Note 11 PRO Plus 5G ,Stealth Black,High,1
+"REDMI 10A SPORT (SEA BLUE, 128 GB)",Redmi,10417,4.0,548,37,6.0,128.0,10A SPORT ,SEA BLUE,Medium,1
+"realme 8 5G (Supersonic Black, 128 GB)",Realme,16499,4.3,75662,6017,4.0,128.0,8 5G ,Supersonic Black,High,0
+"REDMI 10A (Sea Blue, 64 GB)",Redmi,8998,4.2,7695,484,4.0,64.0,10A ,Sea Blue,Medium,0
+"itel A49 (Crystal Purple, 32 GB)",Itel,5699,4.2,466,29,2.0,32.0,A49 ,Crystal Purple,Low,0
+"REDMI 9 Activ (Coral Green, 64 GB)",Redmi,9999,4.2,9079,644,4.0,64.0,9 Activ ,Coral Green,Medium,0
+"MOTOROLA e22s (Eco Black, 64 GB)",Motorola,9189,4.2,21,0,4.0,64.0,e22s ,Eco Black,Medium,0
+"OPPO Reno8 5G (Shimmer Black, 128 GB)",Oppo,29999,4.3,32029,4184,8.0,128.0,Reno8 5G ,Shimmer Black,High,1
+"OPPO Reno8 5G (Shimmer Gold, 128 GB)",Oppo,29999,4.3,32029,4184,8.0,128.0,Reno8 5G ,Shimmer Gold,High,1
+"Tecno Pop 5 LTE (Ice Blue, 32 GB)",Tecno,6485,4.2,667,41,2.0,32.0,Pop 5 LTE ,Ice Blue,Low,0
+"IQOO Z6 5G (Chromatic Blue, 128 GB)",Iqoo,18499,4.1,307,23,8.0,128.0,Z6 5G ,Chromatic Blue,High,1
+"SAMSUNG Galaxy M33 5G (Deep Ocean Blue, 128 GB)",Samsung,17490,4.2,7179,613,6.0,128.0,Galaxy M33 5G ,Deep Ocean Blue,High,1
+"REDMI Note 11 SE (Space Black, 64 GB)",Redmi,11999,4.3,30409,1886,6.0,64.0,Note 11 SE ,Space Black,Medium,0
+"POCO M5 (Icy Blue, 128 GB)",Poco,12999,4.3,1359,93,6.0,128.0,M5 ,Icy Blue,Medium,1
+"REDMI 10 Power (Sporty Orange, 128 GB)",Redmi,13949,4.1,503,32,8.0,128.0,10 Power ,Sporty Orange,Medium,1
+"POCO X4 Pro 5G (Yellow, 128 GB)",Poco,21999,4.1,14202,1467,8.0,128.0,X4 Pro 5G ,Yellow,High,1
+"Redmi Note 9 Pro (Interstellar Black, 128 GB)",Redmi,13999,4.3,26637,1828,4.0,128.0,Note 9 Pro ,Interstellar Black,Medium,1
+"REDMI Note 10 Pro (Vintage Bronze, 128 GB)",Redmi,17999,4.3,41637,3899,6.0,128.0,Note 10 Pro ,Vintage Bronze,High,1
+"realme 9 Pro 5G (Aurora Green, 128 GB)",Realme,20999,4.3,13963,1127,8.0,128.0,9 Pro 5G ,Aurora Green,High,1
+"MOTOROLA e32s (Slate Gray, 64 GB)",Motorola,8849,3.8,1332,161,4.0,64.0,e32s ,Slate Gray,Medium,0
+"REDMI Note 11S (Horizon Blue, 128 GB)",Redmi,16700,4.2,872,85,8.0,128.0,Note 11S ,Horizon Blue,High,1
+"Redmi 9A Sport (Carbon Black, 32 GB)",Redmi,6789,4.1,24369,1859,2.0,32.0,9A Sport ,Carbon Black,Low,0
+"SAMSUNG GALAXY M13 5G (Midnight Blue, 128 GB)",Samsung,14888,4.1,402,28,6.0,128.0,GALAXY M13 5G ,Midnight Blue,Medium,1
+"realme 9 Pro 5G (Midnight Black, 128 GB)",Realme,20999,4.3,13963,1127,8.0,128.0,9 Pro 5G ,Midnight Black,High,1
+"realme 9i 5G (Soulful Blue, 128 GB)",Realme,16999,4.3,4970,354,6.0,128.0,9i 5G ,Soulful Blue,High,1
+"REDMI Note 11 Pro (Phantom White, 128 GB)",Redmi,17830,4.2,978,80,6.0,128.0,Note 11 Pro ,Phantom White,High,1
+"Infinix HOT 20 5G (Racing Black, 64 GB)",Infinix,11499,4.2,831,107,4.0,64.0,HOT 20 5G ,Racing Black,Medium,0
+"realme C20 (Cool Grey, 32 GB)",Realme,7499,4.4,296108,14044,2.0,32.0,C20 ,Cool Grey,Low,0
+"realme 8i (Space Purple, 64 GB)",Realme,13999,4.5,171965,10805,4.0,64.0,8i ,Space Purple,Medium,0
+"realme 8i (Space Black, 64 GB)",Realme,13999,4.5,171965,10805,4.0,64.0,8i ,Space Black,Medium,0
+"SAMSUNG Galaxy F22 (Denim Black, 64 GB)",Samsung,11499,4.3,101336,9764,4.0,64.0,Galaxy F22 ,Denim Black,Medium,0
+"SAMSUNG Galaxy A73 5G (Awesome Gray, 128 GB)",Samsung,41999,4.2,1256,165,8.0,128.0,Galaxy A73 5G ,Awesome Gray,Very high,1
+"IQOO 9 5G (Alpha, 256 GB)",Iqoo,39990,4.0,34,4,12.0,256.0,9 5G ,Alpha,Very high,1
+"vivo Y21G (Diamond Glow, 64 GB)",Vivo,13499,4.3,1985,159,4.0,64.0,Y21G ,Diamond Glow,Medium,0
+"Redmi Note 11 (Horizon Blue, 128 GB)",Redmi,14990,4.2,9161,718,6.0,128.0,Note 11 ,Horizon Blue,Medium,1
+"REDMI 9 Activ (Carbon Black, 64 GB)",Redmi,8091,4.2,9079,644,4.0,64.0,9 Activ ,Carbon Black,Medium,0
+"Infinix Zero 20 (Glitter Gold, 128 GB)",Infinix,17999,4.4,449,80,8.0,128.0,Zero 20 ,Glitter Gold,High,1
+"SAMSUNG Galaxy M32 Prime Edition (Light Blue, 64 GB)",Samsung,11570,4.1,95,7,4.0,64.0,Galaxy M32 Prime Edition ,Light Blue,Medium,0
+"REDMI 10 Prime 2022 (Astral White, 64 GB)",Redmi,11797,4.2,3015,216,4.0,64.0,10 Prime 2022 ,Astral White,Medium,0
+"POCO M3 Pro 5G (Power Black, 128 GB)",Poco,17999,4.2,52420,4434,6.0,128.0,M3 Pro 5G ,Power Black,High,1
+"REDMI Note 11S (Polar White, 128 GB)",Redmi,16480,4.2,2082,170,6.0,128.0,Note 11S ,Polar White,High,1
+"MOTOROLA g22 (Mint Green, 64 GB)",Motorola,9499,3.7,26741,3220,4.0,64.0,g22 ,Mint Green,Medium,0
+"realme narzo 50 5G (Hyper Blue, 128 GB)",Realme,17489,4.3,4,0,6.0,128.0,narzo 50 5G ,Hyper Blue,High,1
+"OnePlus 10R 5G (Sierra Black, 128 GB)",Oneplus,34998,4.3,1460,128,8.0,128.0,10R 5G ,Sierra Black,Very high,1
+"OPPO A17 (Lake Bule, 64 GB)",Oppo,13400,4.4,1044,45,4.0,64.0,A17 ,Lake Bule,Medium,0
+"REDMI Note 11S (Horizon Blue, 128 GB)",Redmi,16698,4.2,872,85,8.0,128.0,Note 11S ,Horizon Blue,High,1
+"SAMSUNG Galaxy M32 (Light Blue, 64 GB)",Samsung,13490,4.2,4237,431,4.0,64.0,Galaxy M32 ,Light Blue,Medium,0
+"REDMI Note 10S (Deep Sea Blue, 128 GB)",Redmi,18499,4.2,7183,667,8.0,128.0,Note 10S ,Deep Sea Blue,High,1
+"POCO X4 Pro 5G (Yellow, 64 GB)",Poco,18999,4.2,61334,6308,6.0,64.0,X4 Pro 5G ,Yellow,High,0
+"Redmi Note 11 (Space Black, 64 GB)",Redmi,12520,4.2,9194,843,4.0,64.0,Note 11 ,Space Black,Medium,0
+"OPPO A74 5G BLACK (Fluid Black, 128 GB)",Oppo,17480,4.3,1770,138,6.0,128.0,A74 5G BLACK ,Fluid Black,High,1
+"MOTOROLA G40 Fusion (Frosted Champagne, 128 GB)",Motorola,16499,4.2,55864,6036,6.0,128.0,G40 Fusion ,Frosted Champagne,High,1
+"OPPO Reno7 5G (Startrails Blue, 256 GB)",Oppo,28999,4.2,16442,2134,8.0,256.0,Reno7 5G ,Startrails Blue,High,1
+"MOTOROLA Edge 30 Fusion (Cosmic grey, 128 GB)",Motorola,39999,4.3,1806,343,8.0,128.0,Edge 30 Fusion ,Cosmic grey,Very high,1
+"Redmi Note 11 (Space Black, 64 GB)",Redmi,13849,4.2,9161,718,6.0,64.0,Note 11 ,Space Black,Medium,0
+"SAMSUNG S20 FE 5G (Cloud Navy, 128 GB)",Samsung,34466,4.2,3658,419,8.0,128.0,S20 FE 5G ,Cloud Navy,Very high,1
+"IQOO Z6 Pro 5G (Legion Sky, 128 GB)",Iqoo,23300,4.3,208,16,6.0,128.0,Z6 Pro 5G ,Legion Sky,High,1
+"SAMSUNG M53 5G (Deep Ocean Blue, 128 GB)",Samsung,24999,4.2,421,42,6.0,128.0,M53 5G ,Deep Ocean Blue,High,1
+"SAMSUNG Galaxy A53 (Awesome Black, 128 GB)",Samsung,31999,4.0,563,67,6.0,128.0,Galaxy A53 ,Awesome Black,Very high,1
+"REDMI 11 Prime 5G (Thunder Black, 128 GB)",Redmi,15899,4.2,174,15,6.0,128.0,11 Prime 5G ,Thunder Black,High,1
+"SAMSUNG Galaxy M33 5G (Emarld Brown, 128 GB)",Samsung,19974,4.3,784,58,8.0,128.0,Galaxy M33 5G ,Emarld Brown,High,1
+"OPPO A15S (Fancy white, 128 GB)",Oppo,11999,4.3,5488,302,4.0,128.0,A15S ,Fancy white,Medium,1
+"OPPO A15S (Rainbow Silver, 64 GB)",Oppo,11480,4.3,5488,302,4.0,64.0,A15S ,Rainbow Silver,Medium,0
+"OPPO A15s (Dynamic Black, 128 GB)",Oppo,12990,4.3,5488,302,4.0,128.0,A15s ,Dynamic Black,Medium,1
+"realme C21Y (Cross Black, 64 GB)",Realme,10499,4.5,253614,9536,4.0,64.0,C21Y ,Cross Black,Medium,0
+"realme 8 (Cyber Black, 128 GB)",Realme,15999,4.4,121458,10620,4.0,128.0,8 ,Cyber Black,High,0
+"REDMI A1 (Light Blue, 32 GB)",Redmi,6348,4.2,1893,141,2.0,32.0,A1 ,Light Blue,Low,0
+"REDMI A1 (Black, 32 GB)",Redmi,6458,4.2,1893,141,2.0,32.0,A1 ,Black,Low,0
+"REDMI A1 (Light Green, 32 GB)",Redmi,6305,4.2,1893,141,2.0,32.0,A1 ,Light Green,Low,0
+"Tecno Pova 3 (Eco Black, 64 GB)",Tecno,10955,4.2,253,12,4.0,64.0,Pova 3 ,Eco Black,Medium,0
+"Tecno Spark 9T (Turquoise Cyan, 64 GB)",Tecno,9370,4.3,48,4,4.0,64.0,Spark 9T ,Turquoise Cyan,Medium,0
+"POCO M3 (Yellow, 64 GB)",Poco,10999,4.3,124433,8927,4.0,64.0,M3 ,Yellow,Medium,0
+"Infinix Hot 11 (Emerald Green, 64 GB)",Infinix,9999,4.3,16022,1375,4.0,64.0,Hot 11 ,Emerald Green,Medium,0
+"POCO X4 Pro 5G (Laser Black, 64 GB)",Poco,18999,4.2,61334,6308,6.0,64.0,X4 Pro 5G ,Laser Black,High,0
+"realme Narzo 30 (Racing Blue, 128 GB)",Realme,15499,4.3,76114,6042,6.0,128.0,Narzo 30 ,Racing Blue,High,1
+"SAMSUNG M53 5G (Emerald Brown, 128 GB)",Samsung,24790,4.2,421,42,6.0,128.0,M53 5G ,Emerald Brown,High,1
+"SAMSUNG Galaxy A13 (Peach, 128 GB)",Samsung,16499,4.1,257,19,6.0,128.0,Galaxy A13 ,Peach,High,1
+"SAMSUNG Galaxy F12 (Sky Blue, 128 GB)",Samsung,11499,4.3,297273,23471,4.0,128.0,Galaxy F12 ,Sky Blue,Medium,0
+"Tecno POVA 4 (Cryolite Blue, 128 GB)",Tecno,12845,4.3,4,1,8.0,128.0,POVA 4 ,Cryolite Blue,Medium,1
+"REDMI 11 Prime 5G (Thunder Black, 64 GB)",Redmi,13499,4.2,791,57,4.0,64.0,11 Prime 5G ,Thunder Black,Medium,0
+"SAMSUNG Galaxy F22 (Denim Blue, 128 GB)",Samsung,13499,4.3,64571,5965,6.0,128.0,Galaxy F22 ,Denim Blue,Medium,1
+"Micromax IN 2B (Green, 64 GB)",Micromax,6999,3.9,21229,3299,4.0,64.0,IN 2B ,Green,Low,0
+"Tecno Camon 19 (Memphis Green, 128 GB)",Tecno,14960,4.2,174,20,6.0,128.0,Camon 19 ,Memphis Green,Medium,1
+"Redmi Note 11 (Starburst White, 64 GB)",Redmi,13444,4.2,9194,843,4.0,64.0,Note 11 ,Starburst White,Medium,0
+"vivo Y75 (Dancing waves, 128 GB)",Vivo,19990,4.2,1465,124,8.0,128.0,Y75 ,Dancing waves,High,1
+"Redmi Note 11 PRO Plus 5G (Mirage Blue, 128 GB)",Redmi,20459,4.2,5366,457,6.0,128.0,Note 11 PRO Plus 5G ,Mirage Blue,High,1
+"realme Narzo 30 (Racing Silver, 128 GB)",Realme,15499,4.3,76114,6042,6.0,128.0,Narzo 30 ,Racing Silver,High,1
+"itel A27 (Crystal Blue, 32 GB)",Itel,5289,4.0,726,50,2.0,32.0,A27 ,Crystal Blue,Low,0
+"realme C20 (Cool Blue, 32 GB)",Realme,7499,4.4,296108,14044,2.0,32.0,C20 ,Cool Blue,Low,0
+"REDMI 9 Power (Electric Green, 64 GB)",Redmi,11499,4.3,241660,17034,4.0,64.0,9 Power ,Electric Green,Medium,0
+"Infinix Smart 5A (Ocean Wave, 32 GB)",Infinix,7199,4.3,78425,5384,2.0,32.0,Smart 5A ,Ocean Wave,Low,0
+"REDMI Note 11 (Space Black, 64 GB)",Redmi,12950,4.3,156,13,4.0,64.0,Note 11 ,Space Black,Medium,0
+"Nokia C21 Plus (Dark Cyan, 64 GB)",Nokia,9999,3.8,94,16,4.0,64.0,C21 Plus ,Dark Cyan,Medium,0
+"REDMI 9 Activ (Metallic Purple, 128 GB)",Redmi,9990,4.2,4552,308,6.0,128.0,9 Activ ,Metallic Purple,Medium,1
+"vivo Y15c (Mystic Blue, 32 GB)",Vivo,9499,4.1,1047,75,3.0,32.0,Y15c ,Mystic Blue,Medium,0
+"realme 8 (Cyber Black, 128 GB)",Realme,16999,4.4,121376,9957,6.0,128.0,8 ,Cyber Black,High,0
+"realme 8 (Cyber Silver, 128 GB)",Realme,15999,4.4,121458,10620,4.0,128.0,8 ,Cyber Silver,High,0
+"realme 8 (Cyber Black, 128 GB)",Realme,17999,4.4,95489,8376,8.0,128.0,8 ,Cyber Black,High,1
+"REDMI 11 Prime (Peppy Purple, 64 GB)",Redmi,11978,4.3,48,4,4.0,64.0,11 Prime ,Peppy Purple,Medium,0
+"realme Narzo 30 (Racing Blue, 64 GB)",Realme,13499,4.4,105997,8981,4.0,64.0,Narzo 30 ,Racing Blue,Medium,0
+"REDMI 9 Power (Fiery Red, 64 GB)",Redmi,11499,4.3,241660,17034,4.0,64.0,9 Power ,Fiery Red,Medium,0
+"SAMSUNG Galaxy M32 (Light Blue, 64 GB)",Samsung,13999,4.2,4237,431,4.0,64.0,Galaxy M32 ,Light Blue,Medium,0
+"SAMSUNG Galaxy A33 (Awesome Blue, 128 GB)",Samsung,25999,4.1,1523,161,6.0,128.0,Galaxy A33 ,Awesome Blue,High,1
+"realme Narzo 50i (Mint Green, 64 GB)",Realme,8999,4.3,61879,3488,4.0,64.0,Narzo 50i ,Mint Green,Medium,0
+"itel Vision 3 (Jewel Blue, 64 GB)",Itel,6929,4.0,412,49,3.0,64.0,Vision 3 ,Jewel Blue,Low,0
+"Tecno Spark 9T (Atlantic Blue, 64 GB)",Tecno,9445,4.3,48,4,4.0,64.0,Spark 9T ,Atlantic Blue,Medium,0
+"SAMSUNG Galaxy F22 (Denim Black, 128 GB)",Samsung,13499,4.3,64571,5965,6.0,128.0,Galaxy F22 ,Denim Black,Medium,1
+"MOTOROLA G40 Fusion (Frosted Champagne, 64 GB)",Motorola,14499,4.2,32851,3699,4.0,64.0,G40 Fusion ,Frosted Champagne,Medium,0
+"SAMSUNG GALAXY M13 (Aqua Green, 128 GB)",Samsung,13490,4.2,360,24,6.0,128.0,GALAXY M13 ,Aqua Green,Medium,1
+"Tecno Pova 3 (Tech Silver, 128 GB)",Tecno,13959,4.1,170,12,6.0,128.0,Pova 3 ,Tech Silver,Medium,1
+"OPPO A17 (Sunlight Orange, 64 GB)",Oppo,12889,4.4,1044,45,4.0,64.0,A17 ,Sunlight Orange,Medium,0
+"Redmi 9A (SeaBlue, 32 GB)",Redmi,7789,4.3,21404,1284,2.0,32.0,9A ,SeaBlue,Medium,0
+"ASUS ROG 5s (Black, 128 GB)",Asus,39999,4.2,797,117,8.0,128.0,ROG 5s ,Black,Very high,1
+"vivo Y33T (Starry Gold, 128 GB)",Vivo,17099,4.4,2462,175,8.0,128.0,Y33T ,Starry Gold,High,1
+"vivo V23e 5G (Sunshine Gold, 128 GB)",Vivo,22997,4.2,1890,172,8.0,128.0,V23e 5G ,Sunshine Gold,High,1
+"itel Vision1 (Gradation Blue, 32 GB)",Itel,6999,4.1,25627,2158,3.0,32.0,Vision1 ,Gradation Blue,Low,0
+"REDMI A1+ (Light Blue, 32 GB)",Redmi,7499,4.2,542,44,2.0,32.0,A1+ ,Light Blue,Low,0
+"REDMI 10 Power (Power Black, 128 GB)",Redmi,12990,4.1,503,32,8.0,128.0,10 Power ,Power Black,Medium,1
+"POCO M5 (Yellow, 64 GB)",Poco,10999,4.3,2782,214,4.0,64.0,M5 ,Yellow,Medium,0
+"Xiaomi 11i 5G (Purple Mist, 128 GB)",Xiaomi,24999,4.2,37330,4613,6.0,128.0,11i 5G ,Purple Mist,High,1
+"MOTOROLA Edge 20 Fusion 5G (Electric Graphite, 128 GB)",Motorola,18999,4.0,19499,2624,6.0,128.0,Edge 20 Fusion 5G ,Electric Graphite,High,1
+"Infinix Zero 5G (Horizon Blue, 128 GB)",Infinix,19999,4.2,9794,1494,8.0,128.0,Zero 5G ,Horizon Blue,High,1
+"Infinix Hot 11S (Silver Wave, 64 GB)",Infinix,10999,4.3,48526,5194,4.0,64.0,Hot 11S ,Silver Wave,Medium,0
+"POCO M2 Reloaded (Mostly Blue, 64 GB)",Poco,11999,4.3,66728,4602,4.0,64.0,M2 Reloaded ,Mostly Blue,Medium,0
+"REDMI 11 Prime 5G (Meadow Green, 64 GB)",Redmi,13490,4.2,791,57,4.0,64.0,11 Prime 5G ,Meadow Green,Medium,0
+"REDMI NOTE 10 LITE (Aurora Blue, 128 GB)",Redmi,14449,4.3,2097,165,4.0,128.0,NOTE 10 LITE ,Aurora Blue,Medium,1
+"Infinix Smart 5A (Midnight Black, 32 GB)",Infinix,7199,4.3,78425,5384,2.0,32.0,Smart 5A ,Midnight Black,Low,0
+"Moto G71 5G (Neptune Green, 128 GB)",Moto,16999,4.2,21817,2541,6.0,128.0,G71 5G ,Neptune Green,High,1
+"Infinix Hot 11S (Green Wave, 128 GB)",Infinix,11999,4.3,48526,5194,4.0,128.0,Hot 11S ,Green Wave,Medium,0
+"OPPO K10 5G (Ocean Blue, 128 GB)",Oppo,16499,4.4,52584,4032,8.0,128.0,K10 5G ,Ocean Blue,High,1
+"OPPO A54 (Starry Blue, 64 GB)",Oppo,12489,4.4,10827,670,4.0,64.0,A54 ,Starry Blue,Medium,0
+"REDMI Note 11T 5G (Matte black, 64 GB)",Redmi,15995,4.3,5436,439,6.0,64.0,Note 11T 5G ,Matte black,High,0
+"REDMI Note 11T 5G (Aquamarine Blue, 128 GB)",Redmi,19490,4.3,2852,250,8.0,128.0,Note 11T 5G ,Aquamarine Blue,High,1
+"OnePlus Nord CE 2 Lite 5G (Black Dusk, 128 GB)",Oneplus,19989,4.3,40620,3313,6.0,128.0,Nord CE 2 Lite 5G ,Black Dusk,High,1
+"OPPO A54 (Starry Blue, 128 GB)",Oppo,14780,4.3,4016,228,6.0,128.0,A54 ,Starry Blue,Medium,1
+"OPPO A54 (Crystal Black, 128 GB)",Oppo,14990,4.4,10827,670,4.0,128.0,A54 ,Crystal Black,Medium,1
+"Xiaomi 11i Hypercharge 5G (Pacific Pearl, 128 GB)",Xiaomi,28999,4.2,6430,720,8.0,128.0,11i Hypercharge 5G ,Pacific Pearl,High,1
+"MOTOROLA Edge 30 Fusion (Solar Gold, 128 GB)",Motorola,39999,4.3,1806,343,8.0,128.0,Edge 30 Fusion ,Solar Gold,Very high,1
+"OPPO A12 (Deep Blue, 32 GB)",Oppo,9990,4.4,74992,4510,3.0,32.0,A12 ,Deep Blue,Medium,0
+"OPPO A16E (Blue, 32 GB)",Oppo,9990,4.3,656,26,3.0,32.0,A16E ,Blue,Medium,0
+"OPPO A54 (Moonlight Gold, 64 GB)",Oppo,13990,4.4,10827,670,4.0,64.0,A54 ,Moonlight Gold,Medium,0
+"MOTOROLA Edge 20 Pro 5G (Midnight Sky, 128 GB)",Motorola,24999,4.0,3591,652,8.0,128.0,Edge 20 Pro 5G ,Midnight Sky,High,1
+"OPPO A12 (Flowing Silver, 32 GB)",Oppo,9990,4.4,74992,4510,3.0,32.0,A12 ,Flowing Silver,Medium,0
+"Redmi 9A Sport (Carbon Black, 32 GB)",Redmi,7999,4.2,5872,437,3.0,32.0,9A Sport ,Carbon Black,Medium,0
+"SAMSUNG Galaxy M13 (Aqua Green, 128 GB)",Samsung,13999,4.2,360,24,6.0,128.0,Galaxy M13 ,Aqua Green,Medium,1
+"itel A27 (Deep Gray, 32 GB)",Itel,5299,4.0,726,50,2.0,32.0,A27 ,Deep Gray,Low,0
+"REDMI Note 10T 5G (Chromium Silver, 64 GB)",Redmi,14999,4.3,44119,3200,4.0,64.0,Note 10T 5G ,Chromium Silver,Medium,0
+"realme C25Y (Metal Grey, 64 GB)",Realme,10999,4.4,137899,5921,4.0,64.0,C25Y ,Metal Grey,Medium,0
+"realme C21 (Cross Black, 32 GB)",Realme,9499,4.4,71609,3908,3.0,32.0,C21 ,Cross Black,Medium,0
+"SAMSUNG GALAXY M13 5G (?Stardust Brown, 128 GB)",Samsung,14849,4.1,402,28,6.0,128.0,GALAXY M13 5G ,?Stardust Brown,Medium,1
+"SAMSUNG GALAXY M13 (Aqua Green, 64 GB)",Samsung,10990,4.2,1860,131,4.0,64.0,GALAXY M13 ,Aqua Green,Medium,0
+"IQOO Z6 5G (Dynamo Black, 128 GB)",Iqoo,17399,4.2,522,38,6.0,128.0,Z6 5G ,Dynamo Black,High,1
+"REDMI 9 Prime (Matte Black, 128 GB)",Redmi,12490,4.4,226830,15261,4.0,128.0,9 Prime ,Matte Black,Medium,0
+"SAMSUNG GALAXY M13 (Aqua Green, 128 GB)",Samsung,15490,4.2,360,24,6.0,128.0,GALAXY M13 ,Aqua Green,High,1
+"OPPO F21s Pro 5G (Starlight Black, 128 GB)",Oppo,25999,4.2,226,17,8.0,128.0,F21s Pro 5G ,Starlight Black,High,1
+"REDMI Note 11S (Space Black, 64 GB)",Redmi,16499,4.2,2082,170,6.0,64.0,Note 11S ,Space Black,High,0
+"SAMSUNG GALAXY M13 (Midnight Blue, 128 GB)",Samsung,14989,4.2,360,24,6.0,128.0,GALAXY M13 ,Midnight Blue,Medium,1
+"Infinix Hot 11S (Polar Black, 128 GB)",Infinix,11999,4.3,48526,5194,4.0,128.0,Hot 11S ,Polar Black,Medium,0
+"Infinix Hot 11S (Green Wave, 64 GB)",Infinix,10999,4.3,48526,5194,4.0,64.0,Hot 11S ,Green Wave,Medium,0
+"REDMI Note 11 Pro (Star Blue, 128 GB)",Redmi,20199,4.1,631,45,8.0,128.0,Note 11 Pro ,Star Blue,High,1
+"Redmi Note 11 (Space Black, 64 GB)",Redmi,12990,4.2,9194,843,4.0,64.0,Note 11 ,Space Black,Medium,0
+"Redmi Note 11 (Starburst White, 128 GB)",Redmi,15183,4.2,9161,718,6.0,128.0,Note 11 ,Starburst White,High,1
+"Tecno Spark 8P (Turquoise Cyan, 64 GB)",Tecno,9295,4.3,8,0,4.0,64.0,Spark 8P ,Turquoise Cyan,Medium,0
+"SAMSUNG Galaxy M32 (Black, 64 GB)",Samsung,11999,4.2,4237,431,4.0,64.0,Galaxy M32 ,Black,Medium,0
+"OPPO A55 (Starry Black, 128 GB)",Oppo,15000,4.1,358,19,6.0,128.0,A55 ,Starry Black,High,1
+"Tecno Spark 8C (Iris Purple, 64 GB)",Tecno,8299,4.2,431,32,3.0,64.0,Spark 8C ,Iris Purple,Medium,0
+"OPPO A55 (Starry Black, 64 GB)",Oppo,14490,4.3,673,62,4.0,64.0,A55 ,Starry Black,Medium,0
+"Redmi Note 11 (Space Black, 128 GB)",Redmi,15884,4.2,9161,718,6.0,128.0,Note 11 ,Space Black,High,1
+"itel vision 1 pro (AURORA BLUE, 32 GB)",Itel,5889,4.0,387,36,2.0,32.0,vision 1 pro ,AURORA BLUE,Low,0
+"OPPO A57 (Glowing Green, 64 GB)",Oppo,13999,4.4,1999,101,4.0,64.0,A57 ,Glowing Green,Medium,0
+"REDMI 11 Prime 5G (Meadow Green, 128 GB)",Redmi,16999,4.2,174,15,6.0,128.0,11 Prime 5G ,Meadow Green,High,1
+"SAMSUNG M53 5G (Mystique Green, 128 GB)",Samsung,24790,4.2,421,42,6.0,128.0,M53 5G ,Mystique Green,High,1
+"realme Narzo 30 5G (Racing Silver, 128 GB)",Realme,16999,4.3,84215,7331,6.0,128.0,Narzo 30 5G ,Racing Silver,High,1
+"vivo Y15c (Wave Green, 32 GB)",Vivo,9798,4.1,1047,75,3.0,32.0,Y15c ,Wave Green,Medium,0
+"SAMSUNG GALAXY M13 5G (Midnight Blue, 64 GB)",Samsung,13880,3.9,183,10,4.0,64.0,GALAXY M13 5G ,Midnight Blue,Medium,0
+"Tecno Pova 3 (Eco Black, 128 GB)",Tecno,13955,4.1,170,12,6.0,128.0,Pova 3 ,Eco Black,Medium,1
+"OPPO A57 (Glowing Black, 64 GB)",Oppo,13999,4.4,1999,101,4.0,64.0,A57 ,Glowing Black,Medium,0
+"Redmi Note 11 (Starburst White, 128 GB)",Redmi,15185,4.2,9161,718,6.0,128.0,Note 11 ,Starburst White,High,1
+"Mi 11X (Lunar White, 128 GB)",Mi,24445,4.2,2776,268,6.0,128.0,11X ,Lunar White,High,1
+"REDMI Note 11S (Polar White, 128 GB)",Redmi,16900,4.2,872,85,8.0,128.0,Note 11S ,Polar White,High,1
+"vivo V25 Pro 5G (Pure Black, 128 GB)",Vivo,35999,4.3,5581,788,8.0,128.0,V25 Pro 5G ,Pure Black,Very high,1
+"OPPO A16E (Midnight Black, 32 GB)",Oppo,9990,4.3,656,26,3.0,32.0,A16E ,Midnight Black,Medium,0
+"Redmi 6 Pro (Gold, 32 GB)",Redmi,8999,4.3,11479,832,3.0,32.0,6 Pro ,Gold,Medium,0
+"realme 8s 5G (Universe Purple, 128 GB)",Realme,17999,4.4,76378,6205,6.0,128.0,8s 5G ,Universe Purple,High,1
+"IQOO Neo 6 5G (Dark Nova, 256 GB)",Iqoo,34889,4.4,289,35,12.0,256.0,Neo 6 5G ,Dark Nova,Very high,1
+"realme 8s 5G (Universe Purple, 128 GB)",Realme,19999,4.4,53580,4789,8.0,128.0,8s 5G ,Universe Purple,High,1
+"realme GT Master Edition (Cosmos Black, 128 GB)",Realme,27999,4.3,61530,6559,8.0,128.0,GT Master Edition ,Cosmos Black,High,1
+"Redmi 9A (Midnight Black, 32 GB)",Redmi,7789,4.3,21404,1284,2.0,32.0,9A ,Midnight Black,Medium,0
+"OnePlus 10R 5G (Forest Green, 256 GB)",Oneplus,38302,4.2,775,58,12.0,256.0,10R 5G ,Forest Green,Very high,1
+"REDMI Note 10 Lite (Glacier White, 128 GB)",Redmi,14399,4.3,843,67,6.0,128.0,Note 10 Lite ,Glacier White,Medium,1
+"OPPO A16 (Royal Gold, 64 GB)",Oppo,12990,4.3,3670,262,4.0,64.0,A16 ,Royal Gold,Medium,0
+"SAMSUNG S20 FE 5G (Cloud Lavender, 128 GB)",Samsung,35599,4.2,3658,419,8.0,128.0,S20 FE 5G ,Cloud Lavender,Very high,1
+"REDMI Note 11 Pro (Stealth Black, 128 GB)",Redmi,20199,4.1,631,45,8.0,128.0,Note 11 Pro ,Stealth Black,High,1
+"OPPO A77 (Sky Blue, 64 GB)",Oppo,15499,4.3,222,11,4.0,64.0,A77 ,Sky Blue,High,0
+"REDMI Note 11S (Polar White, 64 GB)",Redmi,16499,4.2,2082,170,6.0,64.0,Note 11S ,Polar White,High,0
+"REDMI 11 Prime 5G (Chrome Silver, 64 GB)",Redmi,12999,4.2,791,57,4.0,64.0,11 Prime 5G ,Chrome Silver,Medium,0
+"Infinix Note 11s (Haze Green, 64 GB)",Infinix,13999,4.3,11787,1562,6.0,64.0,Note 11s ,Haze Green,Medium,0
+"POCO M3 (Yellow, 64 GB)",Poco,11999,4.3,124433,8927,4.0,64.0,M3 ,Yellow,Medium,0
+"vivo Y21T (Midnight Blue, 128 GB)",Vivo,15499,4.4,1514,108,4.0,128.0,Y21T ,Midnight Blue,High,1
+"Nokia 5.4 (Dusk, 64 GB)",Nokia,12489,3.9,3716,565,4.0,64.0,5.4 ,Dusk,Medium,0
+"realme C25Y (Glacier Blue, 64 GB)",Realme,10999,4.4,137899,5921,4.0,64.0,C25Y ,Glacier Blue,Medium,0
+"OPPO F21SPRO (Orange, 128 GB)",Oppo,21989,4.1,20,0,8.0,128.0,F21SPRO ,Orange,High,1
+"Infinix Hot 11S (Polar Black, 64 GB)",Infinix,10999,4.3,48526,5194,4.0,64.0,Hot 11S ,Polar Black,Medium,0
+"SAMSUNG Galaxy A23 (Peach, 128 GB)",Samsung,18499,4.2,725,48,6.0,128.0,Galaxy A23 ,Peach,High,1
+"Infinix Note 7 (Forest Green, 64 GB)",Infinix,14999,4.3,25446,2544,4.0,64.0,Note 7 ,Forest Green,Medium,0
+"realme C25s (Watery Grey, 128 GB)",Realme,11999,4.4,50559,2933,4.0,128.0,C25s ,Watery Grey,Medium,0
+"MOTOROLA Edge 30 Pro (Stardust White, 128 GB)",Motorola,34999,4.0,1010,179,8.0,128.0,Edge 30 Pro ,Stardust White,Very high,1
+"OPPO K10 5G (Midnight Black, 128 GB)",Oppo,16499,4.4,52584,4032,8.0,128.0,K10 5G ,Midnight Black,High,1
+"REDMI 11 Prime 5G (Thunder Black, 64 GB)",Redmi,13996,4.2,791,57,4.0,64.0,11 Prime 5G ,Thunder Black,Medium,0
+"Infinix Note 10 (Emerald Green, 128 GB)",Infinix,12499,4.3,51466,5807,6.0,128.0,Note 10 ,Emerald Green,Medium,1
+"REDMI 11 Prime 5G (Thunder Black, 128 GB)",Redmi,15880,4.2,174,15,6.0,128.0,11 Prime 5G ,Thunder Black,High,1
+"SAMSUNG Galaxy F12 (Sky Blue, 64 GB)",Samsung,10499,4.3,297273,23471,4.0,64.0,Galaxy F12 ,Sky Blue,Medium,0
+"Redmi 9A Sport (Metallic Blue, 32 GB)",Redmi,7397,4.2,5872,437,3.0,32.0,9A Sport ,Metallic Blue,Low,0
+"Tecno Spark 8C (Turquoise Cyan, 64 GB)",Tecno,8998,4.2,99,9,4.0,64.0,Spark 8C ,Turquoise Cyan,Medium,0
+"LAVA Z2 Max (Stroked Blue, 32 GB)",Lava,7799,4.1,296,55,2.0,32.0,Z2 Max ,Stroked Blue,Medium,0
+"SAMSUNG Galaxy A13 (Black, 64 GB)",Samsung,14499,4.1,635,47,4.0,64.0,Galaxy A13 ,Black,Medium,0
+"REDMI Note 11 Pro (Stealth Black, 128 GB)",Redmi,17980,4.2,978,80,6.0,128.0,Note 11 Pro ,Stealth Black,High,1
+"realme C11 (Rich Grey, 32 GB)",Realme,8999,4.4,458868,29531,2.0,32.0,C11 ,Rich Grey,Medium,0
+"10 Prime (Phantom Black, 128 GB)",10,14100,4.4,34,6,6.0,128.0,Prime ,Phantom Black,Medium,1
+"Redmi Note 11 PRO Plus 5G (Mirage Blue, 128 GB)",Redmi,20464,4.2,5366,457,6.0,128.0,Note 11 PRO Plus 5G ,Mirage Blue,High,1
+"Redmi 9A Sport (Coral Green, 32 GB)",Redmi,7970,4.2,5872,437,3.0,32.0,9A Sport ,Coral Green,Medium,0
+"POCO F1 (Rosso Red, 64 GB)",Poco,13899,4.5,244098,30034,6.0,64.0,F1 ,Rosso Red,Medium,0
+"OPPO A54 (Moonlight Gold, 128 GB)",Oppo,13999,4.4,10827,670,4.0,128.0,A54 ,Moonlight Gold,Medium,1
+"REDMI NOTE 10 LITE (Champagne Gold, 64 GB)",Redmi,14489,4.3,2097,165,4.0,64.0,NOTE 10 LITE ,Champagne Gold,Medium,0
+"Infinix Zero 5G (Cosmic Black, 128 GB)",Infinix,19999,4.2,9794,1494,8.0,128.0,Zero 5G ,Cosmic Black,High,1
+"Infinix Zero 5G (Skylight Orange, 128 GB)",Infinix,19999,4.2,9794,1494,8.0,128.0,Zero 5G ,Skylight Orange,High,1
+"OnePlus 10R 5G (Sierra Black, 256 GB)",Oneplus,38653,4.2,775,58,12.0,256.0,10R 5G ,Sierra Black,Very high,1
+"itel Vision 3 (Deep Ocean Black, 64 GB)",Itel,6887,4.0,412,49,3.0,64.0,Vision 3 ,Deep Ocean Black,Low,0
+"Mi A2 (Gold, 64 GB)",Mi,17499,4.2,34803,2909,4.0,64.0,A2 ,Gold,High,0
+"REDMI NOTE 10 LITE (Aurora Blue, 128 GB)",Redmi,14379,4.3,843,67,6.0,128.0,NOTE 10 LITE ,Aurora Blue,Medium,1
+"REDMI Note 11S (Space Black, 128 GB)",Redmi,16799,4.2,2082,170,6.0,128.0,Note 11S ,Space Black,High,1
+"realme C21Y (Cross Blue, 32 GB)",Realme,9499,4.6,89520,3077,3.0,32.0,C21Y ,Cross Blue,Medium,0
+"Infinix Note 11s (Mithril Grey, 64 GB)",Infinix,13999,4.3,11787,1562,6.0,64.0,Note 11s ,Mithril Grey,Medium,0
+"realme 8i (Space Black, 128 GB)",Realme,15999,4.4,69885,4887,6.0,128.0,8i ,Space Black,High,1
+"Infinix Note 11s (Symphony Cyan, 64 GB)",Infinix,13999,4.3,11787,1562,6.0,64.0,Note 11s ,Symphony Cyan,Medium,0
+"REDMI K50i (Quick Silver, 256 GB)",Redmi,27999,4.3,276,42,8.0,256.0,K50i ,Quick Silver,High,1
+"REDMI Note 10S (Frost White, 128 GB)",Redmi,18499,4.2,7183,667,8.0,128.0,Note 10S ,Frost White,High,1
+"Tecno Pop 5 LTE (Deepsea Luster, 32 GB)",Tecno,6489,4.2,667,41,2.0,32.0,Pop 5 LTE ,Deepsea Luster,Low,0
+"SAMSUNG M53 5G (Deep Ocean Blue, 128 GB)",Samsung,26999,4.0,167,13,8.0,128.0,M53 5G ,Deep Ocean Blue,High,1
+"OPPO A54 (Starry Blue, 64 GB)",Oppo,11949,4.4,10827,670,4.0,64.0,A54 ,Starry Blue,Medium,0
+"LAVA Z2 (Flame Red, 32 GB)",Lava,7999,4.1,330,57,3.0,32.0,Z2 ,Flame Red,Medium,0
+"POCO F1 (Rosso Red, 64 GB)",Poco,21999,4.5,244098,30034,6.0,64.0,F1 ,Rosso Red,High,0
+"OPPO A54 (Starry Blue, 128 GB)",Oppo,15990,4.3,4016,228,6.0,128.0,A54 ,Starry Blue,High,1
