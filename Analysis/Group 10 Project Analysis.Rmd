@@ -42,6 +42,7 @@ library(stringr) #Used to manipulate string
 library(gridExtra) #Used to arrange the ggplot chart
 library(rpart) #Used for classification tree
 library(rpart.plot) #Used for plottingclassification tree
+
 ```
 
 
@@ -535,7 +536,388 @@ So our final conclusion is that Decision Tree (Classification) can best predict 
 
 \pagebreak
 
+## Phone Company Categorization
 
+The goal of this section is to look at categorization of phones that fall within the most expensive bracket. Among these phones are Apple, Google, Samgsung, Vivo and Iqoo. Initially, we wanted to look at categorizing Apple, Google and Samgsung, but the number of entries of Google in the dataset prevented us from using them (Unable to split Google into testing and training). For this reason, we included Vivo and Iqoo. For categorization, we chose to compare four different classification methods: LDA, QDA, Logistic Regression and an Bayesian Classifier and KNN.
+
+
+### Reading in the data 
+
+The first step prior to building the different classifiers was to read in the data into r. 
+```{r}
+cellphone = mobile_dataset
+```
+
+
+### Manipulation of the dataframe prior to categorization
+
+With the dataset in r, we are now able to reduce our dataframe to only contain the different companies which we want to perform classification on.
+
+```{r}
+cellphone = cellphone[cellphone$Company %in% c("APPLE", "SAMSUNG", "VIVO", "IQOO"), ]
+cellhone = cellphone %>% drop_na()
+```
+
+The next step is to chose which classifiers we want to use to perform analysis. Through playing around with the different attributes in the dataset, the rating, Price, number of ratings, total reviews and Rom Size were chosen as the variables used to classify company. Color was also considered, but since there are so many different unique colors, the test set would always contain a color not seen in training and the model would not function. With some possible exceptions, the color of the phone is likely not proprietary to the company and thus isn't crutial for categorization. 
+
+```{r}
+df2 <- cellphone[, (names(cellphone) %in% c("Rating","Price","No_of_ratings","TotalReviwes","RomSize_inGB", "Company"))]
+```
+
+In order to test some of the assumptions requried to use the aforementioned classification methods, the order of the columns is changed so that company, our dependant variable, appears in the last column of the data frame.
+
+```{r}
+order<- df2[,c(6,2,3,4,5,1)]
+order$Company <- as.factor(as.character(order$Company))
+```
+
+
+### Testing Assumptions
+
+First, we will test the assumption of homogeneity of covariance matrices. Homogeneity of covariance matrices is required to use LDA as a classification method. We can test for Homogeneity using the boxM test. 
+
+The hypotheses for the test are as follows:
+
+$$
+\begin{aligned}
+H_0&:\mbox{The observed covariance matrices for the dependent variables are equal across groups}\\
+H_a&:\mbox{The observed covariance matrices for the dependent variables are NOT equal across groups}
+\end{aligned}
+$$
+
+```{r}
+library(heplots)
+boxM(order[,1:5], order$Company)
+```
+
+We can see that since P is very small, we reject the null hypothesis in favor of the alternate hypothesis, indicating we have heterogeneity of covariance matrices. Our assumption of homogeneity of covariance matrices for LDA therefor is not met.
+
+We can try to normalize the data to see if it has an impact on the result.
+
+```{r}
+order2 <- order %>% mutate_at(c("Rating","Price","No_of_ratings","TotalReviwes","RomSize_inGB"), ~(scale(.) %>% as.vector))
+order3 = order2
+```
+
+```{r}
+library(heplots)
+boxM(order2[,1:5], order$Company)
+```
+
+Normalization using the scale function has no effect on changing making the covariance matrices homogenous. 
+
+The covariance matrices do not need to be homogeneous to use QDA, but one of the assumtions of QDA is a gaussian distribution of the independant variables. 
+```{r}
+order2 = order[,1:5]
+order2 <- as.matrix(order2[,1:5])
+```
+
+We are able to visualize the distribution of the indenpendant variable by using histograms of each of the data points. 
+```{r}
+par(mfrow = c(1, ncol(order2)))
+for(j in 1:ncol(order2)){
+  hist(order2[,j])}
+
+```
+
+From the histograms, Price, number of ratings and the total reviews do not appear to follow a normal distribution. We can use the Shapiro-Wilk normality test to validate these results. 
+
+Below is the null hypothesis for the test.
+
+$$
+\begin{aligned}
+H_0&:\mbox{The data follow a Gaussian distribution}\\
+H_a&:\mbox{The data does NOT follow a gaussian distribution}
+\end{aligned}
+$$
+
+```{r}
+library(mvnormtest)
+mshapiro.test(t(order2))
+
+```
+
+From p-value = 7.943e-12, we reject the null hypothesis in favor of the alternate hypothesis indicating that the independent variables do not follow a normal distribution.
+
+We also need to test to see if multicollinearity is present in our predictors. 
+
+```{r}
+faraway::vif(order2)
+```
+
+It appears we need to remove number of ratings from our model because there is multicollinearity.
+
+```{r}
+order3 <- order3[, -4]
+order2 <- order2[, -4]
+
+faraway::vif(order2)
+```
+
+### Comparing Classifiers
+
+#### LDA and QDA Classification
+
+While we have not met all the assumptions for LDA and QDA, we will try and do a classification using these methods regardless and look at the misclassification rates as a metric of their performance.
+```{r}
+library(MASS)
+library(ISLR)
+set.seed(10)
+
+sample <- sample(c(TRUE, FALSE), nrow(order2), replace=TRUE, prob=c(0.7,0.30))
+train  <- order3[sample, ]
+test   <- order3[-sample, ]
+
+qda.fit<-qda(Company~Rating+Price+TotalReviwes+RomSize_inGB, data = train)
+lda.fit<-lda(Company~Rating+Price+TotalReviwes+RomSize_inGB, data = train)
+
+```
+
+```{r}
+# Testing the LDA classifier with the test data
+lda.pred=predict(lda.fit, test)
+table(lda.pred$class, test$Company)
+mean(lda.pred$class != test$Company)
+
+```
+The misclassification rate with Lda is 0.2364865. 
+
+```{r}
+#Testing the QDA classifier with the test data
+qda.pred=predict(qda.fit, test)
+table(qda.pred$class, test$Company)
+mean(qda.pred$class != test$Company)
+
+```
+The misclassification rate with qda is 0.2147651. 
+
+We are also able to visualize how LDA and QDA separate the data using klaR's partimat function. Using this tool it's possible to visualize how each of the different independent variables categorizes the company. It's also an important oberservation to notice how LDA makes distinctions with linear sections, where as the different sections of QDA are much more curved, hens 'quadratic'. 
+
+Below is the lDA partiton plot.
+```{r}
+library(klaR)
+partimat(Company ~ Rating+Price+TotalReviwes+RomSize_inGB, data = order3,
+         method = "lda", nplots.vert = 1)
+```
+
+Below is the QDA partition plot.
+```{r}
+partimat(Company ~ Rating+Price+TotalReviwes+RomSize_inGB, data = order3,
+         method = "qda", nplots.vert = 1)
+```
+
+Recall that linearity was not achieve with price, number of ratings and total reviews, so QDA will be tested again after removing these predictors to see if the result is improved.
+```{r}
+#removal of non-linear predictors
+order4 <- order3[, (names(order3) %in% c("Rating","RomSize_inGB", "Company"))]
+```
+
+Building the training and test data for the QDA classifier with only rating and RomSize_inGB as independent variables.
+```{r}
+set.seed(10)
+
+sample <- sample(c(TRUE, FALSE), nrow(order4), replace=TRUE, prob=c(0.7,0.30))
+trainQ  <- order4[sample, ]
+testQ   <- order4[-sample, ]
+
+qda.fit<-qda(Company~Rating+RomSize_inGB, data = trainQ)
+```
+
+Applying the QDA classification model to the test set.
+```{r}
+qda.pred=predict(qda.fit, testQ)
+table(qda.pred$class, test$Company)
+mean(qda.pred$class != test$Company)
+
+```
+
+We can see that the misclassification rate has not changed significantly, and has increased to 0.2432432. Therefor, rating will not be removed from the predictors used in QDA.
+
+#### Classification using Logistic Regression
+Moving from LDA and QDA, we can look to see whether a logistic regression classifier has improved classification accuracy. We will use the same predictors as LDA and QDA to have a fair comparison of misclassification rates.
+
+```{r}
+require(foreign)
+require(nnet)
+require(ggplot2)
+require(reshape2)
+library(VGAM)
+
+Model.fit<-multinom(Company~Rating+Price+TotalReviwes+RomSize_inGB,  data = train)
+```
+
+```{r}
+Prob.predict<-predict(Model.fit, test)
+
+Actual<-test$Company
+table(Prob.predict, Actual)
+mean(Prob.predict != Actual)
+
+```
+
+We can see that logistic regression worked better than both LDA and QDA, with a misclassification rate of 0.1824324. This increased performance with logistic regression could be a result of the assumtion of homogenous covariance matrices not being met for LDA and doesn't assume the distribution of the data to be Gaussian like QDA. 
+
+#### Naive Bayes Classification
+
+We will use Naive Bayes to see how it compares to LDA, QDA as well as logistic regression. Included below are the plots to show how the Naive Bayes Classifier works with the density of each of the different companies for a given variable.
+
+```{r}
+library(naivebayes)
+set.seed(10)
+sample2 <- sample(c(TRUE, FALSE), nrow(order3), replace=TRUE, prob=c(0.7,0.30))
+train2  <- order3[sample, ]
+test2   <- order3[-sample, ]
+
+modelbayes <- naive_bayes(Company~Rating+Price+TotalReviwes+RomSize_inGB, data = train2, usekernel = T) 
+plot(modelbayes) 
+```
+
+Now to use naive bayes to predict
+
+```{r}
+pred <- predict(modelbayes, test2)
+(tab1 <- table(pred, test2$Company))
+
+mean(pred != test2$Company)
+```
+
+We can see that the misclassification using Naive Bayes is 0.2094595 on the test set. This is less accurate than multinomial logistic regression but performed better than LDA and QDA.
+
+Why did Naive bayes perform worse than multinomial logistic regression? One of the reasons may be the feature independence assumption. We can check the correlation between the variables.
+
+```{r}
+print(cor(cellphone[, c('Rating','Price','TotalReviwes','RomSize_inGB')]))
+```
+
+Clearly we have correlation between the independent variables used in the categorization of the phones. For this reason it may not be appropriate to use Naive Bayes for Classification.
+
+We can try removing the rating out of the predictors since there is a high correlation with the others. 
+
+```{r}
+order5 <- order3[, (names(order3) %in% c('Price','TotalReviwes','RomSize_inGB', "Company"))]
+```
+
+```{r}
+set.seed(10)
+sample3 <- sample(c(TRUE, FALSE), nrow(order5), replace=TRUE, prob=c(0.7,0.30))
+train3  <- order5[sample, ]
+test3   <- order5[-sample, ]
+
+modelbayes2 <- naive_bayes(Company~Price+TotalReviwes+RomSize_inGB, data = train3, usekernel = T) 
+```
+
+Now to use naive bayes to predict
+
+```{r}
+pred2 <- predict(modelbayes2, test3)
+(tab2 <- table(pred2, test3$Company))
+
+mean(pred2 != test3$Company)
+```
+
+The misclassification rate increased slightly when removing rating as one of the predictors. For this reason, we will leave rating in the classifier.
+
+
+#### Evaluating the classification performance of KNN.
+
+We can also look at KNN, which is a non parametric classifier that does not make assumptions on the underlying distribution of the data.
+
+We will perfome multiple runs of KNN, and varying the number of nearest neighbours k, in the classifier for each run to determine the most accurate classifier. 
+```{r}
+# Loading package
+library(e1071)
+library(caTools)
+library(class)
+
+
+# Fitting the Knn Model
+classifier_knn <- knn(train = train[,1:4],
+                      test = test[,1:4],
+                      cl = train$Company,
+                      k = 11)
+
+  
+# Confusion Matrix
+cm <- table(test$Company, classifier_knn)
+cm
+  
+
+# Calculate out of Sample error
+misClassError <- mean(classifier_knn != test$Company)
+misClassError
+
+# Fitting the Knn Model
+classifier_knn <- knn(train = train[,1:4],
+                      test = test[,1:4],
+                      cl = train$Company,
+                      k = 9)
+
+  
+# Confusion Matrix
+cm <- table(test$Company, classifier_knn)
+cm
+  
+
+# Calculate out of Sample error
+misClassError <- mean(classifier_knn != test$Company)
+misClassError
+  
+# Fitting the Knn Model
+classifier_knn <- knn(train = train[,1:4],
+                      test = test[,1:4],
+                      cl = train$Company,
+                      k = 7)
+
+  
+# Confusion Matrix
+cm <- table(test$Company, classifier_knn)
+cm
+  
+
+# Calculate out of Sample error
+misClassError <- mean(classifier_knn != test$Company)
+misClassError
+
+# Fitting the Knn Model
+classifier_knn <- knn(train = train[,1:4],
+                      test = test[,1:4],
+                      cl = train$Company,
+                      k = 5)
+
+# Confusion Matrix
+cm <- table(test$Company, classifier_knn)
+cm
+  
+
+# Calculate out of Sample error
+misClassError <- mean(classifier_knn != test$Company)
+misClassError
+
+# Fitting the Knn Model
+classifier_knn <- knn(train = train[,1:4],
+                      test = test[,1:4],
+                      cl = train$Company,
+                      k = 3)
+
+  
+# Confusion Matrix
+cm <- table(test$Company, classifier_knn)
+cm
+  
+
+# Calculate out of Sample error
+misClassError <- mean(classifier_knn != test$Company)
+misClassError
+
+```
+
+We can see from our results that the most accurate classifier is when k = 5.
+
+### Results from Classifier Predictions.
+
+In conclusion, we have evaluated five different classifiers, including K-nearest neighbors (KNN), Naive Bayes, logistic regression, Quadratic Discriminant Analysis (QDA), and Linear Discriminant Analysis (LDA), on a dataset that did not follow a Gaussian distribution and had unequal covariance matrices as well as correlation between predictors. Our results show that KNN had the lowest misclassification rate of 0.16, followed by logistic regression at 0.18, QDA and Naive Bayes at 0.21, and LDA at 0.24. These findings suggest that KNN and logistic regression may be effective classifiers for non-Gaussian and non-equal covariance data, while QDA, Naive Bayes, and LDA may not perform as well. 
+
+\pagebreak
 
 # References
 
