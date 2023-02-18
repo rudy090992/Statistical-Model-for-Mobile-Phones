@@ -270,8 +270,11 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
-## New price level variable
-```{r}
+# Chapter 5: Estimating and predicting price
+Now, after we have a better understanding of the data, we can start to build a model to predict the price of a mobile phone.
+
+## Redefine the price level
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 # Break Price into 4 groups:
 classify_price_level <- function(price) {
   if (price <= 9500) {
@@ -659,7 +662,7 @@ bc = boxcox(mlr_poly_model,lambda=seq(-1,1))
 
 ```{r}
 bestlambda = bc$x[which(bc$y==max(bc$y))]
-mlr_bcmodel = lm((((Price^bestlambda)-1)/bestlambda) ~ poly(Rating, 3) + TotalReviwes + RamSize_inGB + RomSize_inGB + Rating:RamSize_inGB + Rating:RomSize_inGB + TotalReviwes:RomSize_inGB + RamSize_inGB:RomSize_inGB, data=train_data_without_outliers)
+mlr_bcmodel = lm((((Price^bestlambda)-1)/bestlambda) ~ poly(Rating, 3) + TotalReviwes + RamSize_inGB + RomSize_inGB + Rating:RamSize_inGB + Rating:RomSize_inGB + TotalReviwes:RomSize_inGB + RamSize_inGB:RomSize_inGB, data=train_data)
 summary(mlr_bcmodel)
 ```
 
