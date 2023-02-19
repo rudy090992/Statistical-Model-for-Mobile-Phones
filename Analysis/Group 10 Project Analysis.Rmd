@@ -5,16 +5,16 @@ author:
 - Stuart Finley(30191070), Andrii Voitkiv(30199373)
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
+  html_document:
+    toc: yes
+    df_print: paged
+  lof: yes
+  lot: yes
   pdf_document:
     extra_dependencies:
     - bbm
     - xcolor
     toc: yes
-  lof: yes
-  lot: yes
-  html_document:
-    toc: yes
-    df_print: paged
 geometry: margin=3cm
 subtitle: Final report (MDSA Winter 2023)
 urlcolor: blue
@@ -23,8 +23,8 @@ header-includes: \usepackage{fvextra} \DefineVerbatimEnvironment{Highlighting}{V
 ---
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+#knitr::opts_chunk$set(echo = TRUE)
 library(survey) #Used for statistical analysis
 library(sampling) #Used for sample data
 library(MASS) #USed for QDA
@@ -41,8 +41,7 @@ library(plyr) #Used for mapping vector values
 library(stringr) #Used to manipulate string
 library(gridExtra) #Used to arrange the ggplot chart
 library(rpart) #Used for classification tree
-library(rpart.plot) #Used for plottingclassification tree
-
+library(rpart.plot) #Used for plotting classification tree
 ```
 
 
@@ -105,8 +104,6 @@ mobile_dataset <- mobile_dataset %>% mutate(Price_Level = ntile(Price, n = 4))
 from <- c(1,2,3,4)
 to <- c("Low", "Medium", "High", "Very High")
 mobile_dataset$Price_Level <- mapvalues(mobile_dataset$Price_Level, from = from, to = to)
-
-
 #Step 6: Get the numeric part of RomSize (remove GB and MB, but convert MB to GB), discard any record that no numeric in RomSize
 #Step 6.1: there are some data input errors for RamSize and RomSize. In the records where RomSize is "Not Known" are swapped with RamSize, so we need to correct that.
 RamSize_temp <- ifelse(mobile_dataset$RomSize == "Not Known", "0 GB", mobile_dataset$RamSize)
@@ -122,8 +119,6 @@ mobile_dataset$RomSize_num <- as.numeric(mobile_dataset$RomSize_num)
 mobile_dataset$RomSize_Unit <- ifelse(is.na(as.numeric(mobile_dataset$RomSize_Unit)), 0, as.numeric(mobile_dataset$RomSize_Unit))
 #Step 6.4: generate the final column RomSize_inGB
 mobile_dataset$RomSize_inGB <- mobile_dataset$RomSize_num * mobile_dataset$RomSize_Unit
-
-
 #Step 7: Get the numeric part of RamSize (remove GB and MB, but convert MB to GB), discard any record that no numeric in RamSize
 #Step 7.1: split RamSize into two columns with size number and unit, and convert MB to 1/1000GB
 mobile_dataset <- mobile_dataset %>% separate(RamSize, c("RamSize_num", "RamSize_Unit")) %>% mutate(RamSize_Unit= mapvalues(.$RamSize_Unit, from = c("GB", "MB"), to = c(1, 1/1000)))
@@ -133,21 +128,16 @@ mobile_dataset$RamSize_num<- as.numeric(mobile_dataset$RamSize_num)
 mobile_dataset$RamSize_Unit <- as.numeric(mobile_dataset$RamSize_Unit)
 #Step 7.3: generate the final column RamSize_inGB
 mobile_dataset$RamSize_inGB <- mobile_dataset$RamSize_num * mobile_dataset$RamSize_Unit
-
-
 #Step 8: Create a new column to determine if the phone is 5G or not
 mobile_dataset$Is_5G <- ifelse(str_detect(mobile_dataset$Model_Only, "5G"), "Yes", "No")
 #Step 9: only keep the columns we need
 column_names <- c("Model", "Company", "Price", "Rating", "No_of_ratings", "TotalReviwes", "Model_Only", "Color", "Price_Level", "RamSize_inGB", "RomSize_inGB", "RamSize_Ori", "RomSize_Ori", "Is_5G" )
 mobile_dataset <- mobile_dataset[column_names]
-
 # #Step 9: final check up. Convert all company name to uppercase and then do a final duplicated removal
 # mobile_dataset$Company <- toupper(mobile_dataset$Company)
 # mobile_dataset <- mobile_dataset[!duplicated(mobile_dataset),]
 write.csv(mobile_dataset, file = './Cleaned_Mobile_Dataset.csv', row.names = F)
 ```
-
-
 
 After cleaning and breaking down columns, the dataset now consists of 14 columns and 725 rows and no missing values. These 14 columns are:
 
@@ -167,12 +157,11 @@ and its storage capacity. The latter being also listed as a separate column. - *
 * **RomSize_Ori**: categorical variable. Storage (non-volatile memory) capacity of the phone, original information. - **Independent Variable**
 * **Is_5G**: categorical variable. If the phone has 5G service or not. - **Independent Variable**
 
-
 ```{r Load Data, results='hold'}
-mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
+#mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
 #Specify the level for Price_Level column
 mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
-mobile_dataset %>% head(4)
+head(mobile_dataset, 4)
 ```
 **Table 1**: The cleaned-up dataset for Mobile Phone
 
@@ -185,10 +174,10 @@ Our team is finalizing what the full analysis of the dataset will look like, but
 ![Project Workflow](./Img/project-workflow.png)
 \pagebreak
 
-#  Chapter 4: Exploratory Data Analysis
-## 4.1: A summary of the dataset
+#  Chapter 1: Exploratory Data Analysis
+## 1.1: A summary of the dataset
 The dimension of the cleaned dataset is 726 rows and 14 columns. A summary of the data is as follows:
-```{r 4.1 Summary, results='hold'}
+```{r 1.1 Summary, results='hold'}
 mobile_dataset <- as_tibble(read.csv("./Cleaned_Mobile_Dataset.csv"))
 #Specify the level for Price_Level column
 mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
@@ -196,11 +185,11 @@ mobile_dataset %>% summary()
 ```
 **Table 2**: A summary for Mobile Phone dataset
 
-## 4.2: Exploratory Data Analysis
+## 1.2: Exploratory Data Analysis
 This section is focused on the exploration of relation between variables using various visualization techniques.
 
 The main target is Price in the dataset. In the following visualization it shows the distribution of Mobile Phone price with long tail towards to the high end. The average price is 15902 Rupees. Most price falls in the range of 50000 Rupees. One really stands out price range (arrow indicated) is 1000-2000 Rupees with the highest frequency.
-```{r 4.2.1, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.1, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="black", fill="white", bins = 100)+
   geom_vline(aes(xintercept=mean(Price)),
             color="blue", linetype="dashed", size=0.4) + geom_label(
@@ -218,7 +207,7 @@ ggplot(data = mobile_dataset, mapping = aes(x=Price)) + geom_histogram(color="bl
 
 
 The following figure is to break down the Price by different phone-making companies. There are a total of 37 companies in the dataset. Iin consistent with previous figure about Price distribution, we see a big portion of Price falls between 9000 (left dash line) and 40000 (right dash line) Rupees. _Apple_ alone contributes the most of high priced Mobile Phones, while companies like from _NOKIA_ to _GFIVE_ contribute to the low-priced ones.
-```{r 4.2.2,fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.2,fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price)) +geom_boxplot()+ geom_line() +
     sapply(c(6499, 12490, 20000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
        subtitle="Boxplot for Mobile Phone price from different companies")
@@ -226,20 +215,20 @@ ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Pri
 
 The Price is further broken down by their 5G services. Interestingly, neither high-priced nor low-priced Mobile Phones have equipped 5G service. In contrast, almost all middle-priced Mobile Phones have 5G service. Price for those with 5G service are slightly more expensive than those without. NOTE: the dashed line indicates the price between 9000 (left dash line) and 40000 (right dash line) Rupees.
 
-```{r 4.2.3, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.3, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset, mapping = aes(y = reorder(Company, Price), x = Price, color = Is_5G)) +geom_boxplot(position=position_dodge(width = 0.8))+ geom_line() +
     sapply(c(9000, 40000), function(xint) geom_vline(aes(xintercept = xint), color="blue", linetype="dashed", size=0.4)) + labs(y="Company", x="Price in Rupees", 
        subtitle="Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
 ```
 The pattern is more obvious when we provide color for 4 different price level ("Low", "Medium", "High", "Very High"). Although mobile phones from companies like APPLE, GOOGLE, ASUS and NOTHING have no 5G service, their price are all very high. It is worth investigating if some other attributes like brand effect, Storage capacity (Rom Size), and calculation power (Ram Size) are playing roles. Most Mobile Phones (except MI) with 5G service, again, have a higher proportion falling in a Very High price level, compared to the counterparts without 5G service. Almost all the rest mobile phones without 5G service fall in a Low price level.
 
-```{r 4.2.4, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.4, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset,mapping = aes(y =reorder(Company, Price), fill = Price_Level)) + geom_bar(stat = "count", position="fill") + labs(y="Company", x="Percentage", 
        subtitle="Percent Boxplot for Mobile Phone price from different companies with 5G service (No / Yes)") + facet_wrap(~Is_5G)
 ```
 
 Next, we explored some quantitative features with respect to the Mobile Phone price. The first scatter plot shows an obvious positive relation between Rating and Price as the smooth line indicates. The higher the Rating, the higher the Price. And this holds when we remove those bottom left 2 outlier data points. 
-```{r 4.2.5, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.5, fig.height=6, fig.width=12, results='hold'}
 #The first plot is one with outlier
 plot1 = ggplot(data = mobile_dataset,mapping = aes(x = Rating, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T) + 
   geom_segment(aes(x = 2.6, y = 20000, xend = 2.67, yend = 10000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
@@ -254,15 +243,15 @@ grid.arrange(plot1, plot2, ncol=2)
 ```
 
 The second scatter plot as follows shows the relation between Total number of rating and Price. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
-```{r 4.2.6, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.6, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset,mapping = aes(x = No_of_ratings, y = Price)) + geom_point(alpha=0.3) + geom_smooth()+ labs(y="Price in Rupees", x="Total number of rating", subtitle="Relation between total nubmer of rating and price")
 ```
 The same pattern is also observed in the third scatter plot where relation between Total number of reviews and Price is plotted. As the smooth line indicates, there is no obvious correlation between them. The result holds even when we remove some seemingly outliers on the far right end.
-```{r 4.2.7, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.7, fig.height=6, fig.width=12, results='hold'}
 ggplot(data = mobile_dataset,mapping = aes(x = TotalReviwes, y = Price)) + geom_point(alpha=0.3) + geom_smooth()+ labs(y="Price in Rupees", x="Total number of reviews", subtitle="Relation between total nubmer of reviews and price")
 ```
 In the fourth scatter plot, below, there seems a slight positive relation between Ram size (in GB) and the Price. Ram is normally associated with speed and performance of an operating system. The higher ram is, the better it is in speed and performance. It makes sense that a mobile phone with a larger Ram will charge more. However, because nowadays most mobile phones are very fast and stable, people wont tell too much difference, making the added on value from ram is only weekly associated with price.
-```{r 4.2.8, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.8, fig.height=6, fig.width=12, results='hold'}
 plot1 = ggplot(data = mobile_dataset,mapping = aes(x = RamSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T)+ labs(y="Price in Rupees", x="Ram Size in GB", subtitle="Relation between Ram size (in GB) and price")
 
 plot2 = ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T, method = lm)+ 
@@ -273,7 +262,7 @@ plot2 = ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price))
 grid.arrange(plot1, plot2, ncol=2)
 ```
 In the final scatter plot, again, we have two charts, one the original dataset, the other with outlier removed. Both cases tells the same story. In contrast to the previous scatter plot (Ram size (in GB) and the Price), there is a very obvious positive linear relation between Rom size (in GB) and the Price. This makes sense because often times a mobile phone is more limited by its non-volatile memory space than its speed & performance.
-```{r 4.2.9, fig.height=6, fig.width=12, results='hold'}
+```{r 1.2.9, fig.height=6, fig.width=12, results='hold'}
 #The first plot is a one with outliers
 plot1 = ggplot(data = mobile_dataset,mapping = aes(x = RomSize_inGB, y = Price)) + geom_point(alpha=0.3) + geom_smooth(se=T, method = lm)+ 
   geom_segment(aes(x = 490, y = 100000, xend = 500, yend = 90000),lineend = "round",linejoin = "round",arrow = arrow(length = unit(0.5, "cm"))) +   
@@ -289,8 +278,8 @@ grid.arrange(plot1, plot2, ncol=2)
 
 \pagebreak
 
-#  Chapter 5: Statistical Data Analysis
-## 5.1: Prediction of Mobile Phone Price Level
+#  Chapter 2: Statistical Data Analysis
+## 2.1: Prediction of Mobile Phone Price Level
 In this section, we will use a range of statistical models to predict mobile phone price level: "Low", "Medium", "High", "Very High" based on some selected features.
 
 - Linear Discriminant Analysis (LDA)
@@ -304,14 +293,14 @@ price_level_count <- table(mobile_dataset$Price_Level) %>% as.data.frame()
 ggplot(data = price_level_count, mapping = aes(x = Var1, y = Freq)) + geom_bar(stat = "identity") + 
   labs(y="Price Level", x="Count", subtitle="Count for different Price Level")
 ```
-### 5.1.1 Quadratic Discriminant Analysis (LDA)
+### 2.1.1 Quadratic Discriminant Analysis (LDA)
 We want to use LDA to classify our observations into mobile phone price level: "Low", "Medium", "High", "Very High". However, we know LDA has 2 assumptions:
 
 - The distribution of the predictors is normally distributed within each group.
 - The homogeneity of variance-covariance matrices 
 
 Based on EDA in section 4.2, we know three **numeric features** have a great impact on price level a mobile phone belongs to, which are _Rating_, _RamSize_inGB_ and _RomSize_inGB_. As such, we will do a test for normal distribution for each predictor in each price level. Because we have 4 different price levels and 3 variables, the resulting normality check would be 4*3 = 12 comparison. We use Q-Q plot and Shapiro test for normality check.
-```{r 5.1.1.1, fig.height=3, fig.width=12, results='hold'}
+```{r 2.1.1.1, fig.height=3, fig.width=12, results='hold'}
 #split the dataset based on the price level
 mobile_dataset_low <- mobile_dataset[mobile_dataset$Price_Level == "Low", ]
 mobile_dataset_medium <- mobile_dataset[mobile_dataset$Price_Level == "Medium", ]
@@ -358,11 +347,11 @@ Based on the Q-Q plots (dots not fall on the line) and Shapiro test (p value is 
 NOTE, the above code is inspired by Pascal Schmidt from post [Assumption Checking of LDA vs. QDA – R Tutorial Pima Indians Data Set](https://thatdatatho.com/assumption-checking-lda-vs-qda-r-tutorial-2/).
 
 
-### 5.1.2 Quadratic Discriminant Analysis (QDA)
+### 2.1.2 Quadratic Discriminant Analysis (QDA)
 
 In consistent with LDA, we use the same three numeric features that have a great impact on price level a mobile phone belongs to, which are _Rating_, _RamSize_inGB_ and _RomSize_inGB_.
 To that end, we split the dataset into 75% for training and 25% for testing purpose. We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample. Then we fit the data into Quadratic Discriminant Analysis (QDA) as follows:
-```{r 5.1.2.1, results='hold'}
+```{r 2.1.2.1, results='hold'}
 set.seed(2023)
 Ny <- round(table(mobile_dataset$Price_Level)[unique(mobile_dataset$Price_Level)]* 0.75)
 #Create the sample from the population
@@ -379,7 +368,7 @@ cat(rep("-", 50), "\n")
 ```
 
 At last, we apply this model on the testing dataset, and calculate the misclassification rate.
-```{r 5.1.1.3, results='hold'}
+```{r 2.1.1.3, results='hold'}
 Prob.predict<-predict(Model.fit,test,type="response")
 ggplot(as.data.frame(table(Prob.predict$class,test$Price_Level)), aes(x = Var1, y = Var2, fill = Freq)) +geom_tile() + geom_text(aes(label = round(Freq, 1))) + scale_fill_gradient(low = "white", high = "red") + labs(y="True", x="Predict", subtitle="Confusion Matrix for Classification Tree")
 cat(rep("-", 45), "\n")
@@ -388,13 +377,13 @@ cat("The misclassification rate for QDA is: ", mean(Prob.predict$class != test$P
 
 Conclusion: Quadratic Discriminant Analysis has a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (77%).
 
-### 5.1.3 Decision Tree (Classification)
+### 2.1.3 Decision Tree (Classification)
 To be consistent and comparable with QDA, we again use these three variables _Rating_, _RamSize_inGB_ and _RomSize_inGB_ to build the decision tree model.
 We split the dataset into 75% for training and 25% for testing purpose. 
 We use each “Price_Level” as the stratum and the proportional allocation principle to get a stratified sample.
 Then we fit the data into Classification tree model as follows:
 
-```{r 5.1.3.1, results='hold'}
+```{r 2.1.3.1, results='hold'}
 set.seed(2023)
 Ny <- round(table(mobile_dataset$Price_Level)[unique(mobile_dataset$Price_Level)]* 0.75)
 #Create the sample from the population
@@ -407,7 +396,7 @@ tree.class<-tree(factor(Price_Level)~Rating+RamSize_inGB+RomSize_inGB, train)
 summary(tree.class)
 ```
 The tree is plotted without pruning as follows. There are a total of 9 terminal nodes in the tree.
-```{r 5.1.3.2, results='hold'}
+```{r 2.1.3.2, results='hold'}
 #Let us plot the tree as well
 plot(tree.class)
 text(tree.class,pretty=0)
@@ -415,18 +404,18 @@ text(tree.class,pretty=0)
 # rpart.plot(rpart_fit)
 ```
 To find the best tree size, we used cross-validation to select the "best" number of tree size (the terminal nodes). Based on the following plot, it seems tree size 9 gives the smallest deviance. Just to demonstrate how prunned tree works and also reduce the complexity of tree, we decide to use 8 as the "best" tree size.
-```{r 5.1.3.3, results='hold'}
+```{r 2.1.3.3, results='hold'}
 cv.class<-cv.tree(tree.class, FUN = prune.misclass) 
 plot(cv.class$size, cv.class$dev,type="b")
 ```
 A tree after prunning is plotted as follows. There are a total of 8 terminal nodes in the tree.
-```{r 5.1.3.4, results='hold'}
+```{r 2.1.3.4, results='hold'}
 prune.class=prune.tree(tree.class,best=8)
 plot(prune.class)
 text(prune.class,pretty=0)
 ```
 Finally, we use the pruned tree to do prediction.
-```{r 5.1.3.5, results='hold'}
+```{r 2.1.3.5, results='hold'}
 prune.pred=predict(prune.class,test,type="class")
 ggplot(as.data.frame(table(prune.pred,test$Price_Level)), aes(x = prune.pred, y = Var2, fill = Freq)) +geom_tile() + geom_text(aes(label = round(Freq, 1))) + scale_fill_gradient(low = "white", high = "red") + labs(y="True", x="Predict", subtitle="Confusion Matrix for Classification Tree")
 cat(rep("-", 45), "\n")
@@ -435,7 +424,7 @@ cat("The misclassification rate for regression tree is: ", mean(prune.pred != te
 
 Conclusion: Decision Tree (Classification) has also a good performance to predict the mobile phone price level using only 3 variables ( _Rating_, _RamSize_inGB_ and _RomSize_inGB_), with a relatively high accuracy (76.2%).
 
-### 5.1.4 Multinomial Regression
+### 2.1.4 Multinomial Regression
 This is an experimental analysis. Based on EDA in section 4.2, we know that Company name (branding) also plays a big role in the price level. We also know that Rom size of a mobile phone matters a lot as well. We are curious to see if a combination of _Company_ and _RomSize_ can also be used to distinguish the price level.
 
 Normally, we would split the dataset into 75% for training and 25% for testing purpose. However, because our sample size is small, not every Company has multiple records in our dataset. Therefore, in the following test, we use whole sample as the training and test purpose.
@@ -450,7 +439,7 @@ $$
 $$
 H_1: \text{The Cumulative logit model does not fit the observations}
 $$
-```{r 5.1.4.1, warning=FALSE, results='hold'}
+```{r 2.1.4.1, warning=FALSE, results='hold'}
 comany_rom_train <- mobile_dataset[c("Company", "RomSize_Ori", "Price_Level")]
 multi_train_fit <- vglm(Price_Level~Company+RomSize_Ori,family=cumulative(parallel = TRUE),data=comany_rom_train)
 cat("The p value for the chi test is: ", 1-pchisq(deviance(multi_train_fit),df.residual(multi_train_fit)))
@@ -459,7 +448,7 @@ cat("\nThe p-value here is large = 1, so we cannot reject null hypothesis. Our m
 
 Finally, we use this model to predict use the same training dataset, as a demonstration purpose.
 
-```{r 5.1.4.2, results='hold'}
+```{r 2.1.4.2, results='hold'}
 pred_fit <- predict(multi_train_fit, type="response")
 #Use the record that has the highest probability as the final predication for each row.
 pred_fit_class <-factor(dimnames(pred_fit)[[2]][max.col(pred_fit, 'first')], levels = c("Low", "Medium", "High", "Very High"))
@@ -469,9 +458,9 @@ cat("The misclassification rate for Multinomial Regression is: ", mean(pred_fit_
 ```
 Conclusion: Multinomial Regression has also a good performance to predict the mobile phone price level using only 2 variables ( _Company_ and _RomSize_), with a relatively high accuracy (71.9%).
 
-## 5.2: Cross-Validation
-In section 5.1, we have compared three different models based on their misclassification rate: **Quadratic Discriminant Analysis (QDA)** = 0.2265193, **Decision Tree (Classification)** = 0.2375691, and **Multinomial Regression** = 0.2813793. In order to compare model performance, we decide to also use stratified $10$-fold cross-validation to calculate the cross-validation errors of these 3 methods.
-```{r 5.2.1, results='hold'}
+## 2.2: Cross-Validation
+In section 2.1, we have compared three different models based on their misclassification rate: **Quadratic Discriminant Analysis (QDA)** = 0.2265193, **Decision Tree (Classification)** = 0.2375691, and **Multinomial Regression** = 0.2813793. In order to compare model performance, we decide to also use stratified $10$-fold cross-validation to calculate the cross-validation errors of these 3 methods.
+```{r 2.2.1, results='hold'}
 cat("\nFirst I am using the 10-fold cross validation for Quadratic Discriminant Analysis")
 set.seed(2023)
 #Create 10 folds
@@ -517,8 +506,9 @@ cat(rep("-", 45), "\n")
 
 cat("\nBecause our sample size is small, not every Company has multiple records in our dataset. \nTherefore, we are not able to perform cross-validation for Multinomial regression.")
 ```
-## 5.3: Summary for Prediction of Mobile Phone Price Level
-To summarize this part of analysis, we find some contradictory results. We used the balanced dataset trying to classify the Mobile Phone Price Level. In Section 5.1, we have the following misclassificaiton rate from each model:
+
+## 2.3: Summary for Prediction of Mobile Phone Price Level
+To summarize this part of analysis, we find some contradictory results. We used the balanced dataset trying to classify the Mobile Phone Price Level. In Section 2.1, we have the following misclassificaiton rate from each model:
 
 - **Quadratic Discriminant Analysis (QDA)**: 0.2265193
 - **Decision Tree (Classification)**: 0.2375691
@@ -528,7 +518,7 @@ We can see Quadratic Discriminant Analysis (QDA) gives the lowest misclassificat
 
 - **Quadratic Discriminant Analysis (QDA)**: 0.2690109
 - **Decision Tree (Classification)**: 0.2314057
-- **Multinomial Regression**: Not Available (see section 5.2 explanation)
+- **Multinomial Regression**: Not Available (see section 2.2 explanation)
 
 From this result, Decision Tree (Classification) gives the lowest misclassification rate. Because cross-validation is averaging multiple misclassificaiton rate, we think this result is more reliable. 
 
@@ -536,12 +526,10 @@ So our final conclusion is that Decision Tree (Classification) can best predict 
 
 \pagebreak
 
-## Phone Company Categorization
+# Chapter 3: Phone Company Categorization
 
 The goal of this section is to look at categorization of phones that fall within the most expensive bracket. Among these phones are Apple, Google, Samgsung, Vivo and Iqoo. Initially, we wanted to look at categorizing Apple, Google and Samgsung, but the number of entries of Google in the dataset prevented us from using them (Unable to split Google into testing and training). For this reason, we included Vivo and Iqoo. For categorization, we chose to compare four different classification methods: LDA, QDA, Logistic Regression and an Bayesian Classifier and KNN.
 
-
-### Reading in the data 
 
 The first step prior to building the different classifiers was to read in the data into r. 
 ```{r}
@@ -549,7 +537,7 @@ cellphone = mobile_dataset
 ```
 
 
-### Manipulation of the dataframe prior to categorization
+## 3.1: Manipulation of the dataframe prior to categorization
 
 With the dataset in r, we are now able to reduce our dataframe to only contain the different companies which we want to perform classification on.
 
@@ -558,7 +546,7 @@ cellphone = cellphone[cellphone$Company %in% c("APPLE", "SAMSUNG", "VIVO", "IQOO
 cellhone = cellphone %>% drop_na()
 ```
 
-The next step is to chose which classifiers we want to use to perform analysis. Through playing around with the different attributes in the dataset, the rating, Price, number of ratings, total reviews and Rom Size were chosen as the variables used to classify company. Color was also considered, but since there are so many different unique colors, the test set would always contain a color not seen in training and the model would not function. With some possible exceptions, the color of the phone is likely not proprietary to the company and thus isn't crutial for categorization. 
+The next step is to chose which classifiers we want to use to perform analysis. Through playing around with the different attributes in the dataset, the rating, Price, number of ratings, total reviews and Rom Size were chosen as the variables used to classify company. Color was also considered, but since there are so many different unique colors, the test set would always contain a color not seen in training and the model would not function. With some possible exceptions, the color of the phone is likely not proprietary to the company and thus isn't crucial for categorization. 
 
 ```{r}
 df2 <- cellphone[, (names(cellphone) %in% c("Rating","Price","No_of_ratings","TotalReviwes","RomSize_inGB", "Company"))]
@@ -572,7 +560,7 @@ order$Company <- as.factor(as.character(order$Company))
 ```
 
 
-### Testing Assumptions
+## 3.2: Testing Assumptions
 
 First, we will test the assumption of homogeneity of covariance matrices. Homogeneity of covariance matrices is required to use LDA as a classification method. We can test for Homogeneity using the boxM test. 
 
@@ -604,9 +592,9 @@ library(heplots)
 boxM(order2[,1:5], order$Company)
 ```
 
-Normalization using the scale function has no effect on changing making the covariance matrices homogenous. 
+Normalization using the scale function has no effect on changing making the covariance matrices homogeneous. 
 
-The covariance matrices do not need to be homogeneous to use QDA, but one of the assumtions of QDA is a gaussian distribution of the independant variables. 
+The covariance matrices do not need to be homogeneous to use QDA, but one of the assumptions of QDA is a Gaussian distribution of the independent variables. 
 ```{r}
 order2 = order[,1:5]
 order2 <- as.matrix(order2[,1:5])
@@ -654,9 +642,9 @@ order2 <- order2[, -4]
 faraway::vif(order2)
 ```
 
-### Comparing Classifiers
+## 3.3: Comparing Classifiers
 
-#### LDA and QDA Classification
+### 3.3.1: LDA and QDA Classification
 
 While we have not met all the assumptions for LDA and QDA, we will try and do a classification using these methods regardless and look at the misclassification rates as a metric of their performance.
 ```{r}
@@ -689,9 +677,9 @@ table(qda.pred$class, test$Company)
 mean(qda.pred$class != test$Company)
 
 ```
-The misclassification rate with qda is 0.2147651. 
+The misclassification rate with qda is 0.2162162. 
 
-We are also able to visualize how LDA and QDA separate the data using klaR's partimat function. Using this tool it's possible to visualize how each of the different independent variables categorizes the company. It's also an important oberservation to notice how LDA makes distinctions with linear sections, where as the different sections of QDA are much more curved, hens 'quadratic'. 
+We are also able to visualize how LDA and QDA separate the data using klaR's partimat function. Using this tool it's possible to visualize how each of the different independent variables categorizes the company. It's also an important observation to notice how LDA makes distinctions with linear sections, where as the different sections of QDA are much more curved, hens 'quadratic'. 
 
 Below is the lDA partiton plot.
 ```{r}
@@ -733,7 +721,7 @@ mean(qda.pred$class != test$Company)
 
 We can see that the misclassification rate has not changed significantly, and has increased to 0.2432432. Therefor, rating will not be removed from the predictors used in QDA.
 
-#### Classification using Logistic Regression
+### 3.3.2: Classification using Logistic Regression
 Moving from LDA and QDA, we can look to see whether a logistic regression classifier has improved classification accuracy. We will use the same predictors as LDA and QDA to have a fair comparison of misclassification rates.
 
 ```{r}
@@ -757,7 +745,7 @@ mean(Prob.predict != Actual)
 
 We can see that logistic regression worked better than both LDA and QDA, with a misclassification rate of 0.1824324. This increased performance with logistic regression could be a result of the assumtion of homogenous covariance matrices not being met for LDA and doesn't assume the distribution of the data to be Gaussian like QDA. 
 
-#### Naive Bayes Classification
+### 3.3.3: Naive Bayes Classification
 
 We will use Naive Bayes to see how it compares to LDA, QDA as well as logistic regression. Included below are the plots to show how the Naive Bayes Classifier works with the density of each of the different companies for a given variable.
 
@@ -818,7 +806,7 @@ mean(pred2 != test3$Company)
 The misclassification rate increased slightly when removing rating as one of the predictors. For this reason, we will leave rating in the classifier.
 
 
-#### Evaluating the classification performance of KNN.
+### 3.3.4: Evaluating the classification performance of KNN.
 
 We can also look at KNN, which is a non parametric classifier that does not make assumptions on the underlying distribution of the data.
 
@@ -913,15 +901,15 @@ misClassError
 
 We can see from our results that the most accurate classifier is when k = 5.
 
-### Results from Classifier Predictions.
+## 3.4 Results from Classifier Predictions.
 
 In conclusion, we have evaluated five different classifiers, including K-nearest neighbors (KNN), Naive Bayes, logistic regression, Quadratic Discriminant Analysis (QDA), and Linear Discriminant Analysis (LDA), on a dataset that did not follow a Gaussian distribution and had unequal covariance matrices as well as correlation between predictors. Our results show that KNN had the lowest misclassification rate of 0.16, followed by logistic regression at 0.18, QDA and Naive Bayes at 0.21, and LDA at 0.24. These findings suggest that KNN and logistic regression may be effective classifiers for non-Gaussian and non-equal covariance data, while QDA, Naive Bayes, and LDA may not perform as well. 
 
-# Dimensionality reduction
+# Chapter 4: Dimensionality Reduction
 
 We should emphasize that this part of the analysis is not particularly useful in a dataset with less than 10 predictors like ours. It was still carried for its value as a learning exercise. This point was brought up and addressed during our presentation. With that in mind let's go through the motions.
 
-## Principal component analysis
+## 4.1: Principal component analysis
 
 PCA is a tool that projects a collection of vectors into a a new vector space of fewer orthogonal dimensions. This projection can be simpler to fit
 using a linear model but much harder to interpret: the new predictors are going to be linear combinations of the original predictors and may not have a direct interpretation. To carry out a PCA one must have correlation among features,
@@ -949,6 +937,336 @@ We can see that about 70% of the variance can be explained by projecting onto a 
 This is less of a hassle when dealing with many predictors and the gains from dimensionality reduction are tangible.
 
 \pagebreak
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+```
+
+```{r Load Data 2, echo = FALSE, message = FALSE, warning = FALSE}
+mobile_dataset <- as_tibble(mobile_dataset)
+#Specify the level for Price_Level column
+mobile_dataset$Price_Level <- factor(mobile_dataset$Price_Level, levels = c("Low", "Medium", "High", "Very High"))
+```
+
+
+# Chapter 5: Predicting the Selling Price of Mobile Phones
+Now, after we have a better understanding of the data, we can start building a model to predict the price of a mobile phone. First, we will build a Multiple Linear Regression model to predict the price of a mobile phone to see if there are linear relationships between `Price` and dependent variables. Before we start, here are some steps we will take:
+1. Split the data into training and test sets.
+2. Explore collinearity between the variables.
+3. Build a base valid model.
+4. If there is noticable pattern in the residual plot, introduce interaction terms and higher order terms.
+5. Check the assumptions of the model.
+6. If any of the assumptions are violated, try to fix them with transformations and outliers removal.
+
+At each stage of the model building process, we will check the performance of the model using the test set.
+
+In case the multiple linear regression model does not perform well, or **the relationship is non-linear we will build a Regression Tree** that can model more complex relationships between the variables.
+
+## 5.1: Multiple Linear Regression
+### 5.1.1: Building a base model
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Create a new data frame with the variables of interest
+column_names_mlr <- c("Price", "Rating", "No_of_ratings", "TotalReviwes", "RamSize_inGB", "RomSize_inGB", "Is_5G" ) # "Company"
+mobile_dataset_mlr <- mobile_dataset[column_names_mlr]
+```
+As our initial step, we will use the following variables as predictors: `Rating`, `No_of_ratings`, `TotalReviwes`, `RamSize_inGB`, `RomSize_inGB`, `Is_5G`. We will not use `Company` as a predictor because it is a categorical variable with many levels and it will make the model more complex. We will use `Price` as the response variable. Again, we will use _train_ data set to build the model and _test_ data set to evaluate the model.
+
+```{r}
+# Split the data into training and test sets
+set.seed(2023)
+train_index <- sample(1:nrow(mobile_dataset_mlr), 0.8 * nrow(mobile_dataset_mlr))
+train_data <- mobile_dataset_mlr[train_index, ]
+test_data <- mobile_dataset_mlr[-train_index, ]
+```
+
+Let's explore the relationship between the variables using the correlation matrix.
+```{r message = FALSE, warning = FALSE}
+# Explore collinearity between the variables
+# Plot the correlation matrix with the help of the ggally package
+library('GGally')
+library('ggplot2')
+ggpairs(train_data, lower = list(continuous = "smooth_loess", combo = "facethist", discrete = "facetbar", na = "na")) +
+        scale_color_gradient(high = "red", low = "blue")
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Build a multiple linear regression model
+mlr_full_model <- lm(Price ~ Rating + No_of_ratings + TotalReviwes + RamSize_inGB + RomSize_inGB + factor(Is_5G), data = train_data)
+```
+
+Let's apply VIF test to confirm if there is any collinearity between the variables.
+```{r message = FALSE, warning = FALSE}
+# Check the “variance inflation factor” for each coefficient using imcdiag function from the package "regclass"
+library('regclass')
+VIF(mlr_full_model)
+```
+
+From the VIF values, we can see that two variables are collinear. And form the correlation matrix the relationship between the variables is also high (96%). So, we will remove the variable with the highest VIF value, that is `No_of_ratings`.
+
+Then we update the model by removing `No_of_ratings` and check significance of the variables.
+
+```{r}
+# Update the model by removing the variable with the highest VIF value
+mlr_updated_model <- lm(Price ~ Rating + TotalReviwes + RamSize_inGB + RomSize_inGB + factor(Is_5G), data = train_data)
+summary(mlr_updated_model)
+```
+From the individual t-test, we can see that the variable `Is_5G` is not significant with p-value 82%. Therefore, we will remove it from the model.
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Update the model by removing the variable with the insignificant p-value
+mlr_updated_model <- lm(Price ~ Rating + TotalReviwes + RamSize_inGB + RomSize_inGB, data = train_data)
+```
+
+The adjusted R-squared value is `r summary(mlr_updated_model)$adj.r.squared`, which means that the model explains `r summary(mlr_updated_model)$adj.r.squared * 100`% of the variance in the data.
+
+Now, all the variables are significant. Therefore, the model is valid and can be used for prediction.
+
+```{r}
+# Predict the price of the test data
+test_data$predicted_price_mlr_base <- predict(mlr_updated_model, test_data)
+# Negative values are not possible for the price of a mobile phone. Therefore, we will replace the negative values with 0.
+test_data$predicted_price_mlr_base[test_data$predicted_price_mlr_base < 0] <- 0
+# Calculate the mean square error
+rmse1 <- sqrt(mean((test_data$Price - test_data$predicted_price_mlr_base)^2))
+```
+
+The RMSE value is `r rmse1`. The RMSE value is high. Therefore, we will try to improve the model by introducing interaction terms and higher order terms.
+
+Let's plot the predicted values vs actual values to see how well the model fits the data.
+```{r}
+# Check assumptions of the model
+# Plot the residuals vs fitted values
+plot(mlr_updated_model, which = 3)
+```
+
+The residual plot shows that the model is not a good fit for the data. The residuals are not randomly distributed around the horizontal axis. There is a pattern in the residual plot. Therefore, we will try to improve the model by introducing interaction terms and higher order terms.
+
+### 5.1.2: Improving the model by introducing interaction terms and higher order terms
+Let's improve the model by trying interaction terms.
+```{r}
+# Build a multiple linear regression model with interaction terms
+mlr_interaction_model <- lm(Price ~ Rating + TotalReviwes + RamSize_inGB + RomSize_inGB + Rating:TotalReviwes + Rating:RamSize_inGB + Rating:RomSize_inGB + TotalReviwes:RamSize_inGB + TotalReviwes:RomSize_inGB + RamSize_inGB:RomSize_inGB, data = train_data)
+summary(mlr_interaction_model)
+```
+
+Let's remove the interaction terms with insignificant p-values and build the model again. As `TotalReviwes` has the p-value higher than 0.05, we still want to keep in the model, as it is a part of the significant interaction term `TotalReviwes:RomSize_inGB`.
+```{r}
+# Update the model by removing the variable with the insignificant p-value
+mlr_interaction_updated_model <- lm(Price ~ Rating + TotalReviwes + RamSize_inGB + RomSize_inGB + Rating:RamSize_inGB + Rating:RomSize_inGB + TotalReviwes:RomSize_inGB + RamSize_inGB:RomSize_inGB, data = train_data)
+```
+
+The adjusted R-squared value is `r summary(mlr_interaction_updated_model)$adj.r.squared`, which means that the model explains `r summary(mlr_interaction_updated_model)$adj.r.squared * 100`% of the variance in the data.
+
+Now, all the variables are significant. Therefore, the model is valid and can be used for prediction.
+
+```{r}
+# Predict the price of the test data
+test_data$predicted_price_mlr_interaction <- predict(mlr_interaction_updated_model, test_data)
+# Negative values are not possible for the price of a mobile phone. Therefore, we will replace the negative values with 0.
+test_data$predicted_price_mlr_interaction[test_data$predicted_price_mlr_interaction < 0] <- 0
+# Calculate the mean square error
+rmse2 <- sqrt(mean((test_data$Price - test_data$predicted_price_mlr_interaction)^2))
+# Print the mean square error
+print(paste("RMSE:", rmse2))
+```
+
+We can see that the RMSE value is higher than the base model. This is because the model is overfitting the data. Let's try to improve the model by adding polynomial terms.
+
+We start by adding a polynomial term to the most highly correlated variable with the target variable, that is `Rating`. We start with a quadratic term and then try higher orders. We stop when some of the terms become insignificant. It turned out that the cubic term is the best fit for the model. Here is the summary of the model.
+
+```{r}
+# Build polynomial regression model
+mlr_poly_model <- lm(Price ~ poly(Rating, 3) + TotalReviwes + RamSize_inGB + RomSize_inGB + Rating:RamSize_inGB + Rating:RomSize_inGB + TotalReviwes:RomSize_inGB + RamSize_inGB:RomSize_inGB, data = train_data)
+```
+
+The adjusted R-squared value is `r summary(mlr_poly_model)$adj.r.squared`, which means that the model explains `r summary(mlr_poly_model)$adj.r.squared * 100`% of the variance in the data. It is a very good fit for the data. But let's apply the model to the test data and see how well it performs.
+```{r}
+# Predict the price of the test data
+test_data$predicted_price_mlr_poly <- predict(mlr_poly_model, test_data)
+# Negative values are not possible for the price of a mobile phone. Therefore, we will replace the negative values with 0.
+test_data$predicted_price_mlr_poly[test_data$predicted_price_mlr_poly < 0] <- 0
+# Calculate the mean square error
+rmse3 <- sqrt(mean((test_data$Price - test_data$predicted_price_mlr_poly)^2))
+```
+
+The RMSE values (`r rmse3`) slightly improved compared to the base model. Let's check the assumptions of the model.
+
+### 5.1.3: Checking the assumptions of the model
+**Homoscedasticity** - constant variance of the residuals. The residuals should be randomly distributed around the horizontal axis.
+
+```{r}
+# Check assumptions of the model
+# Plot the residuals vs fitted values
+plot(mlr_poly_model, which = 3)
+```
+
+The residuals are not randomly distributed around the horizontal axis. There is a pattern in the residual plot. Therefore, we will try to improve the model by transforming the target variable. But first, let's cross-check homoskedasticity with the Breusch-Pagan test. And later check the other assumptions of the model as well.
+
+```{r warning = FALSE, message = FALSE}
+library(lmtest)
+bptest(mlr_poly_model)
+```
+
+The output displays the Breusch-Pagan test that results from the MLR polynomial model. The p-value = 0 < 0.05, indicating that we reject the null hypothesis. Therefore, the test provides evidence to suggest that heteroscedasticity is present - non-constant variance.
+
+**Normality** - the residuals should be normally distributed.
+```{r}
+# Normality test
+par(mfrow=c(1,2))
+hist(residuals(mlr_poly_model), breaks = 24)
+plot(mlr_poly_model, which=2) #a Normal plot
+```
+
+The residuals are not normally distributed. QQ-plot demonstrates significant deviations from the "normal" line. Let's cross-check the normality of the residuals with the Shapiro-Wilk test.
+
+H0: the sample data are significantly normally distributed Ha: the sample data are not significantly normally distributed
+```{r}
+shapiro.test(residuals(mlr_poly_model))
+```
+
+The p-value(2.2e-16) is much lower than 0.05, which confirms that the residuals are not normally distributed (reject null hypothesis).
+
+**Linearity** - the relationship between the independent variables and the dependent variable should be linear.
+```{r}
+ggplot(mlr_poly_model, aes(x=.fitted, y=.resid)) +
+        geom_point() + geom_smooth()+
+        geom_hline(yintercept = 0)
+```
+
+The residuals deviate more and more from the horizontal axis as the fitted values increase. Therefore, the relationship between the independent variables and the dependent variable is not linear.
+
+Therefore, we will try to fix the assumptions by transforming the target variable. We will use the Box-Cox transformation.
+### 5.1.4: Box-Cox transformation
+```{r message = FALSE, warning = FALSE}
+library("MASS")
+bc = boxcox(mlr_poly_model,lambda=seq(-1,1))
+```
+
+```{r}
+bestlambda = bc$x[which(bc$y==max(bc$y))]
+mlr_bcmodel = lm((((Price^bestlambda)-1)/bestlambda) ~ poly(Rating, 3) + TotalReviwes + RamSize_inGB + RomSize_inGB + Rating:RamSize_inGB + Rating:RomSize_inGB + TotalReviwes:RomSize_inGB + RamSize_inGB:RomSize_inGB, data=train_data)
+```
+
+After the transformation and removing the outliers, we still weren't able to fix the assumptions of the model (code is not provided in the sake of brevity). Even though the adjusted R-squared value is `r summary(mlr_poly_model)$adj.r.squared` we can't use the model for prediction.
+
+All steps of the model building process are summarized in the following diagram.
+
+<img src="/Users/berg/DataspellProjects/Statistical-Model-for-Mobile-Phones/Analysis/Img/MLR workflow.png">
+
+Therefore, we will try Regression Tree to model more complex relationships between the variables. And  as our final step in this chapter, we will compare the RMSE values of the models using cross-validation.
+
+
+## 5.2: Regression tree
+```{r}
+# Create a new data frame with the variables of interest
+column_names_tree <- c("Price", "Rating", "No_of_ratings", "TotalReviwes", "RamSize_inGB", "RomSize_inGB", "Is_5G", "Company")
+mobile_dataset_tree <- mobile_dataset[column_names_tree]
+# Remove missing values from the dataset
+mobile_dataset_tree <- mobile_dataset_tree %>%
+        filter(!is.na(Price))
+# Split the data into train and test sets
+set.seed(2023)
+train_data <- mobile_dataset_tree[sample(1:nrow(mobile_dataset_tree), 0.7*nrow(mobile_dataset_tree)), ]
+test_data <- mobile_dataset_tree[-sample(1:nrow(mobile_dataset_tree), 0.7*nrow(mobile_dataset_tree)), ]
+# Fit a regression tree to the data
+library(tree)
+tree_model <- tree(Price ~ ., data = train_data)
+summary(tree_model)
+```
+
+Our initial tree has 8 terminal nodes.
+```{r}
+# Plot the tree
+plot(tree_model)
+text(tree_model, pretty = 0)
+```
+
+
+```{r warning = FALSE, message = FALSE}
+# Apply the tree to the test set
+tree_pred <- predict(tree_model, test_data)
+# Calculate the RMSE
+rmse5 <- sqrt(mean((tree_pred - test_data$Price)^2))
+```
+The RMSE value is `r rmse5`. Let's prune the tree. To do that, we will first check the plot between the cross-valiation error and the size of the tree.
+
+### Pruning the tree
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Check the plot between the cross-valiation error and the size of the tree
+cv.tree_model <- cv.tree(tree_model)
+plot(cv.tree_model$size, cv.tree_model$dev, type = "b")
+```
+
+We will use 4 as the best number of terminal nodes. Let's prune the tree and calculate the RMSE.
+
+```{r}
+# Prune the tree
+pruned_tree_model <- prune.tree(tree_model, best = 6)
+# Plot the pruned tree
+plot(pruned_tree_model)
+text(pruned_tree_model, pretty = 0)
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Apply the tree to the test set
+pruned_tree_pred <- predict(pruned_tree_model, test_data)
+# Calculate the RMSE
+rmse6 <- sqrt(mean((pruned_tree_pred - test_data$Price)^2))
+```
+
+The RMSE after pruning is `r rmse6`.
+
+## Cross-validation
+Let's create 10 folds and calculate the cross-validation error for both models.
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Create 10 folds
+library(caret)
+folds<-createFolds(mobile_dataset_tree$Price, k=10)
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# Calculate the cross-validation error for linear regression
+library(MASS)
+cv_error_lr <- c()
+for (i in 1:10){
+  train_lr <- mobile_dataset_mlr[-folds[[i]], ]
+  test_lr <- mobile_dataset_mlr[folds[[i]], ]
+  lr_model <- mlr_poly_model
+  lr_pred <- predict(lr_model, test_lr)
+  RMSE <- sqrt(mean((lr_pred - test_lr$Price)^2))
+  cv_error_lr <- c(cv_error_lr, RMSE)
+}
+cv_error_lr <- mean(cv_error_lr)
+# print(paste("Cross-validation error for linear regression:", cv_error_lr))
+```
+
+Cross-validation error for our best linear regression model is `r cv_error_lr`.
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+# Calculate the cross-validation error for regression tree
+cv_error_tree <- c()
+for (i in 1:10){
+  train_cv <- mobile_dataset_tree[-folds[[i]], ]
+  test_cv <- mobile_dataset_tree[folds[[i]], ]
+  tree_model <- pruned_tree_model # tree(Price ~ ., data = train_cv)
+  tree_pred <- predict(tree_model, test_cv)
+  RMSE <- sqrt(mean((tree_pred - test_cv$Price)^2))
+  cv_error_tree <- c(cv_error_tree, RMSE)
+}
+cv_error_tree <- mean(cv_error_tree)
+# print(paste("Cross-validation error for regression tree:", cv_error_tree))
+```
+
+Cross-validation error for our best linear regression model is `r cv_error_tree`.
+
+## Conclusions
+In this chapter, we have built a linear regression model and a regression tree model to predict the price of a mobile phone. We have used the RMSE value and cross-validation method to compare the models. The RMSE value for the linear regression model is `r rmse3` and the RMSE value for the regression tree model is `r rmse6`. Therefore, the regression tree model is better than the linear regression model. Besides, the Multiple Linear Regression model doesn't meet the assumptions. Comparing to the Regression Tree model, it doesn't have such assumptions. Therefore, we recommend using the Regression Tree model for prediction.
+
 
 # References
 
