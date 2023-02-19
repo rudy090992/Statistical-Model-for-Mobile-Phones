@@ -1268,6 +1268,183 @@ Cross-validation error for our best linear regression model is `r cv_error_tree`
 In this chapter, we have built a linear regression model and a regression tree model to predict the price of a mobile phone. We have used the RMSE value and cross-validation method to compare the models. The RMSE value for the linear regression model is `r rmse3` and the RMSE value for the regression tree model is `r rmse6`. Therefore, the regression tree model is better than the linear regression model. Besides, the Multiple Linear Regression model doesn't meet the assumptions. Comparing to the Regression Tree model, it doesn't have such assumptions. Therefore, we recommend using the Regression Tree model for prediction.
 
 
+# Chapter 6: Using Regression to Determine if a Phone is Apple
+
+
+```{r}
+mobil_df <- mobile_dataset
+mobil_df$Apple = mobil_df$Company=='APPLE'
+```
+
+## 6.1: Assessing Apple Phones in the Dataset
+
+Then the dataset was checked for possible values of technical specs for Apple phones.
+
+```{r}
+unique(mobil_df[mobil_df$Company=='APPLE',]$RomSize_Ori)
+```
+The possible Rom Sizes for Apple phones are 128GB, 64GB, 256GB and 512GB
+
+```{r}
+unique(mobil_df[mobil_df$Company=='APPLE',]$RamSize_Ori)
+```
+
+There are no reported Ram sizes for Apple phones.
+
+```{r}
+mobil_df <- data.frame(mobil_df$Apple, mobil_df$Price, mobil_df$Rating, mobil_df$RomSize_Ori)
+colnames(mobil_df)<-c('Apple','Price','Rating','RomSize_Ori')
+```
+
+Apple customers paid more for the same amount of Rom than non-Apple customers
+
+![Apple vs. Rating](./Capture4.png)
+However, for phones with the same amount of Rom, Apple customers gave their phones a higher rating than non-Apple customers
+
+![Apple vs. Rating](./Capture5.png)
+
+
+Apple phones had higher ratings than other phones but Apple customers paid more money for their phone with an equivalent rating.
+
+![Apple vs. Rating](./Capture3.png)
+
+## 6.2: Comparison of Price Regression between Datasets with and without Apple Phones
+
+To compare the price dependence of Apple and non-Apple phones on rating and RomSize, we set out to perform two different regression analysis of price on Apple and non-Apple phones.
+
+First, the dataset was trimmed to compare only phones that had RomSizes in which existed in Apple and non-Apple phones.
+
+```{r}
+mobil_df <- mobil_df[mobil_df$RomSize_Ori %in% c('64 GB','128 GB',"256 GB"),]
+```
+
+Then, two new datasets were created, one containing only apple phones and one containing only phones that were not apple.
+
+```{r}
+apple_df <- mobil_df[mobil_df$Apple==TRUE,]
+notapple_df <- mobil_df[mobil_df$Apple==FALSE,]
+```
+### 6.2.1: The Apple Dataset
+
+Simple Random Sampling was used to create a regression fit for Apple phone price with RomSize and Rating as predictors.
+
+```{r}
+set.seed(12)
+idx = sample(dim(apple_df)[1], dim(apple_df)[1]*0.75)
+Train=apple_df[idx,]
+Test=apple_df[-idx,]
+apple_mod <- glm(Price~factor(RomSize_Ori) + Rating , data = Train)
+predapple_mod <- predict(apple_mod, Test, type = 'response')
+```
+```{r}
+apple_mod
+```
+The price regression of Apple phones had a RomSize coefficients of 20059 when the RomSize was 256GB and -22668 when the RomSize was 64GB. The Rating coefficient was 224286.
+
+```{r}
+1-mean(abs((Test$Price-predapple_mod)/Test$Price))
+```
+The price accuracy of the Apple model was around 74% against the test set.
+
+### 6.2.2 The Non-Apple Dataset
+
+The same strategy was employed for the non-Apple dataset.
+
+```{r}
+set.seed(12)
+idx = sample(dim(notapple_df)[1], dim(apple_df)[1]*0.75)
+Train=notapple_df[idx,]
+Test=notapple_df[-idx,]
+notapple_mod <- glm(Price~factor(RomSize_Ori) + Rating , data = Train)
+prednotapple_mod <- predict(notapple_mod, Test, type = 'response')
+```
+
+```{r}
+notapple_mod
+```
+The price regression of non-Apple phones had a RomSize coefficients of 13465 when the RomSize was 256GB and -8726 when the RomSize was 64GB. The Rating coefficient was 11442.
+
+```{r}
+1-mean(abs((Test$Price-prednotapple_mod)/Test$Price))
+```
+The price accuracy of the model was around 73% against the test set.
+
+The price of Apple phones is affected much more by the RomSize and the Rating than non-Apple phones. The Apple phones had RomSize coefficients that doubled those of non-Apple phones and the Rating coefficient for Apple phones was roughly 20x higher than that of non-Apple phones. This suggests that while a customer may be paying more for the same amount of Rom with Apple phones, the generally high cost of Apple is mostly dependent on the high ratings that Apple phones typically receive.
+
+### 6.2.3 Linear Regression Assumptions
+
+We wanted to verify the assumptions of our linear regression
+
+```{r}
+par(mfrow=c(2,2)) # init 4 charts in 1 panel
+plot(apple_mod)
+```
+
+The apple dataset was quite small.
+
+```{r}
+shapiro.test(apple_df$Price)
+```
+The prices of Apple phones are not normally distributed and the condition of normality is not met. However, from the normal Q-Q plot, it is apparent that the phones in the middle range of the dataset are more normally distributed than the tails.
+
+```{r}
+bptest(apple_mod)
+```
+The rejection of the null hypothesis that homoscedasticity is not present means that the data is heteroscedastic and our condition is not met.
+
+
+```{r}
+par(mfrow=c(2,2)) # init 4 charts in 1 panel
+plot(notapple_mod)
+```
+The prices for non-Apple phones are not normally distributed and that condition is not met.
+
+```{r}
+shapiro.test(notapple_df$Price)
+```
+```{r}
+bptest(notapple_mod)
+```
+However, the non-Apple phone dataset does have homoscedasticity.
+
+We continue with our analysis despite the failure to meet the assumptions.
+
+## 6.3 Logistic Regression of Apple Phones from non-Apple Phones
+
+We sought to evaluate our ability to differentiate Apple phones from non-Apple phones using logistic regression.
+
+```{r}
+set.seed(10)
+idx = sample(dim(mobil_df)[1], dim(mobil_df)[1]*0.75)
+Train=mobil_df[idx,]
+Test=mobil_df[-idx,]
+log_apple_mod <- glm(Apple~factor(RomSize_Ori) + Price + Rating , data = Train, family = binomial)
+```
+Despite Apple phones being generally more expensive, the best logistic regression model determines whether a phone is Apple or non-Apple primarily by Rating and RomSize.
+
+```{r}
+summary(log_apple_mod)
+```
+```{r}
+predapplelogmod <- predict(log_apple_mod, Test, type = 'response')
+predictapple <- rep(FALSE, dim(Test)[1])
+predictapple[predapplelogmod>=0.5]=TRUE
+```
+
+```{r}
+1-(table(predictapple, Test$Apple)[2]+table(predictapple, Test$Apple)[3])/dim(Test)[1]
+```
+
+```{r}
+dim(mobil_df[mobil_df$Apple==TRUE,])[1]/dim(mobil_df)[1]
+```
+Apple phones comprised 9% of dataset and the logistic regression model was able to correctly classify Apple phones 99.2% of the time.
+
+## 6.4 Summary
+
+The approach of dividing the dataset into two to apply two linear price regressions to the dataset of Apple phones and the dataset of non-Apple phones illustrated how Romsize and Rating affected Apple phone prices differently than non-Apple phones. The logistic regression of Apple phones proved that it's effective to use logistic regression to determine if a phone is an Apple phone or not using the phone's price, rating and RomSize.
+
+
 # References
 
 2020 review. “High-End Mobile Phones Price Have Soared 490% in 20 Years | This Is Money.” This Is Money, This Is Money, 23 July 2020, https://www.thisismoney.co.uk/money/bills/article-8548235/High-end-mobile-phones-price-soared-490-20-years.html.  
@@ -1275,5 +1452,3 @@ In this chapter, we have built a linear regression model and a regression tree m
 MobilePhone's dataset. “MobilePhone’s Dataset | Kaggle.” Kaggle: Your Machine Learning and Data Science Community, Kaggle, 20 Dec. 2022, https://www.kaggle.com/datasets/sudhanshuy17/mobilephone.  
 
 Pascal Schmidt. "Assumption Checking of LDA vs. QDA – R Tutorial Pima Indians Data Set", retrieved Feb 17 2023, https://thatdatatho.com/assumption-checking-lda-vs-qda-r-tutorial-2/.
-
-
